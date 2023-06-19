@@ -56,8 +56,8 @@ const cleanupBNEStation = (stationInfo) => {
             district: stationInfo['Kreis/kreisfreie Stadt'],
             state: stationInfo['Bundesland'],
             zipCode: stationInfo['Postleitzahl'],
-            lat: stationInfo['Breitengrad'],
-            lng: stationInfo['Längengrad']
+            lat: parseFloat(stationInfo['Breitengrad'].replace(',', '.')),
+            lng: parseFloat(stationInfo['Längengrad'].replace(',', '.'))
         },
         commissioningDate: stationInfo['Inbetriebnahmedatum'],
         totalCapacity: stationInfo['Anschlussleistung'],
@@ -87,5 +87,7 @@ const cleanupBNEStation = (stationInfo) => {
 
 const chargingStationsBNE = parseCSV(readFileSync('src/assets/data/Ladesaeulenregister - Ladesäulenregister BNetzA.tsv').toString())
     .map(s => cleanupBNEStation(s))
+
+console.log(`Extracted and formatted ${chargingStationsBNE.length} stations.`)
 
 writeFileSync('src/assets/data/chargingStationsBNE.json', JSON.stringify(chargingStationsBNE))

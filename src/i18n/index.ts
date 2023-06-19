@@ -1,8 +1,9 @@
-import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import homeEN from './en/home.json';
+import i18next from 'i18next';
+
 import homeDE from './de/home.json';
+import homeEN from './en/home.json';
 
 export const ALLOWED_LOCALES = ['de', 'en'] as const;
 type Locale = (typeof ALLOWED_LOCALES)[number];

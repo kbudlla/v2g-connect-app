@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import './i18n';
+
+import { AppContextProvider } from 'core/AppContext';
+
 import './stylesheet/main.scss';
-import { AppContextProvider } from './core/AppContext';
+
+import 'i18n';
+
+import App from 'App';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

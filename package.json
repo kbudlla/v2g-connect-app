@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prettier:format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "supercluster": "8.0.1"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "4.1.1",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@types/supercluster": "7.1.0",

@@ -1,0 +1,60 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-v2gconnectapp-dev-143523-authRole",
+      "UnauthRoleArn": "arn:aws:iam::949257630393:role/amplify-v2gconnectapp-dev-143523-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::949257630393:role/amplify-v2gconnectapp-dev-143523-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-v2gconnectapp-dev-143523-deployment",
+      "UnauthRoleName": "amplify-v2gconnectapp-dev-143523-unauthRole",
+      "StackName": "amplify-v2gconnectapp-dev-143523",
+      "StackId": "arn:aws:cloudformation:eu-central-1:949257630393:stack/amplify-v2gconnectapp-dev-143523/9942e530-0dd4-11ee-a625-02b5d26f37ae",
+      "AmplifyAppId": "d11cdcgrgyw9ix"
+    }
+  },
+  "auth": {
+    "v2gconnectapp26404018": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "signupAttributes": [
+          "BIRTHDATE",
+          "EMAIL",
+          "NAME",
+          "PHONE_NUMBER"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-v2gconnectapp-dev-143523-deployment/amplify-cfn-templates/auth/v2gconnectapp26404018-cloudformation-template.json",
+        "logicalId": "authv2gconnectapp26404018"
+      },
+      "lastPushTimeStamp": "2023-06-18T12:45:23.225Z",
+      "output": {
+        "CreatedSNSRole": "arn:aws:iam::949257630393:role/sns26404018143523-dev",
+        "UserPoolId": "eu-central-1_vmUdgggcZ",
+        "AppClientIDWeb": "2u2qfuvvqqki3npvrk24teidld",
+        "AppClientID": "26bg60aj8vd8n9qo3u6o2jv1b2",
+        "IdentityPoolId": "eu-central-1:06011d0d-9d82-4eec-8f1e-5fbc711f2a6b",
+        "UserPoolArn": "arn:aws:cognito-idp:eu-central-1:949257630393:userpool/eu-central-1_vmUdgggcZ",
+        "IdentityPoolName": "v2gconnectapp26404018_identitypool_26404018__dev",
+        "UserPoolName": "v2gconnectapp26404018_userpool_26404018"
+      },
+      "lastPushDirHash": "nJpWw54DHCP56uCmlBASHbcqEyY="
+    }
+  }
+}

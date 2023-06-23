@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
+    "@types/supercluster": "7.1.0",
     "antd": "^5.5.2",
     "aws-amplify": "^5.2.7",
     "i18next": "^22.5.0",

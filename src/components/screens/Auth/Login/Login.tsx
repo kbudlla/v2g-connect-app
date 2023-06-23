@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
+
 import { Form, Input, Button, Checkbox, notification } from 'antd';
+
+import FederatedSignButton from './FederatedSignButton';
+
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { GoogleOutlined, FacebookFilled } from '@ant-design/icons';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
-
-import FederatedSignButton from './FederatedSignButton';
-import { useNavigate } from 'react-router';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);

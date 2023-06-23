@@ -1,7 +1,9 @@
 import React from 'react';
-import { Auth } from 'aws-amplify';
+
 import { Button } from 'antd';
+
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
+import { Auth } from 'aws-amplify';
 
 type Props = {
   danger: boolean;

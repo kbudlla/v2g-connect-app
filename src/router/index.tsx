@@ -1,10 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { UnauthenticatedOnlyRoute } from './UnauthenticatedOnlyRoute';
+
+import ForgotPasswordForm from '../components/screens/Auth/ForgotPassword/ForgotPassword';
+import ForgotPasswordVerificationForm from '../components/screens/Auth/ForgotPassword/ForgotPasswordVerification';
 import Login from '../components/screens/Auth/Login/Login';
 import RegistrationForm from '../components/screens/Auth/Register/Register';
 import { AuthenticatedOnlyRoute } from './AuthenticatedOnlyRoute';
-import ForgotPasswordForm from '../components/screens/Auth/ForgotPassword/ForgotPassword';
-import ForgotPasswordVerificationForm from '../components/screens/Auth/ForgotPassword/ForgotPasswordVerification';
+import { UnauthenticatedOnlyRoute } from './UnauthenticatedOnlyRoute';
 
 export const router = createBrowserRouter([
   {

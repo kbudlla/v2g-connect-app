@@ -1,10 +1,12 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
-import { LeftOutlined } from '@ant-design/icons';
-import { Auth } from 'aws-amplify';
-import { MailOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Form, Input, Button } from 'antd';
+
+import { LeftOutlined } from '@ant-design/icons';
+import { MailOutlined } from '@ant-design/icons';
+import { Auth } from 'aws-amplify';
 
 const ForgotPasswordForm: React.FC<any> = () => {
   const [loading, setLoading] = useState<boolean>(false);

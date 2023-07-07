@@ -1,4 +1,7 @@
+import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+
+import ChargerMap from 'components/ChargerMap';
 
 import ForgotPasswordForm from '../components/screens/Auth/ForgotPassword/ForgotPassword';
 import ForgotPasswordVerificationForm from '../components/screens/Auth/ForgotPassword/ForgotPasswordVerification';
@@ -19,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
+      },
+      {
+        path: 'map',
+        element: <ChargerMap />,
       },
       {
         path: 'register',

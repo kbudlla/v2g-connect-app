@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router';
 
-export const AuthenticatedOnlyRoute = ({ redirectPath = '/auth/login' }) => {
+export const AuthenticatedOnlyRoute = ({ redirectPath = '/home' }) => {
   const tokenVerified = true;
   const accessToken = false;
 

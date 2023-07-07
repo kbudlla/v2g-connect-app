@@ -1,0 +1,32 @@
+.ant-layout {
+  min-height: 100vh;
+
+  .ant-layout-content {
+    margin: auto;
+    width: calc(100% - 8rem);
+    max-width: 1072px;
+
+    @media screen and (max-width: 768px) {
+      margin: 0 1.5rem;
+      width: auto;
+    }
+  }
+}
+
+.site-layout {
+  .header {
+    height: 40px;
+    width: calc(100% - 8rem);
+    max-width: 1072px;
+    margin: 36px auto 12px auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+
+    @media screen and (max-width: 768px) {
+      margin: 24px;
+      width: auto;
+    }
+  }
+}

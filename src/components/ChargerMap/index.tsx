@@ -2,8 +2,6 @@ import React, { useCallback, useState } from 'react';
 
 import { ChargingStationGeoJSONFeatures, getClusteredChargingStations } from 'api/chargers';
 
-import './ChargerMap.scss';
-
 import ChargerMapMarker from './ChargerMapMarker';
 
 import { Map, MapProps, Marker } from 'pigeon-maps';
@@ -21,12 +19,21 @@ export default function ChargerMap() {
   }, []);
 
   return (
-    <Map provider={osm} defaultCenter={[48.149631, 11.567892]} defaultZoom={11} onBoundsChanged={handleBoundsChanged}>
-      {markers.map((markerGeoJSON, index) => (
-        <Marker key={markerGeoJSON.id ?? index} anchor={markerGeoJSON.geometry.coordinates as [number, number]}>
-          <ChargerMapMarker {...markerGeoJSON.properties} />
-        </Marker>
-      ))}
-    </Map>
+    <div>
+      <Map
+        height={500}
+        width={500}
+        provider={osm}
+        defaultCenter={[48.149631, 11.567892]}
+        defaultZoom={11}
+        onBoundsChanged={handleBoundsChanged}
+      >
+        {markers.map((markerGeoJSON, index) => (
+          <Marker key={markerGeoJSON.id ?? index} anchor={markerGeoJSON.geometry.coordinates as [number, number]}>
+            <ChargerMapMarker {...markerGeoJSON.properties} />
+          </Marker>
+        ))}
+      </Map>
+    </div>
   );
 }

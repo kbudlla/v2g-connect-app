@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
-
-import { AppContextProvider } from 'core/AppContext';
+import { RouterProvider } from 'react-router-dom';
 
 import './stylesheet/main.scss';
 
-import 'i18n';
-
-import App from 'App';
+import { AppContextProvider } from './core/AppContext';
+import { router } from './router';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AppContextProvider>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </AppContextProvider>
   </React.StrictMode>,

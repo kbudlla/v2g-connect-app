@@ -1,0 +1,28 @@
+.registration-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.title {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+.title-text {
+  font-size: 25px;
+  margin-left: 15px;
+  color: #262626;
+}
+
+.go-back {
+  font-size: 15px;
+  color: #262626;
+  cursor: pointer;
+  font-weight: bold;
+}

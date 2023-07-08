@@ -1,31 +1,19 @@
-.login-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-}
+.access-screen {
+  &>main {
+    & .password {
+      margin-bottom: 5px;
+    }
 
-.login-form {
-  max-width: 550px;
-}
+    & .to-forgot-password {
+      align-self: flex-end;
+    }
 
-.login-form-forgot {
-  float: right;
-  color: #3fa9ff;
-  cursor: pointer;
-}
-
-.ant-col-rtl .login-form-forgot {
-  float: left;
-}
-
-.login-form-button {
-  width: 100%;
-}
-
-.route-link {
-  color: #3fa9ff;
-  cursor: pointer;
+    & .no-account {
+      align-self: center;
+    }
+  }
+  .no-margin {
+    width: 370px;
+    margin-bottom: 20px;
+  }
 }

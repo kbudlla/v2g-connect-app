@@ -2,8 +2,12 @@ import { initReactI18next } from 'react-i18next';
 
 import i18next from 'i18next';
 
-import homeDE from './de/home.json';
-import homeEN from './en/home.json';
+import forgotPasswordDE from './de/forgotPassword.json';
+import loginDE from './de/login.json';
+import resetPasswordDE from './de/resetPassword.json';
+import forgotPasswordEN from './en/forgotPassword.json';
+import loginEN from './en/login.json';
+import resetPasswordEN from './en/resetPassword.json';
 
 export const ALLOWED_LOCALES = ['de', 'en'] as const;
 type Locale = (typeof ALLOWED_LOCALES)[number];
@@ -21,10 +25,14 @@ i18next.use(initReactI18next).init({
   lng: detectLocale(),
   resources: {
     en: {
-      home: homeEN,
+      login: loginEN,
+      forgotPassword: forgotPasswordEN,
+      resetPassword: resetPasswordEN,
     },
     de: {
-      home: homeDE,
+      login: loginDE,
+      forgotPassword: forgotPasswordDE,
+      resetPassword: resetPasswordDE,
     },
   },
 });

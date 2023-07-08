@@ -1,0 +1,11 @@
+{
+  "title": "Welcome back",
+  "sub_title": "Login to your Earnest Business account",
+  "email_address": "E-Mail address",
+  "password": "Password",
+  "login": "Login",
+  "forgot_password": "Forgot password?",
+  "no_account": "You don’t have an account?",
+  "contact_us": "Contact us!",
+  "auth_issue": "The email or password does not exist or is wrong. Please try with a correct email and password."
+}

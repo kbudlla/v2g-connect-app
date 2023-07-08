@@ -1,63 +1,42 @@
-import React from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
-import { Form, Input, Button } from 'antd';
+import { Alert, Button, Form, Input, Typography } from 'antd';
+import type { Rule } from 'antd/es/form';
 
-import { LeftOutlined } from '@ant-design/icons';
-import { MailOutlined } from '@ant-design/icons';
-import { Auth } from 'aws-amplify';
+// import { useForgotPassword } from '../../../../hooks/app/cognito/useForgotPassword';
 
-const ForgotPasswordForm: React.FC<any> = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const onFinish = async (values: any) => {
-    // const { username } = values;
-    // try {
-    //   setLoading(true);
-    //   await Auth.forgotPassword(username);
-    //   setLoading(false);
-    //   history.push({
-    //     pathname: '/forgot-password-verification',
-    //     state: { username },
-    //   });
-    // } catch (err) {
-    //   //err
-    //   setLoading(false);
-    // }
+const REQUIRED_RULE: Rule[] = [{ required: true, message: '' }];
+
+export const ForgotPassword = () => {
+  const { t } = useTranslation('forgotPassword');
+  // const { state, forgotPassword } = useForgotPassword();
+
+  const onSubmit = async (fields: { email: string }) => {
+    const { email } = fields;
+    // forgotPassword(email);
   };
 
-  const navigate = useNavigate();
-
   return (
-    <div className="forgot-password-container">
-      <div className="forgot-password-title">
-        <span className="go-back" onClick={() => navigate('/auth/login')}>
-          <LeftOutlined />
-        </span>
-        <span className="title-text">Forgot Password?</span>
+    <Form layout="vertical" className="form flex-column" onFinish={onSubmit}>
+      <div className="title flex-column gap-8">
+        <Typography.Title className="no-margin">{t('title')}</Typography.Title>
+        <Typography.Paragraph type="secondary" className="no-margin">
+          {t('sub_title')}
+        </Typography.Paragraph>
       </div>
-      <div className="forgot-passoword-message">
-        Please enter the email address associated with your account and we'll email you instructions to reset your
-        password.
-      </div>
-      <Form
-        name="forgot-password-form"
-        className="forgot-passowrd"
-        initialValues={{ username: '' }}
-        onFinish={onFinish}
-      >
-        <Form.Item name="username" rules={[{ required: true, message: 'Please input your username!' }]}>
-          <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email" />
-        </Form.Item>
-        <Form.Item>
-          <div className="submit-email-container">
-            <Button loading={loading} type="primary" htmlType="submit" className="reset-password-form-button">
-              Submit
-            </Button>
-          </div>
-        </Form.Item>
-      </Form>
-    </div>
+      {/* {state === 'error' && <Alert type="error" message={t('error')} showIcon closable />} */}
+      <Form.Item label={t('email_address')} rules={REQUIRED_RULE} name="email" required hasFeedback>
+        <Input type="email" name="email" />
+      </Form.Item>
+      <Form.Item className="submit">
+        <Button type="primary" htmlType="submit">
+          {t('reset_password')}
+        </Button>
+      </Form.Item>
+      <Link className="return" to="/auth/reset-password">
+        {t('return')}
+      </Link>
+    </Form>
   );
 };
-export default ForgotPasswordForm;

@@ -17,12 +17,11 @@ const FederatedSignButton: React.FC<any> = ({ danger, label, icon }) => {
   // };
   return (
     <Button
-      type="primary"
+      type="default"
       danger={danger}
-      size="large"
       // onClick={() => handleFederatedSignIn()}
       icon={icon}
-      style={{ width: 235, marginBottom: 10 }}
+      style={{ marginTop: 10 }}
     >
       {label}
     </Button>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import ChargerMap from 'components/ChargerMap';
+import ChargerMap from 'components/common/ChargerMap';
+import Dashboard from 'components/screens/Dashboard/Dashboard';
 import { Home } from 'components/screens/Home/Home';
 
 import ForgotPasswordForm from '../components/screens/Auth/ForgotPassword/ForgotPassword';
@@ -13,17 +14,22 @@ import { UnauthenticatedOnlyRoute } from './UnauthenticatedOnlyRoute';
 
 export const router = createBrowserRouter([
   {
-    element: <UnauthenticatedOnlyRoute />,
-    path: '/',
+    element: <AuthenticatedOnlyRoute />,
     children: [
       {
-        path: 'home',
+        path: '/',
         element: <Home />,
+        children: [
+          {
+            path: 'dashboard',
+            element: <Dashboard />,
+          },
+        ],
       },
     ],
   },
   {
-    element: <AuthenticatedOnlyRoute />,
+    element: <UnauthenticatedOnlyRoute />,
     path: '/auth',
     children: [
       {

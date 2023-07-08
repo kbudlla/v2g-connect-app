@@ -6,23 +6,25 @@ import { usePartialAppContext } from 'core/AppContext';
 
 import { MenuProps, Layout, Menu, Button } from 'antd';
 
+import { V2GLogo } from 'components/common/V2GLogo/V2GLogo';
+
 import './MainMenu.scss';
 
 import i18next, { TFunction } from 'i18next';
 
-// import { usePartialAppContext } from '../AppContext/AppContext';
-// import { EarnestDashboardLogo } from '../EarnestDashboardLogo/EarnestDashboardLogo';
 import {
-  LineChartOutlined,
-  MobileOutlined,
-  FileDoneOutlined,
-  PieChartOutlined,
   TeamOutlined,
   MenuOutlined,
   CloseOutlined,
   MessageOutlined,
   SafetyOutlined,
   AuditOutlined,
+  AppstoreFilled,
+  GiftFilled,
+  SafetyCertificateOutlined,
+  AppstoreOutlined,
+  GiftOutlined,
+  CompassOutlined,
 } from '@ant-design/icons';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -31,8 +33,32 @@ const makeMenuItems = (t: TFunction<'general'>, navigate: NavigateFunction): Men
     key: 'dashboard',
     label: 'Dashboard',
     title: '',
-    icon: <PieChartOutlined />,
-    disabled: true,
+    icon: <AppstoreOutlined />,
+  },
+  {
+    key: 'sustainability',
+    label: 'Sustainability Tracker',
+    title: '',
+    icon: <SafetyCertificateOutlined />,
+  },
+  {
+    key: 'charger-map',
+    label: 'Charger Map',
+    title: '',
+    icon: <CompassOutlined />,
+  },
+  {
+    key: 'rewards',
+    label: 'Rewards',
+    title: '',
+    icon: <GiftOutlined />,
+  },
+
+  {
+    key: 'community',
+    label: 'Community Forum',
+    title: '',
+    icon: <TeamOutlined />,
   },
 ];
 
@@ -75,9 +101,9 @@ export const MainMenu = () => {
         className="menu-container"
         trigger={null}
       >
-        {/* <div className="logo-container">
-          <EarnestDashboardLogo />
-        </div> */}
+        <div className="logo-container">
+          <V2GLogo />
+        </div>
         <Menu
           data-testid="left-menu"
           selectedKeys={[pathname]}

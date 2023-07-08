@@ -54,14 +54,14 @@
       }
 
       .ant-menu-item {
-        gap: 20px;
+        gap: 10px;
         margin: 8px 0;
         width: 100%;
         border-radius: unset;
         padding-right: 0;
 
         .anticon {
-          color: #727272;
+          color: #0D1C2E;
           font-size: 20px;
         }
 
@@ -71,7 +71,7 @@
           font-size: 13px;
           line-height: 1.67;
           letter-spacing: normal;
-          color: #727272;
+          color: #0D1C2E;
         }
 
         &.ant-menu-item-selected {

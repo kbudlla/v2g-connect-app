@@ -30,25 +30,25 @@ import {
 type MenuItem = Required<MenuProps>['items'][number];
 const makeMenuItems = (t: TFunction<'general'>, navigate: NavigateFunction): MenuItem[] => [
   {
-    key: 'dashboard',
+    key: '/dashboard',
     label: 'Dashboard',
     title: '',
     icon: <AppstoreOutlined />,
   },
   {
-    key: 'sustainability',
+    key: '/sustainability',
     label: 'Sustainability Tracker',
     title: '',
     icon: <SafetyCertificateOutlined />,
   },
   {
-    key: 'charger-map',
+    key: '/charger-map',
     label: 'Charger Map',
     title: '',
     icon: <CompassOutlined />,
   },
   {
-    key: 'rewards',
+    key: '/rewards',
     label: 'Rewards',
     title: '',
     icon: <GiftOutlined />,

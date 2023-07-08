@@ -24,6 +24,10 @@ export const router = createBrowserRouter([
             path: 'dashboard',
             element: <Dashboard />,
           },
+          {
+            path: 'charger-map',
+            element: <ChargerMap />,
+          },
         ],
       },
     ],

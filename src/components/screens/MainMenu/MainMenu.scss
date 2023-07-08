@@ -75,14 +75,21 @@
         }
 
         &.ant-menu-item-selected {
+          background-color: #F0FFF2;
           .ant-menu-title-content {
-            color: #1d1e20;
-            border-right: solid #1990ff 2px;
+            color: #12A42F;
+            border-right: solid #12A42F 2px;
           }
 
           .anticon {
-            color: #1990ff;
+            color: #12A42F;
           }
+          &:hover {
+            background-color: #F0FFF2;
+          }
+        }
+        &:hover {
+            background-color: #F0FFF2;
         }
       }
     }

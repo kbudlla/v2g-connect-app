@@ -8,7 +8,7 @@ export const V2GLogo: React.FC = () => {
   return (
     <div className="dashboard-logo">
       <img className="icon" src={icon} />
-      <Typography.Text className="title">Welcome</Typography.Text>
+      <Typography.Text className="title">V2GConnect</Typography.Text>
     </div>
   );
 };

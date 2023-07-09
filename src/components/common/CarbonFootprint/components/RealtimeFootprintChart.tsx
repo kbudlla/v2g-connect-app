@@ -96,7 +96,6 @@ function RealtimeFootprintChart(props: RealtimeFootprintChartProps): JSX.Element
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="x" interval={0} tick={CustomXAxixTick} tickFormatter={xTickFormatter} />
-        <YAxis />
         <Bar dataKey="y" fill="#4DC36F" />
       </BarChart>
     </ResponsiveContainer>

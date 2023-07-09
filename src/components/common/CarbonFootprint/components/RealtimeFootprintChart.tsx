@@ -6,7 +6,7 @@ import { TimeUnit } from 'utils/time';
 import { formatKgValue } from 'utils/units';
 
 import moment from 'moment';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 type RealtimeFootprintChartProps = {
   timeseries?: CarbonFootprintInfo['timeseries'];

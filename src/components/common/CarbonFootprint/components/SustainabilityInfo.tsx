@@ -24,19 +24,6 @@ const useSustainablitityPercentileMessageMap = () => {
   return map;
 };
 
-// Much cooler, but Typescript is iffy
-// type SustainabilityInfoPropsLoading = {
-//     loading: true;
-//     averageCO2: undefined
-//     timeUnit: TimeUnit
-// }
-
-// type SustainabilityInfoPropsNotLoading = {
-//     loading: false;
-//     averageCO2: number
-//     timeUnit: TimeUnit
-// }
-
 type SustainabilityInfoProps = {
   loading: boolean;
   averageCO2?: number;

@@ -1,0 +1,21 @@
+{
+    "challenges": "Herausforderungen",
+    "leaderboard": "Rangliste",
+    "realtimeCarbonFootprint": "Echtzeit-CO2-Fußabdruck",
+    "currentDay": "Heutiger Tag",
+    "currentWeek": "Aktuelle Woche",
+    "currentMonth": "Aktueller Monat",
+    "currentYear": "Aktuelles Jahr",
+    "sustainableLifestyle": "Nachhaltiger Lebensstil",
+    "averageLifestyle": "Durchschnittlicher Lebensstil",
+    "highEmissionLifestyle": "Lebensstil mit hohen Emissionen",
+    "extremelyHighEmissionLifestyle": "Lebensstil mit extrem hohen Emissionen",
+    "co2StatisticsTree": "Bäume absorbieren CO2 für ein Jahr",
+    "co2StatisticsAirplane": "km geflogen",
+    "co2StatisticsCar": "km gefahren",
+    "co2StatisticsBus": "km gefahren",
+    "co2StatisticsEV": "km gefahren (Elektroauto)",
+    "co2StatisticsTrain": "km gefahren",
+    "showAll": "Alle anzeigen",
+    "search": "Suchen"
+}

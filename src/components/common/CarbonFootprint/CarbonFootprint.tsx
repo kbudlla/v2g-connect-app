@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useCarbonFootprint } from 'api/sustainability';
 
@@ -6,7 +7,7 @@ import { Select, Space, Spin, Typography } from 'antd';
 
 import Card from 'components/common/Card/Card';
 
-import { getCo2Statistics } from 'utils/carbon';
+import { useTranslatedCO2Statistics } from 'utils/carbon';
 import { TimeUnit, defaultRangeForTimeUnit } from 'utils/time';
 import { halfSpace } from 'utils/units';
 
@@ -39,6 +40,9 @@ type CarbonFootprintProps = {
 };
 
 function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
+  const { t } = useTranslation('common');
+  const getTranslatedCO2Statistics = useTranslatedCO2Statistics();
+
   const [userId, _] = useState('userId');
   const [timeRange, setTimeRange] = useState(defaultRangeForTimeUnit({ unit: 'months' }));
 
@@ -62,7 +66,7 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
               letterSpacing: '-0.2px',
             }}
           >
-            Real-Time Carbon Footprint
+            {t('realtimeCarbonFootprint')}
           </Typography.Title>
 
           <SustainabilityInfo averageCO2={footprint?.average} loading={loading} timeUnit={timeRange.unit} />
@@ -79,10 +83,10 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
           onChange={handleTimeUnitChange}
           options={[
             // { value: 'minutes', label: 'Current Day (Minutes)' },
-            // { value: 'hours', label: 'Current Day' },
-            { value: 'days', label: 'Current Week' },
-            // { value: 'weeks', label: 'Current Month' },
-            { value: 'months', label: 'Current Year' },
+            // { value: 'hours', label: t('currentDay') },
+            { value: 'days', label: t('currentWeek') },
+            // { value: 'weeks', label: t('currentMonth') },
+            { value: 'months', label: t('currentYear') },
           ]}
         />
       </Space>
@@ -111,7 +115,7 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
           <div className="carbon-footprint-statistics-wrapper-inner">
             {!loading &&
               footprint &&
-              getCo2Statistics(footprint.average).map(({ icon, value, text, type }) => (
+              getTranslatedCO2Statistics(footprint.average).map(({ icon, value, text, type }) => (
                 <StatisticsBadge icon={icon} value={value} text={text} key={type} />
               ))}
           </div>

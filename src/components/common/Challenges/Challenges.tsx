@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Challenge, useChallenges } from 'api/sustainability';
 
@@ -50,6 +51,7 @@ type ChallengesModalProps = {
 };
 
 function ChallengesModal(props: ChallengesModalProps): JSX.Element {
+  const { t } = useTranslation('common');
   const { loading, challenges } = useChallenges();
 
   return (
@@ -73,9 +75,9 @@ function ChallengesModal(props: ChallengesModalProps): JSX.Element {
             letterSpacing: '-0.2px',
           }}
         >
-          Leaderboards
+          {t('challenges')}
         </Typography.Title>
-        <Input placeholder="Search" />
+        <Input placeholder={t('search') ?? ''} />
       </div>
 
       {/* Content */}
@@ -104,6 +106,8 @@ type LeaderboardProps = {
 };
 
 function Challenges(props: LeaderboardProps): JSX.Element {
+  const { t } = useTranslation('common');
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const { loading, challenges } = useChallenges(6);
@@ -130,11 +134,11 @@ function Challenges(props: LeaderboardProps): JSX.Element {
               letterSpacing: '-0.2px',
             }}
           >
-            Challenges
+            {t('challenges')}
           </Typography.Title>
 
           <Button type="primary" onClick={handleModalOpen}>
-            See All
+            {t('showAll')}
           </Button>
         </div>
       }

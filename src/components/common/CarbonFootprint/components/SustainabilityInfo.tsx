@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Typography } from 'antd';
 
@@ -6,17 +7,21 @@ import { SustainabilityScore, getSustainabilityScore } from 'utils/carbon';
 import { TimeUnit } from 'utils/time';
 import { formatKgValue } from 'utils/units';
 
-const SustainabilityPercentileMessageMap: Record<SustainabilityScore['percentile'], string> = {
-  10: 'Sustainable Lifestyle',
-  20: 'Sustainable Lifestyle',
-  30: 'Sustainable Lifestyle',
-  40: 'Average Lifestyle',
-  50: 'Average Lifestyle',
-  60: 'Average Lifestyle',
-  70: 'High emission Lifestyle',
-  80: 'High emission Lifestyle',
-  90: 'Extremely high emission Lifestyle',
-  100: 'Extremely high emission Lifestyle',
+const useSustainablitityPercentileMessageMap = () => {
+  const { t } = useTranslation('common');
+  const map: Record<SustainabilityScore['percentile'], string> = {
+    10: t('sustainableLifestyle'),
+    20: t('sustainableLifestyle'),
+    30: t('sustainableLifestyle'),
+    40: t('averageLifestyle'),
+    50: t('averageLifestyle'),
+    60: t('averageLifestyle'),
+    70: t('highEmissionLifestyle'),
+    80: t('highEmissionLifestyle'),
+    90: t('extremelyHighEmissionLifestyle'),
+    100: t('extremelyHighEmissionLifestyle'),
+  };
+  return map;
 };
 
 // Much cooler, but Typescript is iffy
@@ -40,6 +45,8 @@ type SustainabilityInfoProps = {
 
 function SustainabilityInfo(props: SustainabilityInfoProps): JSX.Element {
   const { loading, averageCO2, timeUnit } = props;
+
+  const percentileMessageMap = useSustainablitityPercentileMessageMap();
 
   const sustainabilityScore = useMemo(() => {
     if (loading || averageCO2 == null) return null;
@@ -70,7 +77,7 @@ function SustainabilityInfo(props: SustainabilityInfoProps): JSX.Element {
       {!loading && (
         <span style={{ fontSize: '20px', marginRight: '0.5em' }}>
           {/* Typescript is stupid, the nc should not be needed here */}
-          {SustainabilityPercentileMessageMap[sustainabilityScore?.percentile ?? 10]}
+          {percentileMessageMap[sustainabilityScore?.percentile ?? 10]}
         </span>
       )}
     </Typography.Title>

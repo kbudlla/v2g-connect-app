@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { LeaderboardUser, useLeaderboard } from 'api/sustainability';
 
@@ -39,6 +40,7 @@ type LeaderboardModalProps = {
 };
 
 function LeaderboardModal(props: LeaderboardModalProps): JSX.Element {
+  const { t } = useTranslation('common');
   const { loading, leaderboard } = useLeaderboard();
 
   return (
@@ -62,9 +64,9 @@ function LeaderboardModal(props: LeaderboardModalProps): JSX.Element {
             letterSpacing: '-0.2px',
           }}
         >
-          Leaderboards
+          {t('leaderboard')}
         </Typography.Title>
-        <Input placeholder="Search" />
+        <Input placeholder={t('search') ?? ''} />
       </div>
 
       {/* Content */}
@@ -93,6 +95,7 @@ type LeaderboardProps = {
 };
 
 function Leaderboard(props: LeaderboardProps): JSX.Element {
+  const { t } = useTranslation('common');
   const { loading, leaderboard } = useLeaderboard(6);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -118,11 +121,11 @@ function Leaderboard(props: LeaderboardProps): JSX.Element {
               letterSpacing: '-0.2px',
             }}
           >
-            Leaderboards
+            {t('leaderboard')}
           </Typography.Title>
 
           <Button type="primary" onClick={handleModalOpen}>
-            See All
+            {t('showAll')}
           </Button>
         </div>
       }

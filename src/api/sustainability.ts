@@ -1,4 +1,6 @@
-import { APIResponse } from './types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { APIHookError, APIResponse } from './types';
 
 import { resolveWithTimeout } from 'utils/mock';
 import { halfSpace } from 'utils/units';
@@ -7,12 +9,14 @@ import { faker } from '@faker-js/faker';
 
 /* Typing */
 
-export type LeaderboardUser = {
+type LeaderboardUserInternal = {
   id: string;
   name: string;
   location: string;
   points: number;
 };
+
+export type LeaderboardUser = LeaderboardUserInternal & { position: number };
 
 export type Challenge = {
   id: string;
@@ -28,7 +32,7 @@ export type Challenge = {
 
 /* Helper functions */
 
-const createFakeUser = (): LeaderboardUser => ({
+const createFakeUser = (): LeaderboardUserInternal => ({
   id: faker.string.uuid(),
   name: faker.person.fullName(),
   location: faker.location.city(),
@@ -83,14 +87,19 @@ export const getLeaderboard = async (
 ): Promise<APIResponse<LeaderboardUser[]>> => {
   const sortKey = sortBy ?? 'points';
 
+  // Add the position, by sorting the users and counting their index
+  const sortedUsers = [...users];
+  sortedUsers.sort((a, b) => b.points - a.points);
+  let data = sortedUsers.map((user, index) => ({ ...user, position: index + 1 }));
+
   // Apply sorting
-  let data = [...users];
   data.sort((a, b) => {
     switch (sortKey) {
       case 'points':
-        return a.points - b.points;
+      case 'position':
+        return b[sortKey] - a[sortKey];
       default:
-        return a[sortKey].localeCompare(b[sortKey]);
+        return b[sortKey].localeCompare(a[sortKey]);
     }
   });
 
@@ -110,14 +119,14 @@ export const getChallenges = async (
   limit?: number,
   sortBy?: Exclude<keyof Challenge, 'id'>,
 ): Promise<APIResponse<Challenge[]>> => {
-  const sortKey = sortBy ?? 'points';
+  const sortKey = sortBy ?? 'completion';
 
   // Apply sorting
   let data = [...challenges];
   data.sort((a, b) => {
     switch (sortKey) {
       case 'points':
-        return a.points - b.points;
+        return b.points - a.points;
       case 'completion':
         // eslint-disable-next-line no-case-declarations
         const percentageA = a.completion.count / a.completion.total;
@@ -126,12 +135,12 @@ export const getChallenges = async (
 
         // If they're equal, sort by points instead
         if (percentageA === percentageB) {
-          return a.points - b.points;
+          return b.points - a.points;
         }
 
-        return percentageA - percentageB;
+        return percentageB - percentageA;
       default:
-        return a[sortKey].localeCompare(b[sortKey]);
+        return b[sortKey].localeCompare(a[sortKey]);
     }
   });
 
@@ -145,4 +154,98 @@ export const getChallenges = async (
     status: 200,
     data,
   });
+};
+
+/* Hooks */
+
+export const useLeaderboard = (limit?: number, sortBy?: Exclude<keyof LeaderboardUser, 'id'>) => {
+  const [loading, setLoading] = useState(false);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
+  const [error, setError] = useState<APIHookError | null>(null);
+  const isMountedRef = useRef(false);
+
+  const update = useCallback(() => {
+    // TODO this is very generic, so we could make this a wrapper thingie
+    setLoading(true);
+    getLeaderboard(limit, sortBy).then((val) => {
+      if (!isMountedRef.current) return;
+      setLoading(false);
+      if (val.status !== 200) {
+        setError(APIHookError.InvalidRequestError);
+        setLeaderboard([]);
+        return;
+      }
+      if (val.data == null) {
+        setError(APIHookError.ServerSideError);
+        setLeaderboard([]);
+        return;
+      }
+      setError(null);
+      setLeaderboard(val.data);
+    });
+  }, [limit, sortBy]);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    // Update on mount
+    update();
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [limit, sortBy, update]);
+
+  return {
+    loading,
+    error,
+    leaderboard,
+    update,
+  };
+};
+
+export const useChallenges = (limit?: number, sortBy?: Exclude<keyof Challenge, 'id'>) => {
+  const [loading, setLoading] = useState(false);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [error, setError] = useState<APIHookError | null>(null);
+  const isMountedRef = useRef(false);
+
+  const update = useCallback(() => {
+    // TODO this is very generic, so we could make this a wrapper thingie
+    setLoading(true);
+    getChallenges(limit, sortBy).then((val) => {
+      if (!isMountedRef.current) return;
+      setLoading(false);
+      if (val.status !== 200) {
+        setError(APIHookError.InvalidRequestError);
+        setChallenges([]);
+        return;
+      }
+      if (val.data == null) {
+        setError(APIHookError.ServerSideError);
+        setChallenges([]);
+        return;
+      }
+      setError(null);
+      setChallenges(val.data);
+    });
+  }, [limit, sortBy]);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    // Update on mount
+    update();
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [limit, sortBy, update]);
+
+  return {
+    loading,
+    error,
+    challenges,
+    update,
+  };
 };

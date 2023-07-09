@@ -15,10 +15,10 @@ function SustainabilityTracker(): JSX.Element {
       </Row>
       <Row gutter={[32, 32]}>
         <Col span={12}>
-          <Leaderboard style={{ flex: '1 1 0' }} />
+          <Leaderboard style={{ flex: '1 1 0', height: '100%' }} />
         </Col>
         <Col span={12}>
-          <Challenges style={{ flex: '1 1 0' }} />
+          <Challenges style={{ flex: '1 1 0', height: '100%' }} />
         </Col>
       </Row>
     </PageWrapper>

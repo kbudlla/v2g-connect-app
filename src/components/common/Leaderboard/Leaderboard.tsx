@@ -1,27 +1,18 @@
 import { useCallback, useState } from 'react';
 
-import { Button, Input, Modal, Table, Typography } from 'antd';
+import { LeaderboardUser, useLeaderboard } from 'api/sustainability';
+
+import { Button, Input, Modal, Spin, Table, TableProps, Typography } from 'antd';
 
 import Card from 'components/common/Card/Card';
 
-type LeaderboardProps = {
-  style?: React.CSSProperties;
-};
+/* Columns */
 
-const generateFakeUserStats = (index: number, n: number) => ({
-  key: index,
-  name: `FakeUser #${index}`,
-  location: 'Munich',
-  points: Math.floor(Math.random() * 100) + (n - index) * 1000,
-});
-
-const userStats = (n: number) => new Array(n).fill(0).map((_, i) => generateFakeUserStats(i + 1, n));
-
-const columns = [
+const columns: TableProps<LeaderboardUser>['columns'] = [
   {
-    title: '',
-    dataIndex: 'key',
-    key: 'key',
+    title: '#',
+    dataIndex: 'position',
+    key: 'position',
   },
   {
     title: 'Name',
@@ -40,12 +31,16 @@ const columns = [
   },
 ];
 
+/* Modal */
+
 type LeaderboardModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
 function LeaderboardModal(props: LeaderboardModalProps): JSX.Element {
+  const { loading, leaderboard } = useLeaderboard();
+
   return (
     <Modal
       open={props.open}
@@ -74,20 +69,30 @@ function LeaderboardModal(props: LeaderboardModalProps): JSX.Element {
 
       {/* Content */}
       <div>
-        <Table
-          dataSource={userStats(100)}
-          columns={columns}
-          pagination={{
-            defaultPageSize: 10,
-            pageSizeOptions: [5, 10, 20],
-          }}
-        />
+        {loading && <Spin style={{ margin: 'auto' }} />}
+        {!loading && (
+          <Table
+            dataSource={leaderboard}
+            columns={columns}
+            pagination={{
+              defaultPageSize: 10,
+              pageSizeOptions: [5, 10, 20],
+            }}
+          />
+        )}
       </div>
     </Modal>
   );
 }
 
+/* Main Component */
+
+type LeaderboardProps = {
+  style?: React.CSSProperties;
+};
+
 function Leaderboard(props: LeaderboardProps): JSX.Element {
+  const { loading, leaderboard } = useLeaderboard(6);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleModalOpen = useCallback(() => {
@@ -122,7 +127,8 @@ function Leaderboard(props: LeaderboardProps): JSX.Element {
       }
       style={props.style}
     >
-      <Table dataSource={userStats(6)} columns={columns} pagination={false} />
+      {loading && <Spin style={{ margin: 'auto' }} />}
+      {!loading && <Table dataSource={leaderboard} columns={columns} pagination={false} />}
       <LeaderboardModal open={modalOpen} onClose={handleModalClose} />
     </Card>
   );

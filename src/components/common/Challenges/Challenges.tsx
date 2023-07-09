@@ -1,35 +1,17 @@
 import { useCallback, useState } from 'react';
 
-import { Button, Input, Modal, Progress, Table, TableProps, Typography } from 'antd';
+import { Challenge, useChallenges } from 'api/sustainability';
+
+import { Button, Input, Modal, Progress, Spin, Table, TableProps, Typography } from 'antd';
 
 import Card from 'components/common/Card/Card';
 
 import { green, grey } from '@ant-design/colors';
 import { CheckCircleFilled as DoneIcon } from '@ant-design/icons';
 
-type LeaderboardProps = {
-  style?: React.CSSProperties;
-};
+/* Columns */
 
-const generateFakeChallenge = (index: number) => ({
-  key: index,
-  name: `GreatChallenge #${index}`,
-  points: Math.floor(Math.random() * 100) + 100,
-  completion:
-    Math.random() > 0.5
-      ? { done: true, count: 10, total: 10 }
-      : {
-          done: false,
-          count: Math.floor(Math.random() * 9),
-          total: 10,
-        },
-});
-
-const generateChallenges = (n: number) => new Array(n).fill(0).map((_, i) => generateFakeChallenge(i + 1));
-
-type ChallengeRecord = ReturnType<typeof generateFakeChallenge>;
-
-const columns: TableProps<ChallengeRecord>['columns'] = [
+const columns: TableProps<Challenge>['columns'] = [
   {
     title: 'Challenge',
     dataIndex: 'name',
@@ -44,12 +26,12 @@ const columns: TableProps<ChallengeRecord>['columns'] = [
     title: 'Progress',
     dataIndex: 'completion',
     key: 'completion',
-    render: (_, { completion: { done, total, count } }) => {
+    render: (_, { completion: { done, total, count, discrete } }) => {
       const progressPercent = (count / total) * 100;
       return (
         <Progress
           percent={progressPercent}
-          steps={total}
+          steps={discrete ? total : undefined}
           size="small"
           strokeColor={new Array(total).fill(0).map((_, i) => (i < count ? green[7] : grey[6]))}
           // Yes we need to use style here, because the color prop is not forwarded correctly
@@ -60,23 +42,27 @@ const columns: TableProps<ChallengeRecord>['columns'] = [
   },
 ];
 
+/* Modal */
+
 type ChallengesModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
 function ChallengesModal(props: ChallengesModalProps): JSX.Element {
+  const { loading, challenges } = useChallenges();
+
   return (
     <Modal
       open={props.open}
       onCancel={props.onClose}
       footer={null}
       centered
-      className="leaderboard-modal-root"
+      className="challenges-modal-root"
       style={{ width: '' }}
     >
       {/* Title */}
-      <div className="leaderboard-modal-title-wrapper">
+      <div className="challenges-modal-title-wrapper">
         <Typography.Title
           level={2}
           type="success"
@@ -93,22 +79,33 @@ function ChallengesModal(props: ChallengesModalProps): JSX.Element {
       </div>
 
       {/* Content */}
-      <div>
-        <Table
-          dataSource={generateChallenges(100)}
-          columns={columns}
-          pagination={{
-            defaultPageSize: 10,
-            pageSizeOptions: [5, 10, 20],
-          }}
-        />
+      <div className="challenges-modal-content-wrapper">
+        {loading && <Spin style={{ margin: 'auto' }} />}
+        {!loading && (
+          <Table
+            dataSource={challenges}
+            columns={columns}
+            pagination={{
+              defaultPageSize: 10,
+              pageSizeOptions: [5, 10, 20],
+            }}
+          />
+        )}
       </div>
     </Modal>
   );
 }
 
+/* Main Component */
+
+type LeaderboardProps = {
+  style?: React.CSSProperties;
+};
+
 function Challenges(props: LeaderboardProps): JSX.Element {
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { loading, challenges } = useChallenges(6);
 
   const handleModalOpen = useCallback(() => {
     setModalOpen(true);
@@ -142,7 +139,8 @@ function Challenges(props: LeaderboardProps): JSX.Element {
       }
       style={props.style}
     >
-      <Table dataSource={generateChallenges(6)} columns={columns} pagination={false} />
+      {loading && <Spin style={{ margin: 'auto' }} />}
+      {!loading && <Table dataSource={challenges} columns={columns} pagination={false} />}
       <ChallengesModal open={modalOpen} onClose={handleModalClose} />
     </Card>
   );

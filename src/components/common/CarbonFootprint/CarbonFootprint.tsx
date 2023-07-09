@@ -7,12 +7,12 @@ import { Spin, Typography } from 'antd';
 
 import Card from 'components/common/Card/Card';
 
+import { getCo2Statistics } from 'utils/carbon';
 import { leftPad } from 'utils/formatting';
 import { defaultRangeForTimeUnit } from 'utils/time';
 import { halfSpace } from 'utils/units';
 
-import { ReactComponent as CarIcon } from 'assets/icons/CarIcon.svg';
-import { ReactComponent as TreeIcon } from 'assets/icons/TreeIcon.svg';
+import { green } from '@ant-design/colors';
 
 /* Mockdata for the Plot */
 const plotData: Plotly.Data[] = [
@@ -38,16 +38,17 @@ const plotLayout: Partial<Plotly.Layout> = {
 };
 
 type StatisticsBadgeProps = {
-  icon: JSX.Element;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   value: number;
   text: string;
 };
 function StatisticsBadge(props: StatisticsBadgeProps): JSX.Element {
+  const Icon = props.icon;
   return (
     <div className="statistics-badge-root">
-      {props.icon}
+      <Icon width={32} height={32} color={green[7]} />
       <Typography.Text type="success">
-        <span style={{ fontWeight: 600, marginRight: '0.25em' }}>{props.value}</span>
+        <span style={{ fontWeight: 600, marginRight: '0.25em' }}>{props.value.toFixed(0)}</span>
         {props.text}
       </Typography.Text>
     </div>
@@ -125,8 +126,11 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
             {`${footprint?.average.toFixed(0)}${halfSpace}Kg is equivalent to:`}
           </Typography.Title>
           <div className="carbon-footprint-statistics-wrapper-inner">
-            <StatisticsBadge icon={<TreeIcon />} value={5} text="trees cut down" />
-            <StatisticsBadge icon={<CarIcon />} value={1000} text="mile drive" />
+            {!loading &&
+              footprint &&
+              getCo2Statistics(footprint.average).map(({ icon, value, text, type }) => (
+                <StatisticsBadge icon={icon} value={value} text={text} key={type} />
+              ))}
           </div>
         </div>
       )}

@@ -21,6 +21,7 @@
     flex-direction: column;
     .carbon-footprint-statistics-wrapper-inner {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         gap: 32px;
     }

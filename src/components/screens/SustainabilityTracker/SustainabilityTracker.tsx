@@ -10,13 +10,11 @@ function SustainabilityTracker(): JSX.Element {
     <PageWrapper showBreadcrumbs>
       <Row gutter={[32, 32]} style={{ height: '100%' }}>
         <Col span={24}>
-          {/* Realtime Carbon footprint placeholder */}
           <CarbonFootprint fullwidth style={{ height: '100%' }} />
         </Col>
       </Row>
       <Row gutter={[32, 32]}>
         <Col span={12}>
-          {/* Leaderboards */}
           <Leaderboard style={{ flex: '1 1 0' }} />
         </Col>
         <Col span={12}>

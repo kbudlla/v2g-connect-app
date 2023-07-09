@@ -22,6 +22,8 @@ export const defaultRangeForTimeUnit = (options: DefaultRangeForTimeUnitOptions)
       // Current day
       return { to, from: moment(to).subtract(1, 'day').toDate(), unit };
     case 'days':
+      // Current week
+      return { to, from: moment(to).subtract(1, 'week').toDate(), unit };
     case 'weeks':
       // Current month
       return { to, from: moment(to).subtract(1, 'month').toDate(), unit };

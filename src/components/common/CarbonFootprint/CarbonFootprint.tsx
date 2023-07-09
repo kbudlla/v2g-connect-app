@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
-import Plot from 'react-plotly.js';
+import { useCallback, useState } from 'react';
 
 import { useCarbonFootprint } from 'api/sustainability';
 
@@ -11,22 +10,10 @@ import { getCo2Statistics } from 'utils/carbon';
 import { TimeUnit, defaultRangeForTimeUnit } from 'utils/time';
 import { halfSpace } from 'utils/units';
 
+import RealtimeFootprintChart from './components/RealtimeFootprintChart';
 import SustainabilityInfo from './components/SustainabilityInfo';
 
 import { green } from '@ant-design/colors';
-
-/* Static configuration for the Plot */
-
-const plotConfig: Partial<Plotly.Config> = {
-  displaylogo: false,
-  displayModeBar: false,
-  responsive: true,
-};
-
-const plotLayout: Partial<Plotly.Layout> = {
-  showlegend: false,
-  autosize: true,
-};
 
 type StatisticsBadgeProps = {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -61,20 +48,6 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
     setTimeRange(defaultRangeForTimeUnit({ unit }));
   }, []);
 
-  const plotData = useMemo(
-    (): Partial<Plotly.PlotData>[] => [
-      {
-        type: 'bar',
-        x: footprint?.timeseries.x ?? [],
-        y: footprint?.timeseries.y ?? [],
-        marker: {
-          color: '#4DC36F',
-        },
-      },
-    ],
-    [footprint],
-  );
-
   return (
     <Card
       header={
@@ -105,10 +78,10 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
           style={{ width: 120 }}
           onChange={handleTimeUnitChange}
           options={[
-            { value: 'minutes', label: 'Current Day (Minutes)' },
-            { value: 'hours', label: 'Current Day (Hourly)' },
-            { value: 'days', label: 'Current Month (Daily)' },
-            { value: 'weeks', label: 'Current Month (Weekly)' },
+            // { value: 'minutes', label: 'Current Day (Minutes)' },
+            // { value: 'hours', label: 'Current Day' },
+            { value: 'days', label: 'Current Week' },
+            // { value: 'weeks', label: 'Current Month' },
             { value: 'months', label: 'Current Year' },
           ]}
         />
@@ -117,7 +90,7 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
       {/* Plot */}
       <div className="carbon-footprint-plot-wrapper">
         {loading && <Spin style={{ margin: 'auto' }} />}
-        {!loading && <Plot data={plotData} layout={plotLayout} config={plotConfig} className="carbon-footprint-plot" />}
+        {!loading && <RealtimeFootprintChart timeseries={footprint?.timeseries} timeUnit={timeRange.unit} />}
       </div>
 
       {/* Statistics */}

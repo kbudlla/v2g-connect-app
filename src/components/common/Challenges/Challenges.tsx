@@ -89,6 +89,7 @@ function ChallengesModal(props: ChallengesModalProps): JSX.Element {
               defaultPageSize: 10,
               pageSizeOptions: [5, 10, 20],
             }}
+            rowKey={(row) => row.id}
           />
         )}
       </div>

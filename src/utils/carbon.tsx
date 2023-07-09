@@ -2,6 +2,8 @@
 This module contains utility functions to translate average CO2 usage into something more appropriate for users
 It takes care of providing the required Icons as well.
 */
+import { toYearPercentage, type TimeUnit } from './time';
+
 import { ReactComponent as AirplaneIcon } from 'assets/icons/material/airplane-takeoff.svg';
 import { ReactComponent as BusIcon } from 'assets/icons/material/bus.svg';
 import { ReactComponent as EVIcon } from 'assets/icons/material/car-electric.svg';
@@ -81,4 +83,45 @@ export const getCo2Statistics = (co2Kg: number): EquivalentCO2StatisticInfo[] =>
       // Filter out elements close to 0
       .filter((e) => e.value > 1)
   );
+};
+
+// Sustainability-metric
+
+// https://www.iea.org/data-and-statistics/charts/energy-related-co2-emissions-per-capita-by-income-decile-in-selected-countries-and-regions-2021
+const EuropeEmissionsPercentile = [1500, 2600, 3700, 4800, 5800, 7300, 8700, 11000, 14100, 24200] as const;
+
+// https://www.greenpeace.de/ueber-uns/leitbild/unser-co2-fussabdruck
+const IdealCO2Emissions = 2000;
+
+export type SustainabilityScore = {
+  percentile: 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
+  ideal: boolean;
+};
+
+// By default this assumes that personal mobility accounts for 40% of your total emissions
+export const getSustainabilityScore = (
+  co2Kg: number,
+  timeUnit: TimeUnit,
+  mobilityFactor = 0.4,
+): SustainabilityScore => {
+  // Re-normalize the provided average to one year:
+  const yearPercentage = toYearPercentage(timeUnit);
+  const co2kgPerYear = co2Kg / yearPercentage;
+
+  const ideal = co2kgPerYear < IdealCO2Emissions * mobilityFactor;
+
+  // For the percentile, we find the smallest index that's larger than the provided number
+  let index = 0;
+  while (co2kgPerYear > EuropeEmissionsPercentile[index] * mobilityFactor) {
+    index++;
+    if (index >= EuropeEmissionsPercentile.length) {
+      index = EuropeEmissionsPercentile.length - 1;
+      break;
+    }
+  }
+
+  return {
+    ideal,
+    percentile: (index * 10) as SustainabilityScore['percentile'],
+  };
 };

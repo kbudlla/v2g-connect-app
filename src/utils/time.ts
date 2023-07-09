@@ -24,7 +24,7 @@ export const defaultRangeForTimeUnit = (options: DefaultRangeForTimeUnitOptions)
     case 'days':
     case 'weeks':
       // Current month
-      return { to, from: moment(to).subtract(1, 'week').toDate(), unit };
+      return { to, from: moment(to).subtract(1, 'month').toDate(), unit };
     case 'months':
       // Current year
       return { to, from: moment(to).subtract(1, 'year').toDate(), unit };
@@ -34,6 +34,8 @@ export const defaultRangeForTimeUnit = (options: DefaultRangeForTimeUnitOptions)
 export const getTimeSteps = (range: TimeRange) => {
   const { from, to, unit } = range;
   const difference = moment(to).diff(from, unit);
+
+  console.log(difference);
 
   const start = moment(from);
   return new Array(difference).fill(0).map((_, i) => start.add(i, unit).toDate());
@@ -50,6 +52,13 @@ export const unitToMs = (unit: TimeUnit): number => {
     case 'weeks':
       return 7 * unitToMs('days');
     case 'months':
-      return 30 * unitToMs('weeks');
+      return 30.4167 * unitToMs('days');
   }
+};
+
+export const toYearPercentage = (unit: TimeUnit): number => {
+  const unitInMs = unitToMs(unit);
+  const yearInMs = 52.1429 * unitToMs('weeks');
+
+  return unitInMs / yearInMs;
 };

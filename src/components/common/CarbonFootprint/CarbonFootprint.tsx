@@ -1,30 +1,21 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Plot from 'react-plotly.js';
 
 import { useCarbonFootprint } from 'api/sustainability';
 
-import { Spin, Typography } from 'antd';
+import { Select, Space, Spin, Typography } from 'antd';
 
 import Card from 'components/common/Card/Card';
 
 import { getCo2Statistics } from 'utils/carbon';
-import { leftPad } from 'utils/formatting';
-import { defaultRangeForTimeUnit } from 'utils/time';
+import { TimeUnit, defaultRangeForTimeUnit } from 'utils/time';
 import { halfSpace } from 'utils/units';
+
+import SustainabilityInfo from './components/SustainabilityInfo';
 
 import { green } from '@ant-design/colors';
 
-/* Mockdata for the Plot */
-const plotData: Plotly.Data[] = [
-  {
-    type: 'bar',
-    x: new Array(12).fill(0).map((_, i) => `2023-${leftPad(i, 2, 0)}-01 12:00:00`),
-    y: new Array(12).fill(0).map(() => Math.floor(Math.random() * 200 + 100)),
-    marker: {
-      color: '#4DC36F',
-    },
-  },
-];
+/* Static configuration for the Plot */
 
 const plotConfig: Partial<Plotly.Config> = {
   displaylogo: false,
@@ -66,6 +57,24 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
 
   const { footprint, loading } = useCarbonFootprint(userId, timeRange);
 
+  const handleTimeUnitChange = useCallback((unit: TimeUnit) => {
+    setTimeRange(defaultRangeForTimeUnit({ unit }));
+  }, []);
+
+  const plotData = useMemo(
+    (): Partial<Plotly.PlotData>[] => [
+      {
+        type: 'bar',
+        x: footprint?.timeseries.x ?? [],
+        y: footprint?.timeseries.y ?? [],
+        marker: {
+          color: '#4DC36F',
+        },
+      },
+    ],
+    [footprint],
+  );
+
   return (
     <Card
       header={
@@ -83,27 +92,28 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
             Real-Time Carbon Footprint
           </Typography.Title>
 
-          <Typography.Title
-            level={2}
-            style={{
-              margin: 0,
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-              fontWeight: 400,
-            }}
-          >
-            <span style={{ fontWeight: 800, marginRight: '0.5em' }}>
-              {loading && 'Loading...'}
-              {!loading && `${footprint?.average.toFixed(0)}${halfSpace}Kg`}
-            </span>
-            {!loading && <span style={{ fontSize: '20px', marginRight: '0.5em' }}>Sustainable Lifestyle</span>}
-          </Typography.Title>
+          <SustainabilityInfo averageCO2={footprint?.average} loading={loading} timeUnit={timeRange.unit} />
         </div>
       }
       fullwidth={props.fullwidth}
       style={props.style}
     >
+      {/* Drop-down to select Time-range*/}
+      <Space wrap style={{ justifyContent: 'flex-end' }}>
+        <Select
+          defaultValue={timeRange.unit}
+          style={{ width: 120 }}
+          onChange={handleTimeUnitChange}
+          options={[
+            { value: 'minutes', label: 'Current Day (Minutes)' },
+            { value: 'hours', label: 'Current Day (Hourly)' },
+            { value: 'days', label: 'Current Month (Daily)' },
+            { value: 'weeks', label: 'Current Month (Weekly)' },
+            { value: 'months', label: 'Current Year' },
+          ]}
+        />
+      </Space>
+
       {/* Plot */}
       <div className="carbon-footprint-plot-wrapper">
         {loading && <Spin style={{ margin: 'auto' }} />}

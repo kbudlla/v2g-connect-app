@@ -5,6 +5,7 @@
 }
 
 .carbon-footprint-plot-wrapper {
+    display: flex;
     flex: 1 1 0;
     // Required for the element to shrink, if required
     min-height: 0;

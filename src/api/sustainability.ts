@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { APIHookError, APIResponse } from './types';
 
 import { resolveWithTimeout } from 'utils/mock';
+import { TimeRange, getTimeSteps, unitToMs } from 'utils/time';
 import { halfSpace } from 'utils/units';
 
 import { faker } from '@faker-js/faker';
@@ -27,6 +28,14 @@ export type Challenge = {
     discrete: boolean;
     count: number;
     total: number;
+  };
+};
+
+export type CarbonFootprintInfo = {
+  average: number;
+  timeseries: {
+    x: string[];
+    y: number[];
   };
 };
 
@@ -156,6 +165,46 @@ export const getChallenges = async (
   });
 };
 
+export const getCarbonFootprint = async (
+  userId: string,
+  range: TimeRange,
+): Promise<APIResponse<CarbonFootprintInfo>> => {
+  const timesteps = getTimeSteps(range);
+
+  // generate data for the timesteps
+  const unitInMs = unitToMs(range.unit);
+
+  // Somewhat sensible defaults for germany
+  // https://www.destatis.de/EN/Themes/Countries-Regions/International-Statistics/Data-Topic/Tables/BasicData_CO2.html
+  // Max ~ 13.24t, min: 4.62t per year
+  // Roughly 40% from mobility
+  // https://www.statista.com/statistics/1185535/transport-carbon-dioxide-emissions-breakdown/
+  // That gives us:
+  const emissionPerMsMinKg = 0.4 * ((4.62 * 1000) / (12 * unitToMs('months')));
+  const emissionPerMsMaxKg = 0.4 * ((13.24 * 1000) / (12 * unitToMs('months')));
+
+  // From this we can calculate min/max for the given timeframe
+  const emissionsMinKg = unitInMs * emissionPerMsMinKg;
+  const emissionsMaxKg = unitInMs * emissionPerMsMaxKg;
+  const emissionsDeltaKg = emissionsMaxKg - emissionsMinKg;
+
+  const emissionsKg = timesteps.map(() => Math.random() * emissionsDeltaKg + emissionsMinKg);
+
+  const average = emissionsKg.reduce((acc, e) => acc + e) / emissionsKg.length;
+
+  // Return after timeout
+  return resolveWithTimeout({
+    status: 200,
+    data: {
+      average,
+      timeseries: {
+        x: timesteps.map((e) => e.toISOString()),
+        y: emissionsKg,
+      },
+    },
+  });
+};
+
 /* Hooks */
 
 export const useLeaderboard = (limit?: number, sortBy?: Exclude<keyof LeaderboardUser, 'id'>) => {
@@ -194,7 +243,7 @@ export const useLeaderboard = (limit?: number, sortBy?: Exclude<keyof Leaderboar
     return () => {
       isMountedRef.current = false;
     };
-  }, [limit, sortBy, update]);
+  }, [update]);
 
   return {
     loading,
@@ -240,12 +289,58 @@ export const useChallenges = (limit?: number, sortBy?: Exclude<keyof Challenge, 
     return () => {
       isMountedRef.current = false;
     };
-  }, [limit, sortBy, update]);
+  }, [update]);
 
   return {
     loading,
     error,
     challenges,
+    update,
+  };
+};
+
+export const useCarbonFootprint = (userId: string, range: TimeRange) => {
+  const [loading, setLoading] = useState(false);
+  const [footprint, setFootprint] = useState<CarbonFootprintInfo | null>(null);
+  const [error, setError] = useState<APIHookError | null>(null);
+  const isMountedRef = useRef(false);
+
+  const update = useCallback(() => {
+    // TODO this is very generic, so we could make this a wrapper thingie
+    setLoading(true);
+    getCarbonFootprint(userId, range).then((val) => {
+      if (!isMountedRef.current) return;
+      setLoading(false);
+      if (val.status !== 200) {
+        setError(APIHookError.InvalidRequestError);
+        setFootprint(null);
+        return;
+      }
+      if (val.data == null) {
+        setError(APIHookError.ServerSideError);
+        setFootprint(null);
+        return;
+      }
+      setError(null);
+      setFootprint(val.data);
+    });
+  }, [userId, range]);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    // Update on mount
+    update();
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [update]);
+
+  return {
+    loading,
+    error,
+    footprint,
     update,
   };
 };

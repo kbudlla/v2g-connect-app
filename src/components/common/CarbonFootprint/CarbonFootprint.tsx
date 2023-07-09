@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import Plot from 'react-plotly.js';
 
-import { Typography } from 'antd';
+import { useCarbonFootprint } from 'api/sustainability';
+
+import { Spin, Typography } from 'antd';
 
 import Card from 'components/common/Card/Card';
 
 import { leftPad } from 'utils/formatting';
+import { defaultRangeForTimeUnit } from 'utils/time';
 import { halfSpace } from 'utils/units';
 
 import { ReactComponent as CarIcon } from 'assets/icons/CarIcon.svg';
@@ -56,6 +60,11 @@ type CarbonFootprintProps = {
 };
 
 function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
+  const [userId, _] = useState('userId');
+  const [timeRange, setTimeRange] = useState(defaultRangeForTimeUnit({ unit: 'months' }));
+
+  const { footprint, loading } = useCarbonFootprint(userId, timeRange);
+
   return (
     <Card
       header={
@@ -83,8 +92,11 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
               fontWeight: 400,
             }}
           >
-            <span style={{ fontWeight: 800, marginRight: '0.5em' }}>180{halfSpace}KG</span>
-            <span style={{ fontSize: '20px', marginRight: '0.5em' }}>Sustainable Lifestyle</span>
+            <span style={{ fontWeight: 800, marginRight: '0.5em' }}>
+              {loading && 'Loading...'}
+              {!loading && `${footprint?.average.toFixed(0)}${halfSpace}Kg`}
+            </span>
+            {!loading && <span style={{ fontSize: '20px', marginRight: '0.5em' }}>Sustainable Lifestyle</span>}
           </Typography.Title>
         </div>
       }
@@ -93,28 +105,31 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
     >
       {/* Plot */}
       <div className="carbon-footprint-plot-wrapper">
-        <Plot data={plotData} layout={plotLayout} config={plotConfig} className="carbon-footprint-plot" />
+        {loading && <Spin style={{ margin: 'auto' }} />}
+        {!loading && <Plot data={plotData} layout={plotLayout} config={plotConfig} className="carbon-footprint-plot" />}
       </div>
 
       {/* Statistics */}
-      <div className="carbon-footprint-statistics-wrapper">
-        <Typography.Title
-          level={4}
-          style={{
-            color: '#5F6D7E',
-            letterSpacing: '-0.02px',
-            fontWeight: 600,
-            textAlign: 'center',
-            margin: '8px 0',
-          }}
-        >
-          275{halfSpace}KG is equivalent to:
-        </Typography.Title>
-        <div className="carbon-footprint-statistics-wrapper-inner">
-          <StatisticsBadge icon={<TreeIcon />} value={5} text="trees cut down" />
-          <StatisticsBadge icon={<CarIcon />} value={1000} text="mile drive" />
+      {!loading && (
+        <div className="carbon-footprint-statistics-wrapper">
+          <Typography.Title
+            level={4}
+            style={{
+              color: '#5F6D7E',
+              letterSpacing: '-0.02px',
+              fontWeight: 600,
+              textAlign: 'center',
+              margin: '8px 0',
+            }}
+          >
+            {`${footprint?.average.toFixed(0)}${halfSpace}Kg is equivalent to:`}
+          </Typography.Title>
+          <div className="carbon-footprint-statistics-wrapper-inner">
+            <StatisticsBadge icon={<TreeIcon />} value={5} text="trees cut down" />
+            <StatisticsBadge icon={<CarIcon />} value={1000} text="mile drive" />
+          </div>
         </div>
-      </div>
+      )}
     </Card>
   );
 }

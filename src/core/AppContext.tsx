@@ -1,10 +1,13 @@
 import { createContext, useCallback, useContext, useRef, useSyncExternalStore } from 'react';
 
+import type { CognitoAccessToken } from 'amazon-cognito-identity-js';
+
 // This context file is mainly inspired by https://www.youtube.com/watch?v=ZKlXqrcBx88 (Making React Context FAST!)
 // This uses latest react hook `useSyncExternalStore` which provide a good data handling in React 18
 
 type AppContextStore = {
   isMainMenuCollapsed: boolean;
+  accessToken?: CognitoAccessToken;
 };
 
 const InitialAppContextValues: AppContextStore = {

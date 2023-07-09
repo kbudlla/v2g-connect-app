@@ -1,5 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
+import { usePartialAppContext } from 'core/AppContext';
+
 import { Layout } from 'antd';
 
 import { MainMenu, MainMenuCollapseButton } from 'components/screens/MainMenu/MainMenu';
@@ -11,6 +13,8 @@ import './Home.scss';
 const { Header, Content } = Layout;
 
 export const Home = () => {
+  const [accessToken, setAccessToken] = usePartialAppContext('accessToken');
+  console.log(accessToken);
   return (
     <Layout>
       <MainMenu />

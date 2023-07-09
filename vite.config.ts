@@ -5,4 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [svgr(), react(), tsconfigPaths()],
+  define: {
+    global: {},
+  },
 });

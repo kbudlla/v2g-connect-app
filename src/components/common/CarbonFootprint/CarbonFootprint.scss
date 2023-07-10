@@ -1,0 +1,42 @@
+.carbon-footprint-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.carbon-footprint-plot-wrapper {
+    display: flex;
+    flex: 1 1 0;
+    // Required for the element to shrink, if required
+    min-height: 0;
+
+    .carbon-footprint-plot {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.carbon-footprint-statistics-wrapper {
+    display: flex;
+    flex-direction: column;
+    .carbon-footprint-statistics-wrapper-inner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 32px;
+    }
+}
+
+.statistics-badge-root {
+    height: 56px;
+    padding: 0 12px;
+    display: flex;
+    border-radius: 12px;
+    background: rgba(60, 179, 74, 0.06);
+    & > * {
+        margin: auto 0;
+    }
+    & > svg {
+        margin-right: 6px;
+    }
+}

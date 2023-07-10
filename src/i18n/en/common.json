@@ -1,0 +1,21 @@
+{
+    "challenges": "Challenges",
+    "leaderboard": "Leaderboard",
+    "realtimeCarbonFootprint": "Real-time carbon footprint",
+    "currentDay": "Current day",
+    "currentWeek": "Current week",
+    "currentMonth": "Current month",
+    "currentYear": "Current year",
+    "sustainableLifestyle": "Sustainable lifestyle",
+    "averageLifestyle": "Average lifestyle",
+    "highEmissionLifestyle": "High emission lifestyle",
+    "extremelyHighEmissionLifestyle": "Extremely high emission lifestyle",
+    "co2StatisticsTree": "trees absorbing CO2 for one year",
+    "co2StatisticsAirplane": "km flown",
+    "co2StatisticsCar": "km driven",
+    "co2StatisticsBus": "km driven",
+    "co2StatisticsEV": "km driven (EV)",
+    "co2StatisticsTrain": "km driven",
+    "showAll": "Show All",
+    "search": "Search"
+}

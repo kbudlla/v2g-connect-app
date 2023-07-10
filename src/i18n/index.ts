@@ -2,9 +2,11 @@ import { initReactI18next } from 'react-i18next';
 
 import i18next from 'i18next';
 
+import commonDE from './de/common.json';
 import forgotPasswordDE from './de/forgotPassword.json';
 import loginDE from './de/login.json';
 import resetPasswordDE from './de/resetPassword.json';
+import commonEN from './en/common.json';
 import forgotPasswordEN from './en/forgotPassword.json';
 import loginEN from './en/login.json';
 import resetPasswordEN from './en/resetPassword.json';
@@ -28,11 +30,13 @@ i18next.use(initReactI18next).init({
       login: loginEN,
       forgotPassword: forgotPasswordEN,
       resetPassword: resetPasswordEN,
+      common: commonEN,
     },
     de: {
       login: loginDE,
       forgotPassword: forgotPasswordDE,
       resetPassword: resetPasswordDE,
+      common: commonDE,
     },
   },
 });

@@ -47,11 +47,11 @@ type ChargingStationGeoJSONProperties = {
 };
 
 export type ChargingStationGeoJSONFeatures =
-  | Supercluster.ClusterFeature<{}>
+  | Supercluster.ClusterFeature<Record<string, never>>
   | Supercluster.PointFeature<ChargingStationGeoJSONProperties>;
 
 // Static Supercluster instance
-const clusterIndex = new Supercluster<ChargingStationGeoJSONProperties, {}>({
+const clusterIndex = new Supercluster<ChargingStationGeoJSONProperties, Record<string, never>>({
   radius: 50,
   maxZoom: 16,
 });

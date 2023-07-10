@@ -31,10 +31,10 @@ module.exports = {
     '^(components)(.*)$',
 
     // Routes
-    '^routes(.*)$',
+    '^components/screens/(.*)$',
 
-    // Theme and local style-definitions
-    '^(theme|((\\.\\/){0,}|(\\.\\.\\/))styles|.*.(s*css))(.*)$',
+    // Theme and local style-definitions, clsx
+    '^(theme|((\\.\\/){0,}|(\\.\\.\\/))styles|.*.(s*css)|clsx)(.*)$',
 
     // Utils
     '^(utils|clsx|nanoid|lodash-es|i18n|i18next)(.*)$',

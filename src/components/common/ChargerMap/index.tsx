@@ -30,7 +30,7 @@ export default function ChargerMap() {
       >
         {markers.map((markerGeoJSON, index) => (
           <Marker key={markerGeoJSON.id ?? index} anchor={markerGeoJSON.geometry.coordinates as [number, number]}>
-            <ChargerMapMarker {...markerGeoJSON.properties} />
+            <ChargerMapMarker {...(markerGeoJSON.properties as any)} />
           </Marker>
         ))}
       </Map>

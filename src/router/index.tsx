@@ -1,11 +1,12 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import ChargerMap from 'components/common/ChargerMap';
 import { AccessScreen } from 'components/screens/Auth/Access/Access';
 import { ResetPassword } from 'components/screens/Auth/ResetPassword/ResetPassword';
+import ChargerMap from 'components/screens/ChargerMap/ChargerMap';
 import Dashboard from 'components/screens/Dashboard/Dashboard';
 import { Home } from 'components/screens/Home/Home';
+import SustainabilityTracker from 'components/screens/SustainabilityTracker/SustainabilityTracker';
 
 import { ForgotPassword } from '../components/screens/Auth/ForgotPassword/ForgotPassword';
 // import ForgotPasswordVerificationForm from '../components/screens/Auth/ForgotPassword/ForgotPasswordVerification';
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
           {
             path: 'charger-map',
             element: <ChargerMap />,
+          },
+          {
+            path: 'sustainability',
+            element: <SustainabilityTracker />,
           },
         ],
       },

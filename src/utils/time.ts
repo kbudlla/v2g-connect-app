@@ -36,9 +36,6 @@ export const defaultRangeForTimeUnit = (options: DefaultRangeForTimeUnitOptions)
 export const getTimeSteps = (range: TimeRange) => {
   const { from, to, unit } = range;
   const difference = moment(to).diff(from, unit);
-
-  console.log(difference);
-
   const start = moment(from);
   return new Array(difference).fill(0).map((_, i) => start.add(i, unit).toDate());
 };

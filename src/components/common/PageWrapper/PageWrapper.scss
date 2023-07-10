@@ -1,6 +1,11 @@
 .page-wrapper {
     height: 100%;
     width: 100%;
+
+    // Same as the sidebar, I think
+    @media screen and (max-width:768px) {
+        padding: 8px;
+    }
     
     padding: 32px;
     display: flex;

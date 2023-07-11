@@ -46,7 +46,6 @@ function SustainabilityInfo(props: SustainabilityInfoProps): JSX.Element {
     };
   }, [averageCO2, loading, timeUnit]);
 
-  console.log(sustainabilityScore);
   return (
     <Typography.Title
       level={2}

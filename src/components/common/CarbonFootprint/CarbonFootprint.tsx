@@ -53,7 +53,7 @@ function CarbonFootprint(props: ForwardedCardProps<CarbonFootprintProps>): JSX.E
   return (
     <Card
       header={
-        <div className="carbon-footprint-header">
+        <div className="flex flex-row justify-between flex-wrap gap-4">
           <Typography.Title
             level={2}
             type="success"

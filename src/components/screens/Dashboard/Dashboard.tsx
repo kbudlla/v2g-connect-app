@@ -36,8 +36,8 @@ const Dashboard = () => {
   return (
     <PageWrapper showBreadcrumbs>
       <Greeting />
-      <Row gutter={[16, 32]} style={{ flex: '600px 1 0' }}>
-        <Col span={16}>
+      <Row gutter={[16, 32]}>
+        <Col span={24} xl={16} className="min-h-[32rem]">
           <EnergyGraphCard
             fullwidth
             fullheight
@@ -47,18 +47,18 @@ const Dashboard = () => {
             onTimeRangeChange={handleTimeUnitChange}
           />
         </Col>
-        <Col span={8}>
-          <Row gutter={[16, 16]} className="fullheight">
-            <Col span={24}>
+        <Col span={24} xl={8}>
+          <Row gutter={[16, 16]} className="h-full">
+            <Col span={12} xl={24}>
               <EnergySoldCard fullheight loading={loading} amount={energyUsageInfo?.total.dischargedKWh} />
             </Col>
-            <Col span={24}>
+            <Col span={12} xl={24}>
               <EarningsCard fullheight loading={loading} receipts={energyUsageInfo?.receipts} />
             </Col>
-            <Col span={24}>
+            <Col span={12} xl={24}>
               <EnergyChargedCard fullheight loading={loading} amountKWh={amountChargedClean} />
             </Col>
-            <Col span={24}>
+            <Col span={12} xl={24}>
               <CO2OverviewCard
                 fullheight
                 loading={loading}
@@ -71,18 +71,19 @@ const Dashboard = () => {
         </Col>
       </Row>
 
-      <Row gutter={[32, 32]} style={{ flex: '400px 1 0' }}>
-        <Col span={12}>
+      <Row gutter={[32, 32]}>
+        <Col sm={24} lg={12} className="h-[26rem]">
           <EnergyMixCard
             simple
             fullheight
+            fullwidth
             loading={loading}
             gridMix={AveragePowerMix}
             userMix={energyUsageInfo?.average.chargingMix}
           />
         </Col>
-        <Col span={12}>
-          <ChargingReceiptsCard fullheight loading={loading} limit={3} receipts={energyUsageInfo?.receipts} />
+        <Col sm={24} lg={12}>
+          <ChargingReceiptsCard fullheight fullwidth loading={loading} limit={3} receipts={energyUsageInfo?.receipts} />
         </Col>
       </Row>
 

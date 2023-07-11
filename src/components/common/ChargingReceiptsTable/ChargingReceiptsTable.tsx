@@ -10,6 +10,9 @@ const columns: TableProps<ChargingReceipt>['columns'] = [
     title: 'Location',
     dataIndex: 'location',
     key: 'location',
+    ellipsis: {
+      showTitle: true,
+    },
   },
   {
     title: 'Date',
@@ -47,6 +50,7 @@ function ChargingReceiptsTable(props: ChargingReceiptsTableProps): JSX.Element {
 
   return (
     <Table
+      className="max-w-full"
       dataSource={receipts}
       columns={columns}
       pagination={
@@ -58,6 +62,7 @@ function ChargingReceiptsTable(props: ChargingReceiptsTableProps): JSX.Element {
           : false
       }
       rowKey={(row) => row.timestamp}
+      tableLayout="fixed"
     />
   );
 }

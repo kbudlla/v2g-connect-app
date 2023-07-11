@@ -8,16 +8,16 @@ import PageWrapper from 'components/common/PageWrapper/PageWrapper';
 function SustainabilityTracker(): JSX.Element {
   return (
     <PageWrapper showBreadcrumbs>
-      <Row gutter={[32, 32]} className="flex110">
+      <Row gutter={[32, 32]} className="flex-1">
         <Col span={24}>
           <CarbonFootprint fullheight fullwidth />
         </Col>
       </Row>
-      <Row gutter={[32, 32]} className="flex110">
-        <Col sm={24} md={12}>
+      <Row gutter={[32, 32]} className="flex-1">
+        <Col span={24} lg={12}>
           <LeaderboardCard fullheight />
         </Col>
-        <Col sm={24} md={12}>
+        <Col span={24} lg={12}>
           <ChallengesCard fullheight />
         </Col>
       </Row>

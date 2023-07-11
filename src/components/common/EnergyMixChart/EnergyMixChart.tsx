@@ -33,23 +33,23 @@ function EnergyMixChart(props: EnergyMixChartProps): JSX.Element {
   }, [energyMix]);
 
   return (
-    <div className="fullheight flexColumn">
+    <div className="h-full max-h-full overflow-hidden flex flex-col">
       {title && (
         <Typography.Title level={5} style={{ margin: 0, fontFamily: 'Roboto' }}>
           {title}
         </Typography.Title>
       )}
-      <div className="flex110">
+      <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart
             margin={{
-              top: 5,
-              right: 30,
-              left: 5,
+              top: 20,
+              right: 10,
+              left: 10,
               bottom: 20,
             }}
           >
-            <Pie data={data} cx="50%" cy="50%" innerRadius={30} outerRadius={65} fill="#8884d8" dataKey="val">
+            <Pie data={data} cx="50%" cy="50%" innerRadius={25} outerRadius={60} fill="#8884d8" dataKey="val">
               {data.map((entry, index) => (
                 <Cell key={`cell-${entry.name}`} fill={Colors[index % Colors.length]} />
               ))}

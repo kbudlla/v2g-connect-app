@@ -60,6 +60,7 @@ function EnergyGraphCard(props: ForwardedCardProps<EnergyGraphCardProps>): JSX.E
           </Space>
         </div>
       }
+      fixedheight
       {...props}
     >
       <EnergyGraph timeseries={energyUsageInfo?.timeseries} timeUnit={timeRange.unit} />

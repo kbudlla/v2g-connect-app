@@ -38,7 +38,8 @@ function Greeting(): JSX.Element {
   const greetingSubtitle = useTranslatedRandomGreetingSubtitle();
 
   return (
-    <div>
+    // TODO fix this
+    <div className="sticky top-0 z-20" style={{ backgroundColor: '#f5f5f5' }}>
       <Typography.Title
         level={3}
         style={{

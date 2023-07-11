@@ -31,12 +31,9 @@ function UnitWithTime(props: UnitWithTimeProps): JSX.Element {
   return (
     // TODO! class
     <span
+      className="inline-flex flex-col max-h-full h-full"
       style={{
-        display: 'inline-flex',
-        flexDirection: 'column',
-        maxHeight: '100%',
-        height: '100%',
-        verticalAlign: 'middle',
+        verticalAlign: 'top',
         marginLeft: '0.25em',
       }}
     >

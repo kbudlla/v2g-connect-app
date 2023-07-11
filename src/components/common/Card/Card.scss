@@ -10,6 +10,13 @@
             margin-bottom: 20px;
         }
     }
+
+    &.fixedheight {
+        .card-content {
+            overflow: hidden;
+        }
+    }
+
     &.fullwidth {
         width: 100%;
     }
@@ -20,7 +27,6 @@
     .card-content {
         position: relative;
         flex: 1 0 0;
-        overflow: hidden;
         
         display: flex;
         flex-direction: column;

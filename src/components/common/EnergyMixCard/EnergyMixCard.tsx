@@ -37,6 +37,7 @@ function EnergyMixCard(props: ForwardedCardProps<EnergyMixCardProps>): JSX.Eleme
           </Typography.Title>
         </div>
       }
+      fixedheight
       {...props}
     >
       <div className="energy-mix-card-chart-wrapper">

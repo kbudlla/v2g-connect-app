@@ -15,12 +15,13 @@ export type ForwardedCardProps<T> = T & ForwardableCardProps;
 
 export type CardProps = {
   header?: JSX.Element;
+  fixedheight?: boolean;
 } & ForwardableCardProps;
 
 function Card(props: PropsWithChildren<CardProps>): JSX.Element {
-  const { fullwidth, fullheight, loading, style } = props;
+  const { fullwidth, fullheight, fixedheight, loading, style } = props;
   return (
-    <AntdCard className={clsx('card', { fullwidth, fullheight })} style={style}>
+    <AntdCard className={clsx('card', { fullwidth, fullheight, fixedheight })} style={style}>
       {props.header && <div className="card-header">{props.header}</div>}
       <div className="card-content">
         {loading && (

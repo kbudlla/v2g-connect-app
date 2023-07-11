@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
+import NotFound from 'components/common/NotFound/NotFound';
 import { AccessScreen } from 'components/screens/Auth/Access/Access';
 import { ResetPassword } from 'components/screens/Auth/ResetPassword/ResetPassword';
 import ChargerMap from 'components/screens/ChargerMap/ChargerMap';
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
           {
             path: 'sustainability',
             element: <SustainabilityTracker />,
+          },
+          {
+            element: <NotFound />,
+            path: '*',
           },
         ],
       },

@@ -5,7 +5,7 @@ import { APIHookError, APIResponse } from './types';
 
 import { EnergyMix, addEnergyMix, normalizeEnergyMix } from 'utils/energyMix';
 import { resolveWithTimeout } from 'utils/mock';
-import { EnergyUsageTimestep, initializeSimulation, runSimulationStep } from 'utils/simulation';
+import { ChargingReceipt, EnergyUsageTimestep, initializeSimulation, runSimulationStep } from 'utils/simulation';
 import { TimeRange, getTimeSteps } from 'utils/time';
 
 type EnergyUsageStats = Omit<EnergyUsageTimestep, 'batteryIn' | 'batteryOut' | 'timestamp'>;
@@ -15,6 +15,7 @@ export type EnergyUsageInfo = {
   total: Omit<EnergyUsageStats, 'chargingRateKW' | 'dischargeRateKW' | 'chargingMix'>;
   timeseries: EnergyUsageTimestep[];
   batteryCapacityKWh: number;
+  receipts: ChargingReceipt[];
 };
 
 /* Helper functions */
@@ -89,6 +90,7 @@ export const getEnergyUsage = async (
   // Run a quick simulation for each of the timesteps separately
   // This is easier than averaging later
   const timeseries: EnergyUsageTimestep[] = [];
+  let receipts: ChargingReceipt[] = [];
   const state = initializeSimulation({
     batteryCapacityKWh,
     batteryPercentage: initialBatteryPercentage,
@@ -100,7 +102,8 @@ export const getEnergyUsage = async (
   });
   for (const ts of timesteps) {
     const timestep = runSimulationStep(state, ts);
-    timeseries.push(timestep);
+    timeseries.push(timestep.statistics);
+    receipts = receipts.concat(timestep.receipts);
   }
 
   // Return after timeout
@@ -110,6 +113,7 @@ export const getEnergyUsage = async (
       total: totalEnergyUsage(timeseries),
       average: averageEnergyUsage(timeseries),
       timeseries,
+      receipts,
       batteryCapacityKWh,
     },
   });

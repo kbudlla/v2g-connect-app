@@ -6,24 +6,26 @@ import { Spin, Typography } from 'antd';
 import Card from 'components/common/Card/Card';
 import RoundedIconContainer from 'components/common/RoundedIconContainer/RoundedIconContainer';
 
+import { ChargingReceipt } from 'utils/simulation';
 import { halfSpace } from 'utils/units';
 
 import { ReactComponent as EarningsIcon } from 'assets/icons/earningsIcon.svg';
 
 type EarningsCardProps = {
   loading?: boolean;
-  amountKWh?: number;
+  receipts?: ChargingReceipt[];
 
   style?: React.CSSProperties;
 };
 
 function EarningsCard(props: EarningsCardProps): JSX.Element {
-  const { loading, amountKWh } = props;
+  const { loading, receipts } = props;
   const { t } = useTranslation('common');
 
   const earnings = useMemo(() => {
-    return `${((amountKWh ?? 0) * 0.08).toFixed(2)}${halfSpace}€`;
-  }, [amountKWh]);
+    const total = receipts ? receipts.reduce((total, r) => total + r.earnings, 0) : 0;
+    return `${total.toFixed(2)}${halfSpace}€`;
+  }, [receipts]);
 
   return (
     <Card

@@ -4,9 +4,9 @@ import { useEnergyUsage } from 'api/energy';
 
 import { Col, Row } from 'antd';
 
+import ChargingReceiptsCard from 'components/common/ChargingReceiptsCard/ChargingReceiptsCard';
 import EnergyGraphCard from 'components/common/EnergyGraphCard/EnergyGraphCard';
 import EnergyMixCard from 'components/common/EnergyMixCard/EnergyMixCard';
-import EnergyMixChart from 'components/common/EnergyMixChart/EnergyMixChart';
 import Greeting from 'components/common/Greeting/Greeting';
 import PageWrapper from 'components/common/PageWrapper/PageWrapper';
 
@@ -51,7 +51,7 @@ const Dashboard = () => {
         <Col span={8}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
             <EnergySoldCard loading={loading} amount={energyUsageInfo?.total.dischargedKWh} />
-            <EarningsCard loading={loading} amountKWh={energyUsageInfo?.total.dischargedKWh} />
+            <EarningsCard loading={loading} receipts={energyUsageInfo?.receipts} />
             <EnergyChargedCard loading={loading} amountKWh={amountChargedClean} />
           </div>
         </Col>
@@ -64,6 +64,14 @@ const Dashboard = () => {
             loading={loading}
             gridMix={AveragePowerMix}
             userMix={energyUsageInfo?.average.chargingMix}
+            style={{ height: '100%' }}
+          />
+        </Col>
+        <Col span={12}>
+          <ChargingReceiptsCard
+            loading={loading}
+            limit={3}
+            receipts={energyUsageInfo?.receipts}
             style={{ height: '100%' }}
           />
         </Col>

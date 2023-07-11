@@ -1,4 +1,6 @@
 import { estimateChargingSpeedPercentage, getMaximumChargingSpeed, getRandomChargingSpeed } from './chargingSpeed';
+import { charginStationLocationToHumanHumanReadable, getRandomChargingStation } from './chargingStations';
+import { generateReceipt } from './earnings';
 import {
   AveragePowerMix,
   EnergyMix,
@@ -43,6 +45,11 @@ export type SimulationState = {
   dischargedKWh: number;
   usedKWh: number;
   averageEnergyMix: EnergyMix | null;
+
+  // State for generating charging receipts
+  lastChargedKWh: number;
+  lastDischargedKWh: number;
+  receipts: ChargingReceipt[];
 };
 
 export type EnergyUsageTimestep = {
@@ -57,6 +64,21 @@ export type EnergyUsageTimestep = {
   // Doesn't happen in this simulation, tho
   chargingMix: EnergyMix;
   timestamp: string;
+};
+
+export type ChargingReceipt = {
+  chargedKWh: number;
+  dischargedKWh: number;
+  timestamp: string;
+  // Maybe charging station -> but this would bind the simulation to the chargers
+  // Doing this properly is pretty hard to do, since it requires simulating driving on a map and so on
+  // And most importantly geo-filtering.
+  // For now just a random location, sampled from the chargers
+  location: string;
+
+  chargingCost: number;
+  earnings: number;
+  totalCost: number;
 };
 
 /* Constants */
@@ -205,6 +227,17 @@ export const simulateTimestep = (state: SimulationState, timestamp: number) => {
         state.kilometersDrivenAverage < state.preferredAverageKilometers
       ) {
         state.driverState = 'driving';
+
+        // If we switch, we can generate a charging receipt
+        const receipt = generateReceipt({
+          chargedKWh: state.chargedKWh - state.lastChargedKWh,
+          dischargedKWh: state.dischargedKWh - state.lastDischargedKWh,
+          location: charginStationLocationToHumanHumanReadable(getRandomChargingStation()),
+          timestamp: new Date(timestamp).toISOString(),
+        });
+        state.receipts.push(receipt);
+        state.lastChargedKWh = state.chargedKWh;
+        state.lastDischargedKWh = state.dischargedKWh;
       }
       break;
   }
@@ -265,6 +298,10 @@ export const initializeSimulation = (parameters: SimulationParamters): Simulatio
     usedKWh: 0,
     dischargedKWh: 0,
     averageEnergyMix: null,
+
+    lastChargedKWh: 0,
+    lastDischargedKWh: 0,
+    receipts: [],
   };
 };
 
@@ -278,7 +315,7 @@ export const runSimulationStep = (state: SimulationState, timestep: Date) => {
   }
 
   // Export statistics
-  const timestampStatistics: EnergyUsageTimestep = {
+  const statistics: EnergyUsageTimestep = {
     batteryIn,
     chargedKWh: state.chargedKWh,
     usedKWh: state.usedKWh,
@@ -289,8 +326,7 @@ export const runSimulationStep = (state: SimulationState, timestep: Date) => {
     chargingMix: normalizeEnergyMix(state.averageEnergyMix) ?? AveragePowerMix,
     timestamp: timestep.toISOString(),
   };
-
-  console.log(state.kilometersDriven);
+  const receipts = [...state.receipts];
 
   // Reset running statistics
   state.stepIndex = 0;
@@ -300,6 +336,12 @@ export const runSimulationStep = (state: SimulationState, timestep: Date) => {
   state.usedKWh = 0;
   state.kilometersDriven = 0;
   state.kilometersDrivenAverage = 0;
+  state.lastChargedKWh = 0;
+  state.lastDischargedKWh = 0;
+  state.receipts = [];
 
-  return timestampStatistics;
+  return {
+    statistics,
+    receipts,
+  };
 };

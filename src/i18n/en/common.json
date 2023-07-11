@@ -43,5 +43,6 @@
     "hours": "hour",
     "days": "day",
     "weeks": "week",
-    "months": "month"
+    "months": "month",
+    "receiptsTitle": "Receipts"
 }

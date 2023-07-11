@@ -37,12 +37,13 @@
     "energyGraphTitle": "Energy flow",
     "energyMixTitle": "Energy mix",
     "energySoldTitle": "Energy sold",
-    "earningsTitle": "Earnings from V2G",
+    "earningsTitle": "Savings from V2G",
     "energyChargedCardTitle": "Energy charged",
     "minutes": "minute",
     "hours": "hour",
     "days": "day",
     "weeks": "week",
     "months": "month",
-    "receiptsTitle": "Receipts"
+    "receiptsTitle": "Receipts",
+    "co2SavedTitle": "CO2 saved"
 }

@@ -43,7 +43,7 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
   const { t } = useTranslation('common');
   const getTranslatedCO2Statistics = useTranslatedCO2Statistics();
 
-  const [userId, _] = useState('userId');
+  const [userId] = useState('userId');
   const [timeRange, setTimeRange] = useState(defaultRangeForTimeUnit({ unit: 'months' }));
 
   const { footprint, loading } = useCarbonFootprint(userId, timeRange);

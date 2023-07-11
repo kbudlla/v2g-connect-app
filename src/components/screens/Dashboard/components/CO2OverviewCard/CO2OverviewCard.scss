@@ -1,0 +1,14 @@
+.co2-overview-card-header {
+    display: flex;
+
+    // Vertical centering via flex
+    & > * {
+        margin-top: auto !important;
+        margin-bottom: auto !important;
+    }
+
+    // Spacing between icon and text
+    & > :first-child {
+        margin-right: 8px;
+    }
+}

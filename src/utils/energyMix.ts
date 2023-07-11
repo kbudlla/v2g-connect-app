@@ -145,26 +145,6 @@ export const AveragePowerMix: EnergyMix = {
   [EnergyProducerType.Other]: 0.044,
 };
 
-// https://www.bundestag.de/resource/blob/406432/c4cbd6c8c74ec40df8d9cda8fe2f7dbb/WD-8-056-07-pdf-data.pdf
-export const CO2PerKWhProducerMap: Record<EnergyProducerType, number> = {
-  // Eyeball-average levels of statistics
-  [EnergyProducerType.Coal]: 1.02,
-  [EnergyProducerType.Nuclear]: 0.0195,
-  [EnergyProducerType.Gas]: 0.64,
-  [EnergyProducerType.Oil]: 0.89,
-  [EnergyProducerType.Wind]: 0.012,
-  [EnergyProducerType.Water]: 0.0085,
-  // IDK about this one chief
-  [EnergyProducerType.Biomass]: -0.409,
-  [EnergyProducerType.Photovoltaic]: 0.12,
-  // https://www.hamburger-energietisch.de/WP-Server/wp-content/uploads/2019/02/Bilanzierung-von-CO2-aus-M%C3%BCllverbrennungsanlagen-in-Hamburg.pdf
-  // Average of industrial/residential waste, 1:1
-  [EnergyProducerType.Waste]: 0.29268,
-  // https://www.tech-for-future.de/co2-kwh-strom/
-  [EnergyProducerType.Geothermal]: 0.038,
-  [EnergyProducerType.Other]: 0.044,
-};
-
 export const SimpleAveragePowerMix = energyMixToSimple(AveragePowerMix);
 
 /* Access to resamples values from the energy mix */
@@ -217,4 +197,31 @@ export const getCurrentEnergyMix = (timestamp: number): EnergyMix => {
 
   // This is fine, because it cannot be null
   return mix as EnergyMix;
+};
+
+/* PowerMix to CO2 emissions */
+// https://www.bundestag.de/resource/blob/406432/c4cbd6c8c74ec40df8d9cda8fe2f7dbb/WD-8-056-07-pdf-data.pdf
+export const CO2PerKWhProducerMap: Record<EnergyProducerType, number> = {
+  // Eyeball-average levels of statistics
+  [EnergyProducerType.Coal]: 1.02,
+  [EnergyProducerType.Nuclear]: 0.0195,
+  [EnergyProducerType.Gas]: 0.64,
+  [EnergyProducerType.Oil]: 0.89,
+  [EnergyProducerType.Wind]: 0.012,
+  [EnergyProducerType.Water]: 0.0085,
+  // IDK about this one chief
+  [EnergyProducerType.Biomass]: -0.409,
+  [EnergyProducerType.Photovoltaic]: 0.12,
+  // https://www.hamburger-energietisch.de/WP-Server/wp-content/uploads/2019/02/Bilanzierung-von-CO2-aus-M%C3%BCllverbrennungsanlagen-in-Hamburg.pdf
+  // Average of industrial/residential waste, 1:1
+  [EnergyProducerType.Waste]: 0.29268,
+  // https://www.tech-for-future.de/co2-kwh-strom/
+  [EnergyProducerType.Geothermal]: 0.038,
+  [EnergyProducerType.Other]: 0.044,
+};
+
+export const getCO2Emissions = (mix: EnergyMix, kWh: number): number => {
+  return EnergyProducerTypes.map((type) => mix[type] * kWh * CO2PerKWhProducerMap[type]).reduce(
+    (total, e) => total + e,
+  );
 };

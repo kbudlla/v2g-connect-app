@@ -2,9 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { APIHookError, APIResponse } from './types';
 
+import { getCO2Emissions } from 'utils/energyMix';
 import { resolveWithTimeout } from 'utils/mock';
-import { TimeRange, getTimeSteps, unitToMs } from 'utils/time';
+import { TimeRange, getTimeSteps } from 'utils/time';
 import { halfSpace } from 'utils/units';
+
+import { getEnergyUsage } from './energy';
 
 import { faker } from '@faker-js/faker';
 
@@ -171,25 +174,13 @@ export const getCarbonFootprint = async (
 ): Promise<APIResponse<CarbonFootprintInfo>> => {
   const timesteps = getTimeSteps(range);
 
-  // generate data for the timesteps
-  const unitInMs = unitToMs(range.unit);
+  // Run the simulation instead
+  const { data: energyUsageInfo } = await getEnergyUsage(userId, 0.5, range);
 
-  // Somewhat sensible defaults for germany
-  // https://www.destatis.de/EN/Themes/Countries-Regions/International-Statistics/Data-Topic/Tables/BasicData_CO2.html
-  // Max ~ 13.24t, min: 4.62t per year
-  // Roughly 40% from mobility
-  // https://www.statista.com/statistics/1185535/transport-carbon-dioxide-emissions-breakdown/
-  // That gives us:
-  const emissionPerMsMinKg = 0.4 * ((4.62 * 1000) / (12 * unitToMs('months')));
-  const emissionPerMsMaxKg = 0.4 * ((13.24 * 1000) / (12 * unitToMs('months')));
-
-  // From this we can calculate min/max for the given timeframe
-  const emissionsMinKg = unitInMs * emissionPerMsMinKg;
-  const emissionsMaxKg = unitInMs * emissionPerMsMaxKg;
-  const emissionsDeltaKg = emissionsMaxKg - emissionsMinKg;
-
-  const emissionsKg = timesteps.map(() => Math.random() * emissionsDeltaKg + emissionsMinKg);
-
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const emissionsKg = energyUsageInfo!.timeseries.map((val) =>
+    getCO2Emissions(val.chargingMix, val.chargedKWh - val.dischargedKWh),
+  );
   const average = emissionsKg.reduce((acc, e) => acc + e) / emissionsKg.length;
 
   // Return after timeout

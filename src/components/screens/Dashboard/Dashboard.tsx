@@ -13,6 +13,7 @@ import PageWrapper from 'components/common/PageWrapper/PageWrapper';
 import { AveragePowerMix } from 'utils/energyMix';
 import { TimeUnit, defaultRangeForTimeUnit } from 'utils/time';
 
+import CO2OverviewCard from './components/CO2OverviewCard/CO2OverviewCard';
 import EarningsCard from './components/EarningsCard/EarningsCard';
 import EnergyChargedCard from './components/EnergyChargedCard/EnergyChargedCard';
 import EnergySoldCard from './components/EnergySoldCard/EnergySoldCard';
@@ -49,11 +50,25 @@ const Dashboard = () => {
           />
         </Col>
         <Col span={8}>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-            <EnergySoldCard loading={loading} amount={energyUsageInfo?.total.dischargedKWh} />
-            <EarningsCard loading={loading} receipts={energyUsageInfo?.receipts} />
-            <EnergyChargedCard loading={loading} amountKWh={amountChargedClean} />
-          </div>
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <EnergySoldCard loading={loading} amount={energyUsageInfo?.total.dischargedKWh} />
+            </Col>
+            <Col span={24}>
+              <EarningsCard loading={loading} receipts={energyUsageInfo?.receipts} />
+            </Col>
+            <Col span={24}>
+              <EnergyChargedCard loading={loading} amountKWh={amountChargedClean} />
+            </Col>
+            <Col span={24}>
+              <CO2OverviewCard
+                loading={loading}
+                amountKWh={amountChargedClean}
+                userMix={energyUsageInfo?.average.chargingMix}
+                gridMix={AveragePowerMix}
+              />
+            </Col>
+          </Row>
         </Col>
       </Row>
 

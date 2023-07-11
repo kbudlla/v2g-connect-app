@@ -8,7 +8,6 @@ import { toYearPercentage, type TimeUnit } from './time';
 
 import { ReactComponent as AirplaneIcon } from 'assets/icons/material/airplane-takeoff.svg';
 import { ReactComponent as BusIcon } from 'assets/icons/material/bus.svg';
-import { ReactComponent as EVIcon } from 'assets/icons/material/car-electric.svg';
 import { ReactComponent as CarIcon } from 'assets/icons/material/car.svg';
 import { ReactComponent as TrainIcon } from 'assets/icons/material/train.svg';
 import { ReactComponent as TreeIcon } from 'assets/icons/material/tree.svg';
@@ -27,7 +26,7 @@ import { ReactComponent as TreeIcon } from 'assets/icons/material/tree.svg';
 
 type SVGIcon = React.FC<React.SVGProps<SVGSVGElement>>;
 
-const CO2SourceNames = ['Tree', 'Airplane', 'Car', 'Bus', 'EV', 'Train'] as const;
+const CO2SourceNames = ['Tree', 'Airplane', 'Car', 'Bus', 'Train'] as const;
 type CO2SourceType = (typeof CO2SourceNames)[number];
 
 type EquivalentCO2StatisticInfo = {
@@ -63,12 +62,6 @@ export const useTranslatedCO2Statistics = () => {
       value: value / 0.105,
       text: t('co2StatisticsBus'),
       type: 'Bus',
-    }),
-    EV: (value) => ({
-      icon: EVIcon,
-      value: value / 0.053,
-      text: t('co2StatisticsEV'),
-      type: 'EV',
     }),
     Train: (value) => ({
       icon: TrainIcon,

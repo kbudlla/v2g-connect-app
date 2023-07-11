@@ -85,8 +85,6 @@ export const getEnergyUsage = async (
   const kmPerYear =
     Math.random() * (maxKilometersDrivenPerYear - minKilometersDrivenPerYear) + minKilometersDrivenPerYear;
 
-  console.log(kmPerYear);
-
   // Run a quick simulation for each of the timesteps separately
   // This is easier than averaging later
   const timeseries: EnergyUsageTimestep[] = [];

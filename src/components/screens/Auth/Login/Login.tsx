@@ -41,8 +41,6 @@ export const Login = () => {
     }
   };
 
-  console.log();
-
   return (
     <Form layout="vertical" className="form flex-column" onFinish={onSubmit}>
       <div className=" flex-column">

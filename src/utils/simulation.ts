@@ -190,7 +190,6 @@ const simulateCharging = (state: SimulationState, timestamp: number) => {
 export const simulateTimestep = (state: SimulationState, timestamp: number) => {
   // Increment step-index
   state.stepIndex += 1;
-  // console.log(state.driverState)
 
   // Simulation logic
   switch (state.driverState) {

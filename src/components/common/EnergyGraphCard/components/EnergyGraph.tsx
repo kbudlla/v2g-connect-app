@@ -83,8 +83,6 @@ function EnergyGraph(props: EnergyGraphProps): JSX.Element {
 
   const timeFormatter = useMemo(() => getTimeFormatter(timeUnit), [timeUnit]);
 
-  console.log(data);
-
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart

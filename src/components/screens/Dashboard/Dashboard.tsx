@@ -33,8 +33,6 @@ const Dashboard = () => {
     return energyUsageInfo.total.chargedKWh - energyUsageInfo.total.dischargedKWh;
   }, [energyUsageInfo]);
 
-  console.log(energyUsageInfo);
-
   return (
     <PageWrapper showBreadcrumbs>
       <Greeting />

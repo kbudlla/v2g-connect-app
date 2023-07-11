@@ -13,15 +13,6 @@ export const generateReceipt = (
 ): ChargingReceipt => {
   const pricePerKWh = pricesPerKWh[Math.floor(Math.random() * pricesPerKWh.length)];
 
-  if (receipt.dischargedKWh > receipt.chargedKWh) {
-    const chargingCost = receipt.chargedKWh * pricePerKWh;
-    const earnings = receipt.dischargedKWh * pricePerKWh * v2gParticipationScale;
-
-    const totalCost = chargingCost - earnings;
-    console.log(receipt.chargedKWh, receipt.dischargedKWh, chargingCost, earnings, totalCost);
-  }
-  // console.log(receipt.chargedKWh, receipt.dischargedKWh)
-
   const chargingCost = receipt.chargedKWh * pricePerKWh;
   const earnings = receipt.dischargedKWh * pricePerKWh * v2gParticipationScale;
 

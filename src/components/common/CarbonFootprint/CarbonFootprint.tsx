@@ -74,10 +74,10 @@ function CarbonFootprint(props: ForwardedCardProps<CarbonFootprintProps>): JSX.E
       {...props}
     >
       {/* Drop-down to select Time-range*/}
-      <Space wrap style={{ justifyContent: 'flex-end' }}>
+      <Space wrap className="justify-end">
         <Select
           defaultValue={timeRange.unit}
-          style={{ width: 120 }}
+          className="w-32"
           onChange={handleTimeUnitChange}
           options={[
             // { value: 'minutes', label: 'Current Day (Minutes)' },

@@ -9,7 +9,7 @@ import RoundedIconContainer from 'components/common/RoundedIconContainer/Rounded
 import { EnergyMix, getCO2Emissions } from 'utils/energyMix';
 import { formatKgValue } from 'utils/units';
 
-import { ReactComponent as LightningIcon } from 'assets/icons/lightningIcon.svg';
+import { ReactComponent as CO2Icon } from 'assets/icons/material/molecule-co2.svg';
 
 type CO2OverviewCardProps = {
   userMix?: EnergyMix;
@@ -31,7 +31,7 @@ function CO2OverviewCard(props: ForwardedCardProps<CO2OverviewCardProps>): JSX.E
     <Card
       header={
         <div className="co2-overview-card-header">
-          <RoundedIconContainer Icon={LightningIcon} size={24} color="#52c41a" backgroundColor="#EDFFEF" />
+          <RoundedIconContainer Icon={CO2Icon} size={24} color="#52c41a" backgroundColor="#EDFFEF" />
           <Typography.Title
             level={2}
             type="success"

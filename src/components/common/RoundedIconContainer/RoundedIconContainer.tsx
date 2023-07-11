@@ -11,14 +11,12 @@ type RoundedIconContainerProps = {
 function RoundedIconContainer(props: RoundedIconContainerProps): JSX.Element {
   const { size, Icon, color, backgroundColor } = props;
   return (
-    // TODO: make this a class instead
     <div
+      className="rounded-full inline-flex"
       style={{
         width: size + 18,
         height: size + 18,
         backgroundColor,
-        borderRadius: '50%',
-        display: 'inline-flex',
       }}
     >
       <Icon width={size} height={size} style={{ color, margin: 'auto' }} />

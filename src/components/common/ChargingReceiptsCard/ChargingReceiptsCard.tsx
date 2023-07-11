@@ -49,7 +49,7 @@ function ChargingReceiptsModal(props: ChargingReceiptsModalProps): JSX.Element {
 
       {/* Content */}
       <div className="challenges-modal-content-wrapper">
-        {loading && <Spin style={{ margin: 'auto' }} />}
+        {loading && <Spin className="m-auto" />}
         {!loading && data && <ChargingReceiptsTable pagination receipts={data} />}
       </div>
     </Modal>

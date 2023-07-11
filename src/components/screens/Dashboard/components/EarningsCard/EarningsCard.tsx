@@ -9,7 +9,7 @@ import RoundedIconContainer from 'components/common/RoundedIconContainer/Rounded
 import { ChargingReceipt } from 'utils/simulation';
 import { halfSpace } from 'utils/units';
 
-import { ReactComponent as EarningsIcon } from 'assets/icons/earningsIcon.svg';
+import { ReactComponent as MoneyIcon } from 'assets/icons/material/currency-usd.svg';
 
 type EarningsCardProps = {
   receipts?: ChargingReceipt[];
@@ -28,12 +28,12 @@ function EarningsCard(props: ForwardedCardProps<EarningsCardProps>): JSX.Element
     <Card
       header={
         <div className="energy-sold-card-header">
-          <RoundedIconContainer Icon={EarningsIcon} size={24} color="#52c41a" backgroundColor="#EDFFEF" />
+          <RoundedIconContainer Icon={MoneyIcon} size={24} color="#52c41a" backgroundColor="#EDFFEF" />
           <Typography.Title
             level={2}
             type="success"
+            className="m-0"
             style={{
-              margin: 0,
               fontSize: '26px',
               lineHeight: '36px',
               letterSpacing: '-0.2px',
@@ -46,6 +46,7 @@ function EarningsCard(props: ForwardedCardProps<EarningsCardProps>): JSX.Element
       {...props}
     >
       <Typography.Title
+        className="m-0"
         style={{
           color: '#0D1C2E',
           textAlign: 'center',
@@ -53,7 +54,6 @@ function EarningsCard(props: ForwardedCardProps<EarningsCardProps>): JSX.Element
           fontSize: '36px',
           fontWeight: 600,
           letterSpacing: '-0.036px',
-          margin: '0 0 0 0',
         }}
       >
         {earnings}

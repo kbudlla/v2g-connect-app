@@ -1,7 +1,5 @@
 export const halfSpace = ' ';
 
-// TODO: If we change this to { value, unit }, we can display the thing a lot better
-// Because then we can display xxx unit / time-unit
 export const formatKgValue = (co2Kg: number): string => {
   // kg
   if (co2Kg > 1) {

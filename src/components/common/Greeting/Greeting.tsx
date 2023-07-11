@@ -42,11 +42,10 @@ function Greeting(): JSX.Element {
     <div className="sticky top-0 z-20" style={{ backgroundColor: '#f5f5f5' }}>
       <Typography.Title
         level={3}
+        className="m-0 font-semibold"
         style={{
           fontFamily: 'Roboto',
-          margin: 0,
           fontSize: 28,
-          fontWeight: 600,
           lineHeight: '38px',
           letterSpacing: '-0.28px',
           color: '#0D1C2E',
@@ -56,11 +55,10 @@ function Greeting(): JSX.Element {
       </Typography.Title>
       <Typography.Title
         level={5}
+        className="m-0 font-normal"
         style={{
           fontFamily: 'Roboto',
-          margin: 0,
           lineHeight: '24px',
-          fontWeight: 400,
           letterSpacing: '-0.016px',
           color: '#868D97',
         }}

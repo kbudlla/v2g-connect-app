@@ -7,7 +7,7 @@ import RoundedIconContainer from 'components/common/RoundedIconContainer/Rounded
 
 import { formatKWhValue } from 'utils/units';
 
-import { ReactComponent as LightningIcon } from 'assets/icons/lightningIcon.svg';
+import { ReactComponent as LightningIcon } from 'assets/icons/material/lightning-bolt.svg';
 
 type EnergySoldCardProps = {
   amount?: number;

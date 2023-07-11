@@ -19,3 +19,17 @@ export const formatKgValue = (co2Kg: number): string => {
   // For amounts this small we just give up :)
   return `0${halfSpace}mg`;
 };
+
+export const formatKWhValue = (kwh: number): string => {
+  // kwh
+  if (kwh > 1) {
+    return `${kwh.toFixed(0)}${halfSpace}kWh`;
+  }
+  // wh
+  if (kwh > 0.001) {
+    return `${(kwh * 1000).toFixed(0)}${halfSpace}Wh`;
+  }
+
+  // For amounts this small we just give up :)
+  return `0${halfSpace}kWh`;
+};

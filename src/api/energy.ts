@@ -41,7 +41,7 @@ const averageEnergyUsage = (timeseries: EnergyUsageInfo['timeseries']): EnergyUs
 
 const totalEnergyUsage = (timeseries: EnergyUsageInfo['timeseries']): EnergyUsageInfo['total'] => {
   const chargedKWh = timeseries.reduce((acc, e) => acc + e.chargedKWh, 0);
-  const dischargedKWh = timeseries.reduce((acc, e) => acc + e.chargedKWh, 0);
+  const dischargedKWh = timeseries.reduce((acc, e) => acc + e.dischargedKWh, 0);
   const usedKWh = timeseries.reduce((acc, e) => acc + e.usedKWh, 0);
 
   return {

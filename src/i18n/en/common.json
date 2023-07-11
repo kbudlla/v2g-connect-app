@@ -34,5 +34,14 @@
         "Your journey towards greener choices starts here",
         "Fueling your path to a sustainable lifestyle"
     ],
-    "energyGraphTitle": "Energy Flow"
+    "energyGraphTitle": "Energy flow",
+    "energyMixTitle": "Energy mix",
+    "energySoldTitle": "Energy sold",
+    "earningsTitle": "Earnings from V2G",
+    "energyChargedCardTitle": "Energy charged",
+    "minutes": "minute",
+    "hours": "hour",
+    "days": "day",
+    "weeks": "week",
+    "months": "month"
 }

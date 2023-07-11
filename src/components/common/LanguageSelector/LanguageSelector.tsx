@@ -46,7 +46,7 @@ export const LanguageSelector = () => {
   };
 
   return (
-    <Dropdown menu={menuProps} placement="bottom" trigger={['click']}>
+    <Dropdown menu={menuProps} placement="bottom" trigger={['click']} overlayClassName="overlay">
       <Button className="language_selector__button" shape="round">
         <div className="language_selector__wrapper">
           <Image width={24} preview={false} src={i18n.language === 'en' ? ENIcon : DEIcon} />

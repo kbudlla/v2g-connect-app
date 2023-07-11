@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateFunction, useLocation, useMatch, useMatches, useNavigate, useNavigation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { usePartialAppContext } from 'core/AppContext';
 
@@ -15,12 +15,6 @@ import i18next, { TFunction } from 'i18next';
 import {
   TeamOutlined,
   MenuOutlined,
-  CloseOutlined,
-  MessageOutlined,
-  SafetyOutlined,
-  AuditOutlined,
-  AppstoreFilled,
-  GiftFilled,
   SafetyCertificateOutlined,
   AppstoreOutlined,
   GiftOutlined,
@@ -28,7 +22,7 @@ import {
 } from '@ant-design/icons';
 
 type MenuItem = Required<MenuProps>['items'][number];
-const makeMenuItems = (t: TFunction<'general'>, navigate: NavigateFunction): MenuItem[] => [
+const makeMenuItems = (t: TFunction<'general'>): MenuItem[] => [
   {
     key: '/dashboard',
     label: 'Dashboard',
@@ -84,7 +78,7 @@ export const MainMenu = () => {
   const { t } = useTranslation('general');
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const items = useMemo(() => makeMenuItems(t, navigate), [i18next.language]);
+  const items = useMemo(() => makeMenuItems(t), [i18next.language]);
   return (
     <div
       className="sider-container"

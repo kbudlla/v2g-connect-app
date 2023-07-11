@@ -47,7 +47,7 @@ function EnergyGraphCard(props: ForwardedCardProps<EnergyGraphCardProps>): JSX.E
           <Space wrap style={{ justifyContent: 'flex-end' }}>
             <Select
               defaultValue={timeRange.unit}
-              style={{ width: 120 }}
+              style={{ width: 130 }}
               onChange={handleTimeUnitChange}
               options={[
                 // { value: 'minutes', label: 'Current Day (Minutes)' },

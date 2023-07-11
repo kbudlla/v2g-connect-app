@@ -4,6 +4,8 @@ import { usePartialAppContext } from 'core/AppContext';
 
 import { Layout } from 'antd';
 
+import { LanguageSelector } from 'components/common/LanguageSelector/LanguageSelector';
+import { UserMenu } from 'components/common/UserMenu/UserMenu';
 import { MainMenu, MainMenuCollapseButton } from 'components/screens/MainMenu/MainMenu';
 
 import './Home.scss';
@@ -21,8 +23,8 @@ export const Home = () => {
       <Layout className="site-layout">
         <header className="header">
           <MainMenuCollapseButton />
-          {/* <EarLanguageSelector />
-          <UserMenu /> */}
+          <LanguageSelector />
+          <UserMenu />
         </header>
         <Content>
           <Outlet />

@@ -1,14 +1,8 @@
-.carbon-footprint-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
 .carbon-footprint-plot-wrapper {
     display: flex;
     flex: 1 1 0;
     // Required for the element to shrink, if required
-    min-height: 0;
+    min-height: 240px;
 
     .carbon-footprint-plot {
         width: 100%;

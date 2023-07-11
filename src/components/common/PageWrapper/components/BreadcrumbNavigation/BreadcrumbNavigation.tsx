@@ -1,16 +1,19 @@
 import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 
 import { Typography } from 'antd';
 
 import { clsx } from 'clsx';
 
-const PathNameMap: Record<string, string> = {
-  sustainability: 'Sustainability Tracker',
-};
-
 const useBreadcrumbPath = () => {
   const location = useLocation();
+  const { t } = useTranslation('common');
+
+  const translatedPathNameMap: Record<string, string> = {
+    sustainability: t('sustainability'),
+    dashboard: t('dashboard'),
+  };
   const pathElements = useMemo(() => {
     const parts = location.pathname.split('/').filter((e) => e);
 
@@ -19,7 +22,7 @@ const useBreadcrumbPath = () => {
     return parts.map((part, index, parts) => {
       const path = parts.filter((_, ii) => ii < index).join('/');
       return {
-        title: PathNameMap[part] ?? part,
+        title: translatedPathNameMap[part] ?? part,
         url: path ? `/${path}/${part}` : `/${part}`,
       };
     });

@@ -17,5 +17,21 @@
     "co2StatisticsEV": "km gefahren (Elektroauto)",
     "co2StatisticsTrain": "km gefahren",
     "showAll": "Alle anzeigen",
-    "search": "Suchen"
+    "search": "Suchen",
+    "sustainability": "Nachhaltigkeits-Tracker",
+    "dashboard": "Dashboard",
+    "greetings": [
+        "Hallo, {{user}}!",
+        "Guten Tag, {{user}}!",
+        "Wie geht's, {{user}}?",
+        "Was gibt's Neues, {{user}}?",
+        "Schön dich zu sehen, {{user}}!"
+    ],
+    "greetingSubtitles": [
+        "Willkommen zurück bei V2GConnect",
+        "Wir verbinden Sie mit einer nachhaltigen Zukunft",
+        "Förderung der Nachhaltigkeit mit V2GConnect",
+        "Ihre Reise zu grüneren Entscheidungen beginnt hier",
+        "Wir unterstützen Ihren Weg zu einem nachhaltigen Lebensstil"
+    ]
 }

@@ -17,5 +17,33 @@
     "co2StatisticsEV": "km driven (EV)",
     "co2StatisticsTrain": "km driven",
     "showAll": "Show All",
-    "search": "Search"
+    "search": "Search",
+    "sustainability": "Sustainability tracker",
+    "dashboard": "Dashboard",
+    "greetings": [
+        "Hey there, {{user}}!",
+        "Hello, {{user}}!",
+        "How's it going, {{user}}?",
+        "What's up, {{user}}?",
+        "Good to see you, {{user}}!"
+    ],
+    "greetingSubtitles": [
+        "Welcome back to V2GConnect",
+        "Connecting you to a sustainable future",
+        "Driving sustainability with V2GConnect",
+        "Your journey towards greener choices starts here",
+        "Fueling your path to a sustainable lifestyle"
+    ],
+    "energyGraphTitle": "Energy flow",
+    "energyMixTitle": "Energy mix",
+    "energySoldTitle": "Energy sold",
+    "earningsTitle": "Savings from V2G",
+    "energyChargedCardTitle": "Energy charged",
+    "minutes": "minute",
+    "hours": "hour",
+    "days": "day",
+    "weeks": "week",
+    "months": "month",
+    "receiptsTitle": "Receipts",
+    "co2SavedTitle": "CO2 saved"
 }

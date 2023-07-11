@@ -2,10 +2,9 @@ import React from 'react';
 
 import { ChargingStationGeoJSONFeatures } from 'api/chargers';
 
-type ChargerMapMarkerProps = ChargingStationGeoJSONFeatures['properties'];
+import { sigmoid } from 'utils/math';
 
-// ML.
-const sigmoid = (x: number) => 1.0 / (1 + Math.pow(Math.E, -x));
+type ChargerMapMarkerProps = ChargingStationGeoJSONFeatures['properties'];
 
 function ChargerMapMarker(props: ChargerMapMarkerProps): JSX.Element {
   const { cluster } = props;

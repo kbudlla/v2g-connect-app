@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { useCarbonFootprint } from 'api/sustainability';
 
-import { Select, Space, Spin, Typography } from 'antd';
+import { Select, Space, Typography } from 'antd';
 
-import Card from 'components/common/Card/Card';
+import Card, { ForwardedCardProps } from 'components/common/Card/Card';
 
 import { useTranslatedCO2Statistics } from 'utils/carbon';
 import { TimeUnit, defaultRangeForTimeUnit } from 'utils/time';
@@ -34,16 +34,14 @@ function StatisticsBadge(props: StatisticsBadgeProps): JSX.Element {
   );
 }
 
-type CarbonFootprintProps = {
-  fullwidth?: boolean;
-  style?: React.CSSProperties;
-};
+// eslint-disable-next-line @typescript-eslint/ban-types
+type CarbonFootprintProps = {};
 
-function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
+function CarbonFootprint(props: ForwardedCardProps<CarbonFootprintProps>): JSX.Element {
   const { t } = useTranslation('common');
   const getTranslatedCO2Statistics = useTranslatedCO2Statistics();
 
-  const [userId, _] = useState('userId');
+  const [userId] = useState('userId');
   const [timeRange, setTimeRange] = useState(defaultRangeForTimeUnit({ unit: 'months' }));
 
   const { footprint, loading } = useCarbonFootprint(userId, timeRange);
@@ -55,7 +53,7 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
   return (
     <Card
       header={
-        <div className="carbon-footprint-header">
+        <div className="flex flex-row justify-between flex-wrap gap-4">
           <Typography.Title
             level={2}
             type="success"
@@ -72,14 +70,14 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
           <SustainabilityInfo averageCO2={footprint?.average} loading={loading} timeUnit={timeRange.unit} />
         </div>
       }
-      fullwidth={props.fullwidth}
-      style={props.style}
+      loading={loading}
+      {...props}
     >
       {/* Drop-down to select Time-range*/}
-      <Space wrap style={{ justifyContent: 'flex-end' }}>
+      <Space wrap className="justify-end">
         <Select
           defaultValue={timeRange.unit}
-          style={{ width: 120 }}
+          className="w-32"
           onChange={handleTimeUnitChange}
           options={[
             // { value: 'minutes', label: 'Current Day (Minutes)' },
@@ -93,34 +91,30 @@ function CarbonFootprint(props: CarbonFootprintProps): JSX.Element {
 
       {/* Plot */}
       <div className="carbon-footprint-plot-wrapper">
-        {loading && <Spin style={{ margin: 'auto' }} />}
-        {!loading && <RealtimeFootprintChart timeseries={footprint?.timeseries} timeUnit={timeRange.unit} />}
+        <RealtimeFootprintChart timeseries={footprint?.timeseries} timeUnit={timeRange.unit} />
       </div>
 
       {/* Statistics */}
-      {!loading && (
-        <div className="carbon-footprint-statistics-wrapper">
-          <Typography.Title
-            level={4}
-            style={{
-              color: '#5F6D7E',
-              letterSpacing: '-0.02px',
-              fontWeight: 600,
-              textAlign: 'center',
-              margin: '8px 0',
-            }}
-          >
-            {`${footprint?.average.toFixed(0)}${halfSpace}Kg is equivalent to:`}
-          </Typography.Title>
-          <div className="carbon-footprint-statistics-wrapper-inner">
-            {!loading &&
-              footprint &&
-              getTranslatedCO2Statistics(footprint.average).map(({ icon, value, text, type }) => (
-                <StatisticsBadge icon={icon} value={value} text={text} key={type} />
-              ))}
-          </div>
+      <div className="carbon-footprint-statistics-wrapper">
+        <Typography.Title
+          level={4}
+          style={{
+            color: '#5F6D7E',
+            letterSpacing: '-0.02px',
+            fontWeight: 600,
+            textAlign: 'center',
+            margin: '8px 0',
+          }}
+        >
+          {`${footprint?.average.toFixed(0)}${halfSpace}Kg is equivalent to:`}
+        </Typography.Title>
+        <div className="carbon-footprint-statistics-wrapper-inner">
+          {footprint &&
+            getTranslatedCO2Statistics(footprint.average).map(({ icon, value, text, type }) => (
+              <StatisticsBadge icon={icon} value={value} text={text} key={type} />
+            ))}
         </div>
-      )}
+      </div>
     </Card>
   );
 }

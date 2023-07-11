@@ -89,8 +89,8 @@ function RealtimeFootprintChart(props: RealtimeFootprintChartProps): JSX.Element
         data={data}
         margin={{
           top: 5,
-          right: 30,
-          left: 5,
+          right: 0,
+          left: 0,
           bottom: 20,
         }}
       >

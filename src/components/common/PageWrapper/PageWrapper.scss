@@ -17,15 +17,22 @@
         flex-direction: column;
         margin-bottom: 32px;
     }
-    .page-wrapper-content {
-        display: flex;
-        flex-direction: column;
+    .page-wrapper-content-wrapper {
         flex: 1 1 0;
-        gap: 32px;
-        
-        &.flexRow {
-            flex-direction: row;
-            flex-wrap: wrap;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .page-wrapper-content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            min-height: 100%;
+            
+            &.flexRow {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
         }
     }
+    
 }

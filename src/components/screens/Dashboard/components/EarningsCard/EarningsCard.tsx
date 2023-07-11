@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Spin, Typography } from 'antd';
+import { Typography } from 'antd';
 
-import Card from 'components/common/Card/Card';
+import Card, { ForwardedCardProps } from 'components/common/Card/Card';
 import RoundedIconContainer from 'components/common/RoundedIconContainer/RoundedIconContainer';
 
 import { ChargingReceipt } from 'utils/simulation';
@@ -12,14 +12,11 @@ import { halfSpace } from 'utils/units';
 import { ReactComponent as EarningsIcon } from 'assets/icons/earningsIcon.svg';
 
 type EarningsCardProps = {
-  loading?: boolean;
   receipts?: ChargingReceipt[];
-
-  style?: React.CSSProperties;
 };
 
-function EarningsCard(props: EarningsCardProps): JSX.Element {
-  const { loading, receipts } = props;
+function EarningsCard(props: ForwardedCardProps<EarningsCardProps>): JSX.Element {
+  const { receipts } = props;
   const { t } = useTranslation('common');
 
   const earnings = useMemo(() => {
@@ -46,24 +43,21 @@ function EarningsCard(props: EarningsCardProps): JSX.Element {
           </Typography.Title>
         </div>
       }
-      style={props.style}
+      {...props}
     >
-      {loading && <Spin style={{ margin: 'auto' }} />}
-      {!loading && (
-        <Typography.Title
-          style={{
-            color: '#0D1C2E',
-            textAlign: 'center',
-            fontFamily: 'Inter',
-            fontSize: '36px',
-            fontWeight: 600,
-            letterSpacing: '-0.036px',
-            margin: '0 0 0 0',
-          }}
-        >
-          {earnings}
-        </Typography.Title>
-      )}
+      <Typography.Title
+        style={{
+          color: '#0D1C2E',
+          textAlign: 'center',
+          fontFamily: 'Inter',
+          fontSize: '36px',
+          fontWeight: 600,
+          letterSpacing: '-0.036px',
+          margin: '0 0 0 0',
+        }}
+      >
+        {earnings}
+      </Typography.Title>
     </Card>
   );
 }

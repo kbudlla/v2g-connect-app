@@ -5,8 +5,6 @@ import { UserInfo, useUserInfo } from 'api/user';
 
 import { Typography } from 'antd';
 
-// TODO! introduce some random greeting with i18n
-
 const useTranslatedRandomGreeting = (userInfo: UserInfo | null) => {
   const { t } = useTranslation('common');
 

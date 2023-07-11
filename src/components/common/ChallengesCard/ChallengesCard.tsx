@@ -5,7 +5,7 @@ import { Challenge, useChallenges } from 'api/sustainability';
 
 import { Button, Input, Modal, Progress, Spin, Table, TableProps, Typography } from 'antd';
 
-import Card from 'components/common/Card/Card';
+import Card, { CardProps } from 'components/common/Card/Card';
 
 import { green, grey } from '@ant-design/colors';
 import { CheckCircleFilled as DoneIcon } from '@ant-design/icons';
@@ -101,11 +101,9 @@ function ChallengesModal(props: ChallengesModalProps): JSX.Element {
 
 /* Main Component */
 
-type LeaderboardProps = {
-  style?: React.CSSProperties;
-};
+type ChallengesCardProps = Omit<CardProps, 'header' | 'loading'>;
 
-function Challenges(props: LeaderboardProps): JSX.Element {
+function ChallengesCard(props: ChallengesCardProps): JSX.Element {
   const { t } = useTranslation('common');
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -121,34 +119,36 @@ function Challenges(props: LeaderboardProps): JSX.Element {
   }, []);
 
   return (
-    <Card
-      header={
-        <div className="challenges-card-header">
-          <Typography.Title
-            level={2}
-            type="success"
-            style={{
-              margin: 0,
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('challenges')}
-          </Typography.Title>
+    <>
+      <Card
+        header={
+          <div className="challenges-card-header">
+            <Typography.Title
+              level={2}
+              type="success"
+              style={{
+                margin: 0,
+                fontSize: '26px',
+                lineHeight: '36px',
+                letterSpacing: '-0.2px',
+              }}
+            >
+              {t('challenges')}
+            </Typography.Title>
 
-          <Button type="primary" onClick={handleModalOpen}>
-            {t('showAll')}
-          </Button>
-        </div>
-      }
-      style={props.style}
-    >
-      {loading && <Spin style={{ margin: 'auto' }} />}
-      {!loading && <Table dataSource={challenges} columns={columns} pagination={false} />}
+            <Button type="primary" onClick={handleModalOpen}>
+              {t('showAll')}
+            </Button>
+          </div>
+        }
+        loading={loading}
+        {...props}
+      >
+        <Table dataSource={challenges} columns={columns} pagination={false} />
+      </Card>
       <ChallengesModal open={modalOpen} onClose={handleModalClose} />
-    </Card>
+    </>
   );
 }
 
-export default Challenges;
+export default ChallengesCard;

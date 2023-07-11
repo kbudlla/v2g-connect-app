@@ -5,7 +5,7 @@ import { LeaderboardUser, useLeaderboard } from 'api/sustainability';
 
 import { Button, Input, Modal, Spin, Table, TableProps, Typography } from 'antd';
 
-import Card from 'components/common/Card/Card';
+import Card, { CardProps } from 'components/common/Card/Card';
 
 /* Columns */
 
@@ -90,11 +90,9 @@ function LeaderboardModal(props: LeaderboardModalProps): JSX.Element {
 
 /* Main Component */
 
-type LeaderboardProps = {
-  style?: React.CSSProperties;
-};
+type LeaderboardCardProps = Omit<CardProps, 'header' | 'loading'>;
 
-function Leaderboard(props: LeaderboardProps): JSX.Element {
+function LeaderboardCard(props: LeaderboardCardProps): JSX.Element {
   const { t } = useTranslation('common');
   const { loading, leaderboard } = useLeaderboard(6);
   const [modalOpen, setModalOpen] = useState(false);
@@ -108,34 +106,36 @@ function Leaderboard(props: LeaderboardProps): JSX.Element {
   }, []);
 
   return (
-    <Card
-      header={
-        <div className="leaderboard-card-header">
-          <Typography.Title
-            level={2}
-            type="success"
-            style={{
-              margin: 0,
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('leaderboard')}
-          </Typography.Title>
+    <>
+      <Card
+        header={
+          <div className="leaderboard-card-header">
+            <Typography.Title
+              level={2}
+              type="success"
+              style={{
+                margin: 0,
+                fontSize: '26px',
+                lineHeight: '36px',
+                letterSpacing: '-0.2px',
+              }}
+            >
+              {t('leaderboard')}
+            </Typography.Title>
 
-          <Button type="primary" onClick={handleModalOpen}>
-            {t('showAll')}
-          </Button>
-        </div>
-      }
-      style={props.style}
-    >
-      {loading && <Spin style={{ margin: 'auto' }} />}
-      {!loading && <Table dataSource={leaderboard} columns={columns} pagination={false} />}
+            <Button type="primary" onClick={handleModalOpen}>
+              {t('showAll')}
+            </Button>
+          </div>
+        }
+        loading={loading}
+        {...props}
+      >
+        <Table dataSource={leaderboard} columns={columns} pagination={false} />
+      </Card>
       <LeaderboardModal open={modalOpen} onClose={handleModalClose} />
-    </Card>
+    </>
   );
 }
 
-export default Leaderboard;
+export default LeaderboardCard;

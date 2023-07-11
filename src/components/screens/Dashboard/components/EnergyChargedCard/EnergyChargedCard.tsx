@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Spin, Typography } from 'antd';
+import { Typography } from 'antd';
 
-import Card from 'components/common/Card/Card';
+import Card, { ForwardedCardProps } from 'components/common/Card/Card';
 import RoundedIconContainer from 'components/common/RoundedIconContainer/RoundedIconContainer';
 
 import { formatKWhValue } from 'utils/units';
@@ -10,14 +10,11 @@ import { formatKWhValue } from 'utils/units';
 import { ReactComponent as LightningIcon } from 'assets/icons/lightningIcon.svg';
 
 type EnergyChargedCardProps = {
-  loading?: boolean;
   amountKWh?: number;
-
-  style?: React.CSSProperties;
 };
 
-function EnergyChargedCard(props: EnergyChargedCardProps): JSX.Element {
-  const { loading, amountKWh } = props;
+function EnergyChargedCard(props: ForwardedCardProps<EnergyChargedCardProps>): JSX.Element {
+  const { amountKWh } = props;
   const { t } = useTranslation('common');
 
   return (
@@ -39,24 +36,21 @@ function EnergyChargedCard(props: EnergyChargedCardProps): JSX.Element {
           </Typography.Title>
         </div>
       }
-      style={props.style}
+      {...props}
     >
-      {loading && <Spin style={{ margin: 'auto' }} />}
-      {!loading && (
-        <Typography.Title
-          style={{
-            color: '#0D1C2E',
-            textAlign: 'center',
-            fontFamily: 'Inter',
-            fontSize: '36px',
-            fontWeight: 600,
-            letterSpacing: '-0.036px',
-            margin: '0 0 0 0',
-          }}
-        >
-          {formatKWhValue(amountKWh ?? 0)}
-        </Typography.Title>
-      )}
+      <Typography.Title
+        style={{
+          color: '#0D1C2E',
+          textAlign: 'center',
+          fontFamily: 'Inter',
+          fontSize: '36px',
+          fontWeight: 600,
+          letterSpacing: '-0.036px',
+          margin: '0 0 0 0',
+        }}
+      >
+        {formatKWhValue(amountKWh)}
+      </Typography.Title>
     </Card>
   );
 }

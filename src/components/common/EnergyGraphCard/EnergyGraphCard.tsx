@@ -3,27 +3,23 @@ import { useTranslation } from 'react-i18next';
 
 import { EnergyUsageInfo } from 'api/energy';
 
-import { Select, Space, Spin, Typography } from 'antd';
+import { Select, Space, Typography } from 'antd';
 
-import Card from 'components/common/Card/Card';
+import Card, { ForwardedCardProps } from 'components/common/Card/Card';
 
 import { TimeRange, TimeUnit } from 'utils/time';
 
 import EnergyGraph from './components/EnergyGraph';
 
 type EnergyGraphCardProps = {
-  fullwidth?: boolean;
-  style?: React.CSSProperties;
-
-  loading?: boolean;
   energyUsageInfo: EnergyUsageInfo | null;
 
   timeRange: TimeRange;
   onTimeRangeChange?: (unit: TimeUnit) => void;
 };
 
-function EnergyGraphCard(props: EnergyGraphCardProps): JSX.Element {
-  const { energyUsageInfo, loading, onTimeRangeChange, timeRange } = props;
+function EnergyGraphCard(props: ForwardedCardProps<EnergyGraphCardProps>): JSX.Element {
+  const { energyUsageInfo, onTimeRangeChange, timeRange } = props;
   const { t } = useTranslation('common');
 
   const handleTimeUnitChange = useCallback((unit: TimeUnit) => {
@@ -64,14 +60,9 @@ function EnergyGraphCard(props: EnergyGraphCardProps): JSX.Element {
           </Space>
         </div>
       }
-      fullwidth={props.fullwidth}
-      style={props.style}
+      {...props}
     >
-      {/* Plot */}
-      <div className="energy-graph-card-plot-wrapper">
-        {loading && <Spin style={{ margin: 'auto' }} />}
-        {!loading && <EnergyGraph timeseries={energyUsageInfo?.timeseries} timeUnit={timeRange.unit} />}
-      </div>
+      <EnergyGraph timeseries={energyUsageInfo?.timeseries} timeUnit={timeRange.unit} />
     </Card>
   );
 }

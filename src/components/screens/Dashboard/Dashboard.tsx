@@ -36,11 +36,11 @@ const Dashboard = () => {
   return (
     <PageWrapper showBreadcrumbs>
       <Greeting />
-      <Row gutter={[16, 32]} style={{ height: '100%' }}>
+      <Row gutter={[16, 32]} style={{ flex: '600px 1 0' }}>
         <Col span={16}>
           <EnergyGraphCard
             fullwidth
-            style={{ height: '100%' }}
+            fullheight
             loading={loading}
             energyUsageInfo={energyUsageInfo}
             timeRange={timeRange}
@@ -48,18 +48,19 @@ const Dashboard = () => {
           />
         </Col>
         <Col span={8}>
-          <Row gutter={[16, 16]}>
+          <Row gutter={[16, 16]} className="fullheight">
             <Col span={24}>
-              <EnergySoldCard loading={loading} amount={energyUsageInfo?.total.dischargedKWh} />
+              <EnergySoldCard fullheight loading={loading} amount={energyUsageInfo?.total.dischargedKWh} />
             </Col>
             <Col span={24}>
-              <EarningsCard loading={loading} receipts={energyUsageInfo?.receipts} />
+              <EarningsCard fullheight loading={loading} receipts={energyUsageInfo?.receipts} />
             </Col>
             <Col span={24}>
-              <EnergyChargedCard loading={loading} amountKWh={amountChargedClean} />
+              <EnergyChargedCard fullheight loading={loading} amountKWh={amountChargedClean} />
             </Col>
             <Col span={24}>
               <CO2OverviewCard
+                fullheight
                 loading={loading}
                 amountKWh={amountChargedClean}
                 userMix={energyUsageInfo?.average.chargingMix}
@@ -70,23 +71,18 @@ const Dashboard = () => {
         </Col>
       </Row>
 
-      <Row gutter={[32, 32]} style={{ height: '100%' }}>
+      <Row gutter={[32, 32]} style={{ flex: '400px 1 0' }}>
         <Col span={12}>
           <EnergyMixCard
             simple
+            fullheight
             loading={loading}
             gridMix={AveragePowerMix}
             userMix={energyUsageInfo?.average.chargingMix}
-            style={{ height: '100%' }}
           />
         </Col>
         <Col span={12}>
-          <ChargingReceiptsCard
-            loading={loading}
-            limit={3}
-            receipts={energyUsageInfo?.receipts}
-            style={{ height: '100%' }}
-          />
+          <ChargingReceiptsCard fullheight loading={loading} limit={3} receipts={energyUsageInfo?.receipts} />
         </Col>
       </Row>
 

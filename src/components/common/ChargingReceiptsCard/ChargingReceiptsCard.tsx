@@ -5,7 +5,7 @@ import { Button, Input, Modal, Spin, Typography } from 'antd';
 
 import { ChargingReceipt } from 'utils/simulation';
 
-import Card from '../Card/Card';
+import Card, { ForwardedCardProps } from '../Card/Card';
 import ChargingReceiptsTable from '../ChargingReceiptsTable/ChargingReceiptsTable';
 
 /* Modal */
@@ -57,13 +57,11 @@ function ChargingReceiptsModal(props: ChargingReceiptsModalProps): JSX.Element {
 }
 
 type ChargingReceiptsCardProps = {
-  loading?: boolean;
   limit?: number;
   receipts?: ChargingReceipt[];
-  style: React.CSSProperties;
 };
 
-function ChargingReceiptsCard(props: ChargingReceiptsCardProps): JSX.Element {
+function ChargingReceiptsCard(props: ForwardedCardProps<ChargingReceiptsCardProps>): JSX.Element {
   const { receipts, limit, loading } = props;
   const { t } = useTranslation('common');
 
@@ -104,10 +102,9 @@ function ChargingReceiptsCard(props: ChargingReceiptsCardProps): JSX.Element {
           </Button>
         </div>
       }
-      style={props.style}
+      {...props}
     >
-      {loading && <Spin style={{ margin: 'auto' }} />}
-      {!loading && <ChargingReceiptsTable pagination={!limit} receipts={data} />}
+      <ChargingReceiptsTable pagination={!limit} receipts={data} />
       <ChargingReceiptsModal open={modalOpen} onClose={handleModalClose} loading={loading} data={receipts} />
     </Card>
   );

@@ -1,20 +1,36 @@
 import React, { PropsWithChildren } from 'react';
 
-import { Card as AntdCard } from 'antd';
+import { Card as AntdCard, Spin } from 'antd';
 
 import { clsx } from 'clsx';
 
-type CardProps = {
-  header?: JSX.Element;
+type ForwardableCardProps = {
   fullwidth?: boolean;
+  fullheight?: boolean;
+  loading?: boolean;
   style?: React.CSSProperties;
 };
 
+export type ForwardedCardProps<T> = T & ForwardableCardProps;
+
+export type CardProps = {
+  header?: JSX.Element;
+} & ForwardableCardProps;
+
 function Card(props: PropsWithChildren<CardProps>): JSX.Element {
+  const { fullwidth, fullheight, loading, style } = props;
   return (
-    <AntdCard className={clsx('card', { fullwidth: props.fullwidth })} style={props.style}>
+    <AntdCard className={clsx('card', { fullwidth, fullheight })} style={style}>
       {props.header && <div className="card-header">{props.header}</div>}
-      {props.children}
+      <div className="card-content">
+        {loading && (
+          <div className="card-loading-overlay">
+            <Spin className="card-spinner" />
+          </div>
+        )}
+
+        {props.children}
+      </div>
     </AntdCard>
   );
 }

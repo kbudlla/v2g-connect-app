@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { Spin, Typography } from 'antd';
+import { Typography } from 'antd';
 
-import Card from 'components/common/Card/Card';
+import Card, { ForwardedCardProps } from 'components/common/Card/Card';
 
 import { EnergyMix } from 'utils/energyMix';
 
@@ -13,18 +13,16 @@ type EnergyMixCardProps = {
   userMix?: EnergyMix;
   gridMix?: EnergyMix;
   simple?: boolean;
-
-  style?: React.CSSProperties;
 };
 
-function EnergyMixCard(props: EnergyMixCardProps): JSX.Element {
-  const { loading, userMix, gridMix, simple } = props;
+function EnergyMixCard(props: ForwardedCardProps<EnergyMixCardProps>): JSX.Element {
+  const { userMix, gridMix, simple } = props;
   const { t } = useTranslation('common');
 
   return (
     <Card
       header={
-        <div className="energy-graph-card-header">
+        <div className="energy-mix-card-header">
           <Typography.Title
             level={2}
             type="success"
@@ -39,11 +37,12 @@ function EnergyMixCard(props: EnergyMixCardProps): JSX.Element {
           </Typography.Title>
         </div>
       }
-      style={props.style}
+      {...props}
     >
-      {loading && <Spin style={{ margin: 'auto' }} />}
-      {!loading && <EnergyMixChart simple={simple} energyMix={userMix} title="User energy mix" />}
-      {!loading && <EnergyMixChart simple={simple} energyMix={gridMix} title="Average grid energy mix" />}
+      <div className="energy-mix-card-chart-wrapper">
+        <EnergyMixChart simple={simple} energyMix={userMix} title="User energy mix" />
+        <EnergyMixChart simple={simple} energyMix={gridMix} title="Average grid energy mix" />
+      </div>
     </Card>
   );
 }

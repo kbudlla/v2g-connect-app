@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 
-import { EnergyUsageTimestep } from 'api/energy';
-
 import { leftPad } from 'utils/formatting';
+import { EnergyUsageTimestep } from 'utils/simulation';
 import { TimeUnit } from 'utils/time';
 import { halfSpace } from 'utils/units';
 

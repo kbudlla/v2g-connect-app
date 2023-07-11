@@ -41,7 +41,7 @@ function EnergyMixChart(props: EnergyMixChartProps): JSX.Element {
       )}
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
-          <Pie data={data} cx="50%" cy="50%" innerRadius={40} outerRadius={80} fill="#8884d8" dataKey="val">
+          <Pie data={data} cx="50%" cy="50%" innerRadius={30} outerRadius={70} fill="#8884d8" dataKey="val">
             {data.map((entry, index) => (
               <Cell key={`cell-${entry.name}`} fill={Colors[index % Colors.length]} />
             ))}

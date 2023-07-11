@@ -120,6 +120,6 @@ export const getSustainabilityScore = (
 
   return {
     ideal,
-    percentile: (index * 10) as SustainabilityScore['percentile'],
+    percentile: Math.max(10, Math.min(100, index * 10)) as SustainabilityScore['percentile'],
   };
 };

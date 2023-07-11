@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Typography } from 'antd';
 
+import UnitWithTime from 'components/common/UnitWithTime/UnitWithTime';
+
 import { SustainabilityScore, getSustainabilityScore } from 'utils/carbon';
 import { TimeUnit } from 'utils/time';
-import { formatKgValue } from 'utils/units';
+import { formatKgValueWithUnit } from 'utils/units';
 
 const useSustainablitityPercentileMessageMap = () => {
   const { t } = useTranslation('common');
@@ -40,10 +42,11 @@ function SustainabilityInfo(props: SustainabilityInfoProps): JSX.Element {
     const score = getSustainabilityScore(averageCO2, timeUnit);
     return {
       ...score,
-      humanReadableCO2: formatKgValue(averageCO2),
+      humanReadableCO2: formatKgValueWithUnit(averageCO2),
     };
   }, [averageCO2, loading, timeUnit]);
 
+  console.log(sustainabilityScore);
   return (
     <Typography.Title
       level={2}
@@ -59,7 +62,12 @@ function SustainabilityInfo(props: SustainabilityInfoProps): JSX.Element {
     >
       <span style={{ fontWeight: 800, marginRight: '0.5em' }}>
         {loading && 'Loading...'}
-        {!loading && sustainabilityScore?.humanReadableCO2}
+        {!loading && (
+          <span>
+            Average: {sustainabilityScore?.humanReadableCO2.value}
+            <UnitWithTime unit={sustainabilityScore?.humanReadableCO2.unit ?? ''} timeUnit={timeUnit} />
+          </span>
+        )}
       </span>
       {!loading && (
         <span style={{ fontSize: '20px', marginRight: '0.5em' }}>

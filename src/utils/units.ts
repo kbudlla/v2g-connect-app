@@ -20,6 +20,36 @@ export const formatKgValue = (co2Kg: number): string => {
   return `0${halfSpace}mg`;
 };
 
+export const formatKgValueWithUnit = (co2Kg: number): { value: string; unit: string } => {
+  // kg
+  if (co2Kg > 1) {
+    return {
+      value: co2Kg.toFixed(0),
+      unit: 'kg',
+    };
+  }
+  // g
+  if (co2Kg > 0.001) {
+    return {
+      value: (co2Kg * 1000).toFixed(0),
+      unit: 'g',
+    };
+  }
+  // mg
+  if (co2Kg > 0.000001) {
+    return {
+      value: (co2Kg * 1000000).toFixed(0),
+      unit: 'mg',
+    };
+  }
+
+  // For amounts this small we just give up :)
+  return {
+    value: '',
+    unit: 'kg',
+  };
+};
+
 export const formatKWhValue = (kwh: number): string => {
   // kwh
   if (kwh > 1) {

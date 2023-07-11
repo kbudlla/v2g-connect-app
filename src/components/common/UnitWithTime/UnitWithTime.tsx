@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Divider } from 'antd';
-
 import { TimeUnit } from 'utils/time';
 
 const useTranslatedTimeUnit = (unit: TimeUnit) => {
@@ -32,10 +30,19 @@ function UnitWithTime(props: UnitWithTimeProps): JSX.Element {
 
   return (
     // TODO! class
-    <span style={{ display: 'flex', flexDirection: 'column' }}>
-      <span>{props.unit}</span>
-      <Divider />
-      <span>{timeUnit}</span>
+    <span
+      style={{
+        display: 'inline-flex',
+        flexDirection: 'column',
+        maxHeight: '100%',
+        height: '100%',
+        verticalAlign: 'middle',
+        marginLeft: '0.25em',
+      }}
+    >
+      <span style={{ fontSize: '0.6em', lineHeight: 1.2, textAlign: 'center' }}>{props.unit}</span>
+      <span style={{ margin: '0.1em auto', height: '1px', width: '90%', backgroundColor: 'rgba(0, 0, 0, 40%)' }} />
+      <span style={{ fontSize: '0.6em', lineHeight: 1.2, textAlign: 'center' }}>{timeUnit}</span>
     </span>
   );
 }

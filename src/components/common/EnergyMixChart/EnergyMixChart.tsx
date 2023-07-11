@@ -28,8 +28,6 @@ function EnergyMixChart(props: EnergyMixChartProps): JSX.Element {
     }));
   }, [energyMix]);
 
-  console.log(data, simple);
-
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>

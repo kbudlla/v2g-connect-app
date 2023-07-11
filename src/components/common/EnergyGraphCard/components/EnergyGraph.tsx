@@ -114,9 +114,8 @@ function EnergyGraph(props: EnergyGraphProps): JSX.Element {
 
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="x" interval={0} tick={CustomXAxixTick} tickFormatter={timeFormatter} />
-        {/* <Bar dataKey="discharge" fill="#4DC36F" /> */}
 
-        <YAxis yAxisId="battery" orientation="right" tickFormatter={percentTickFormatter}>
+        <YAxis yAxisId="battery" orientation="right" tickFormatter={percentTickFormatter} domain={[0, 1]}>
           <Label
             value="Battery percentage"
             position="center"

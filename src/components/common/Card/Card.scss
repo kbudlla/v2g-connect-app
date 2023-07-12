@@ -17,6 +17,12 @@
         }
     }
 
+    &.disablePadding {
+        .ant-card-body {
+            padding: 0;
+        }
+    }
+
     &.fullwidth {
         width: 100%;
     }

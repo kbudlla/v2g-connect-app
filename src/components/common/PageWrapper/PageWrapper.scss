@@ -4,10 +4,10 @@
 
     // Same as the sidebar, I think
     @media screen and (max-width:768px) {
-        padding: 8px;
+        padding: 0 8px 8px 8px;
     }
     
-    padding: 32px;
+    padding: 8px 32px 32px 32px;
     display: flex;
     flex-direction: column;
 
@@ -32,6 +32,17 @@
                 flex-direction: row;
                 flex-wrap: wrap;
             }
+        }
+    }
+
+    .sm-only {
+        transform: translateX(0);
+        
+        @media screen and (min-width:768px) {
+            transform: translateX(-200%) scale(0);
+            width: 0;
+            min-width: 0;
+            margin: 0;
         }
     }
     

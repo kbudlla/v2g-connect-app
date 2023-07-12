@@ -1,10 +1,10 @@
 import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import NotFound from 'components/common/NotFound/NotFound';
 import { AccessScreen } from 'components/screens/Auth/Access/Access';
 import { ResetPassword } from 'components/screens/Auth/ResetPassword/ResetPassword';
-import ChargerMap from 'components/screens/ChargerMap/ChargerMap';
+import ChargerMapScreen from 'components/screens/ChargerMapScreen/ChargerMapScreen';
 import Dashboard from 'components/screens/Dashboard/Dashboard';
 import { Home } from 'components/screens/Home/Home';
 import SustainabilityTracker from 'components/screens/SustainabilityTracker/SustainabilityTracker';
@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'charger-map',
-            element: <ChargerMap />,
+            element: <ChargerMapScreen />,
           },
           {
             path: 'sustainability',
@@ -39,6 +39,10 @@ export const router = createBrowserRouter([
           {
             element: <NotFound />,
             path: '*',
+          },
+          {
+            element: <Navigate replace to="dashboard" />,
+            path: '',
           },
         ],
       },
@@ -54,10 +58,6 @@ export const router = createBrowserRouter([
           {
             path: 'login',
             element: <Login />,
-          },
-          {
-            path: 'map',
-            element: <ChargerMap />,
           },
           {
             path: 'register',

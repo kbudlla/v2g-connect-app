@@ -4,15 +4,11 @@ import { usePartialAppContext } from 'core/AppContext';
 
 import { Layout } from 'antd';
 
-import { LanguageSelector } from 'components/common/LanguageSelector/LanguageSelector';
-import { UserMenu } from 'components/common/UserMenu/UserMenu';
-import { MainMenu, MainMenuCollapseButton } from 'components/screens/MainMenu/MainMenu';
+import { MainMenu } from 'components/screens/MainMenu/MainMenu';
 
 import './Home.scss';
 
-// import { EarLanguageSelector } from '../../common/EarLanguageSelector/EarLanguageSelector';
-
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 export const Home = () => {
   const [accessToken, setAccessToken] = usePartialAppContext('accessToken');
@@ -21,11 +17,6 @@ export const Home = () => {
     <Layout>
       <MainMenu />
       <Layout className="site-layout">
-        <header className="header">
-          <MainMenuCollapseButton />
-          <LanguageSelector />
-          <UserMenu />
-        </header>
         <Content>
           <Outlet />
         </Content>

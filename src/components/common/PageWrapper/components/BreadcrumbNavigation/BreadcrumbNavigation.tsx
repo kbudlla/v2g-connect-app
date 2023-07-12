@@ -11,8 +11,11 @@ const useBreadcrumbPath = () => {
   const { t } = useTranslation('common');
 
   const translatedPathNameMap: Record<string, string> = {
-    sustainability: t('sustainability'),
-    dashboard: t('dashboard'),
+    dashboard: t('routeNameDashboard'),
+    sustainability: t('routeNameSustainability'),
+    'charger-map': t('routeNameChargerMap'),
+    rewards: t('routeNameRewards'),
+    community: t('routeNameForum'),
   };
   const pathElements = useMemo(() => {
     const parts = location.pathname.split('/').filter((e) => e);
@@ -63,7 +66,7 @@ function BreadcrumbPathElement(props: BreadcrumbPathElementProps): JSX.Element {
 function BreadcrumbNavigation(): JSX.Element {
   const pathElements = useBreadcrumbPath();
   return (
-    <div>
+    <div className="my-auto">
       {pathElements.map((part, index) => (
         <BreadcrumbPathElement {...part} key={`path_element_${index}`} />
       ))}

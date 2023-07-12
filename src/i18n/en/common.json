@@ -18,8 +18,6 @@
   "co2StatisticsTrain": "km driven",
   "showAll": "Show All",
   "search": "Search",
-  "sustainability": "Sustainability tracker",
-  "dashboard": "Dashboard",
   "greetings": [
     "Hey there, {{user}}!",
     "Hello, {{user}}!",
@@ -46,5 +44,10 @@
   "months": "month",
   "receiptsTitle": "Receipts",
   "co2SavedTitle": "CO2 saved",
-  "logout": "Logout"
+  "logout": "Logout",
+  "routeNameDashboard": "Dashboard",
+  "routeNameSustainability": "Sustainability tracker",
+  "routeNameChargerMap": "Charger Map",
+  "routeNameRewards": "Rewards",
+  "routeNameForum": "Community forum"
 }

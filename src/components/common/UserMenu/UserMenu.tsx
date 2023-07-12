@@ -8,7 +8,11 @@ import './UserMenu.scss';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useLogout } from 'hooks/auth/useLogut';
 
-export const UserMenu = () => {
+type UserMenuProps = {
+  className?: string;
+};
+
+export const UserMenu = (props: UserMenuProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation('common');
   const logout = useLogout();
@@ -24,10 +28,10 @@ export const UserMenu = () => {
       }}
       placement="bottomRight"
       trigger={['click']}
-      className="round-btn"
+      className={props.className}
     >
-      <Button shape="round">
-        <UserOutlined width={20} height={20} />
+      <Button shape="circle">
+        <UserOutlined />
       </Button>
     </Dropdown>
   );

@@ -11,8 +11,11 @@ const useBreadcrumbPath = () => {
   const { t } = useTranslation('common');
 
   const translatedPathNameMap: Record<string, string> = {
-    sustainability: t('sustainability'),
-    dashboard: t('dashboard'),
+    dashboard: t('routeNameDashboard'),
+    sustainability: t('routeNameSustainability'),
+    'charger-map': t('routeNameChargerMap'),
+    rewards: t('routeNameRewards'),
+    community: t('routeNameForum'),
   };
   const pathElements = useMemo(() => {
     const parts = location.pathname.split('/').filter((e) => e);

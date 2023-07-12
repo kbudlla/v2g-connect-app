@@ -7,8 +7,10 @@ import { clsx } from 'clsx';
 type ForwardableCardProps = {
   fullwidth?: boolean;
   fullheight?: boolean;
+  disablePadding?: boolean;
   loading?: boolean;
   style?: React.CSSProperties;
+  className?: string;
 };
 
 export type ForwardedCardProps<T> = T & ForwardableCardProps;
@@ -19,9 +21,12 @@ export type CardProps = {
 } & ForwardableCardProps;
 
 function Card(props: PropsWithChildren<CardProps>): JSX.Element {
-  const { fullwidth, fullheight, fixedheight, loading, style } = props;
+  const { fullwidth, fullheight, fixedheight, disablePadding, loading, style } = props;
   return (
-    <AntdCard className={clsx('card', { fullwidth, fullheight, fixedheight })} style={style}>
+    <AntdCard
+      className={clsx('card', props.className, { fullwidth, fullheight, fixedheight, disablePadding })}
+      style={style}
+    >
       {props.header && <div className="card-header">{props.header}</div>}
       <div className="card-content">
         {loading && (

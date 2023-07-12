@@ -66,7 +66,7 @@ function BreadcrumbPathElement(props: BreadcrumbPathElementProps): JSX.Element {
 function BreadcrumbNavigation(): JSX.Element {
   const pathElements = useBreadcrumbPath();
   return (
-    <div>
+    <div className="my-auto">
       {pathElements.map((part, index) => (
         <BreadcrumbPathElement {...part} key={`path_element_${index}`} />
       ))}

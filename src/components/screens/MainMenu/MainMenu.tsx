@@ -9,6 +9,7 @@ import { MenuProps, Layout, Menu, Button } from 'antd';
 import { V2GLogo } from 'components/common/V2GLogo/V2GLogo';
 
 import './MainMenu.scss';
+import clsx from 'clsx';
 
 import i18next, { TFunction } from 'i18next';
 
@@ -56,7 +57,11 @@ const makeMenuItems = (t: TFunction<'general'>): MenuItem[] => [
   },
 ];
 
-export const MainMenuCollapseButton = () => {
+type MainMenuCollapseButtonProps = {
+  className?: string;
+};
+
+export const MainMenuCollapseButton = (props: MainMenuCollapseButtonProps) => {
   const [, setIsMainMenuCollapsed] = usePartialAppContext('isMainMenuCollapsed');
 
   const onUncollapseClick = () => {
@@ -65,8 +70,8 @@ export const MainMenuCollapseButton = () => {
   };
 
   return (
-    <Button shape="round" onClick={onUncollapseClick} className="round-btn menu-btn">
-      <MenuOutlined width={20} height={20} />
+    <Button shape="circle" onClick={onUncollapseClick} className={props.className}>
+      <MenuOutlined width={24} height={20} />
     </Button>
   );
 };

@@ -9,3 +9,10 @@ export enum APIHookError {
   ServerSideError,
   InvalidRequestError,
 }
+
+export type PaginationResult<T> = {
+  offset: number;
+  count: number;
+  totalCount: number;
+  elements: T[];
+};

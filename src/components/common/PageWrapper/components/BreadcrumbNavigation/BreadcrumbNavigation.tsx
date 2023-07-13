@@ -7,29 +7,46 @@ import { Typography } from 'antd';
 import { clsx } from 'clsx';
 
 const useBreadcrumbPath = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const { t } = useTranslation('common');
 
-  const translatedPathNameMap: Record<string, string> = {
-    dashboard: t('routeNameDashboard'),
-    sustainability: t('routeNameSustainability'),
-    'charger-map': t('routeNameChargerMap'),
-    rewards: t('routeNameRewards'),
-    community: t('routeNameForum'),
-  };
+  const translatedPathNameMap: Record<string, string> = useMemo(
+    () => ({
+      dashboard: t('routeNameDashboard'),
+      sustainability: t('routeNameSustainability'),
+      'charger-map': t('routeNameChargerMap'),
+      rewards: t('routeNameRewards'),
+      community: t('routeNameForum'),
+    }),
+    [t],
+  );
   const pathElements = useMemo(() => {
-    const parts = location.pathname.split('/').filter((e) => e);
+    const parts = pathname.split('/').filter((e) => e);
+    const basePathName = pathname.replace(/^(\/[^/]+)(\/.+)$/, '$1');
+    const isForum = basePathName === '/community';
 
     // For each of the parts, we can get both the human-readable title
     // and the corresponding URL
-    return parts.map((part, index, parts) => {
-      const path = parts.filter((_, ii) => ii < index).join('/');
-      return {
-        title: translatedPathNameMap[part] ?? part,
-        url: path ? `/${path}/${part}` : `/${part}`,
-      };
-    });
-  }, []);
+    return [
+      ...parts.slice(0, isForum ? 1 : 2).map((part, index, parts) => {
+        const path = parts.filter((_, ii) => ii < index).join('/');
+        return {
+          title: translatedPathNameMap[part] ?? part,
+          url: path ? `/${path}/${part}` : `/${part}`,
+        };
+      }),
+      // Extra Path element for Forum
+      ...(isForum && parts.length === 2
+        ? [
+            {
+              title: atob(parts[parts.length - 1]).split('|')[0],
+              url: pathname,
+            },
+          ]
+        : []),
+    ];
+  }, [pathname, translatedPathNameMap]);
+
   return pathElements;
 };
 
@@ -66,7 +83,7 @@ function BreadcrumbPathElement(props: BreadcrumbPathElementProps): JSX.Element {
 function BreadcrumbNavigation(): JSX.Element {
   const pathElements = useBreadcrumbPath();
   return (
-    <div className="my-auto">
+    <div className="breadcrumb-wrapper my-auto flex gap-2">
       {pathElements.map((part, index) => (
         <BreadcrumbPathElement {...part} key={`path_element_${index}`} />
       ))}

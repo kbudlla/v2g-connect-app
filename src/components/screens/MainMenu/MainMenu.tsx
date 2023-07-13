@@ -9,7 +9,6 @@ import { MenuProps, Layout, Menu, Button } from 'antd';
 import { V2GLogo } from 'components/common/V2GLogo/V2GLogo';
 
 import './MainMenu.scss';
-import clsx from 'clsx';
 
 import i18next, { TFunction } from 'i18next';
 
@@ -84,6 +83,8 @@ export const MainMenu = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const items = useMemo(() => makeMenuItems(t), [i18next.language]);
+
+  const basePathName = useMemo(() => [pathname.replace(/^(\/[^/]+)(\/.+)$/, '$1')], [pathname]);
   return (
     <div
       className="sider-container"
@@ -105,7 +106,7 @@ export const MainMenu = () => {
         </div>
         <Menu
           data-testid="left-menu"
-          selectedKeys={[pathname]}
+          selectedKeys={basePathName}
           onClick={(info) => {
             navigate(info.key);
             setIsMainMenuCollapsed(true);

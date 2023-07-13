@@ -7,6 +7,8 @@ import { Button, Input, Modal, Progress, Spin, Table, TableProps, Typography } f
 
 import Card, { CardProps } from 'components/common/Card/Card';
 
+import CardHeader from '../Card/CardHeader';
+
 import { green, grey } from '@ant-design/colors';
 import { CheckCircleFilled as DoneIcon } from '@ant-design/icons';
 
@@ -101,14 +103,15 @@ function ChallengesModal(props: ChallengesModalProps): JSX.Element {
 
 /* Main Component */
 
-type ChallengesCardProps = Omit<CardProps, 'header' | 'loading'>;
+type ChallengesCardProps = Omit<CardProps, 'header' | 'loading'> & { title: string; simple?: boolean };
 
 function ChallengesCard(props: ChallengesCardProps): JSX.Element {
+  const { title, simple } = props;
   const { t } = useTranslation('common');
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { loading, challenges } = useChallenges(6);
+  const { loading, challenges } = useChallenges(simple ? 3 : 6);
 
   const handleModalOpen = useCallback(() => {
     setModalOpen(true);
@@ -122,29 +125,18 @@ function ChallengesCard(props: ChallengesCardProps): JSX.Element {
     <>
       <Card
         header={
-          <div className="challenges-card-header">
-            <Typography.Title
-              level={2}
-              type="success"
-              style={{
-                margin: 0,
-                fontSize: '26px',
-                lineHeight: '36px',
-                letterSpacing: '-0.2px',
-              }}
-            >
-              {t('challenges')}
-            </Typography.Title>
-
-            <Button type="primary" onClick={handleModalOpen}>
-              {t('showAll')}
-            </Button>
-          </div>
+          <CardHeader title={title}>
+            {!simple && (
+              <Button type="primary" onClick={handleModalOpen}>
+                {t('showAll')}
+              </Button>
+            )}
+          </CardHeader>
         }
         loading={loading}
         {...props}
       >
-        <Table dataSource={challenges} columns={columns} pagination={false} />
+        <Table dataSource={challenges} columns={columns} pagination={false} showHeader={!simple} />
       </Card>
       <ChallengesModal open={modalOpen} onClose={handleModalClose} />
     </>

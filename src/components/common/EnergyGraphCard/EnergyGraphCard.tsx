@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import { EnergyUsageInfo } from 'api/energy';
 
-import { Select, Space, Typography } from 'antd';
+import { Select, Space } from 'antd';
 
 import Card, { ForwardedCardProps } from 'components/common/Card/Card';
 
 import { TimeRange, TimeUnit } from 'utils/time';
 
+import CardHeader from '../Card/CardHeader';
 import EnergyGraph from './components/EnergyGraph';
 
 type EnergyGraphCardProps = {
@@ -29,20 +30,7 @@ function EnergyGraphCard(props: ForwardedCardProps<EnergyGraphCardProps>): JSX.E
   return (
     <Card
       header={
-        <div className="energy-graph-card-header">
-          <Typography.Title
-            level={2}
-            type="success"
-            style={{
-              margin: 0,
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('energyGraphTitle')}
-          </Typography.Title>
-
+        <CardHeader title={t('energyGraphTitle')}>
           {/* Drop-down to select Time-range*/}
           <Space wrap style={{ justifyContent: 'flex-end' }}>
             <Select
@@ -58,7 +46,7 @@ function EnergyGraphCard(props: ForwardedCardProps<EnergyGraphCardProps>): JSX.E
               ]}
             />
           </Space>
-        </div>
+        </CardHeader>
       }
       fixedheight
       {...props}

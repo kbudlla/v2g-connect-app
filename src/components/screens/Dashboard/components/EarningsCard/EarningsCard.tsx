@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from 'antd';
 
 import Card, { ForwardedCardProps } from 'components/common/Card/Card';
-import RoundedIconContainer from 'components/common/RoundedIconContainer/RoundedIconContainer';
+import CardHeader from 'components/common/Card/CardHeader';
 
 import { ChargingReceipt } from 'utils/simulation';
 import { halfSpace } from 'utils/units';
@@ -25,26 +25,7 @@ function EarningsCard(props: ForwardedCardProps<EarningsCardProps>): JSX.Element
   }, [receipts]);
 
   return (
-    <Card
-      header={
-        <div className="energy-sold-card-header">
-          <RoundedIconContainer Icon={MoneyIcon} size={24} color="#52c41a" backgroundColor="#EDFFEF" />
-          <Typography.Title
-            level={2}
-            type="success"
-            className="m-0"
-            style={{
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('earningsTitle')}
-          </Typography.Title>
-        </div>
-      }
-      {...props}
-    >
+    <Card header={<CardHeader title={t('earningsTitle')} icon={MoneyIcon} />} {...props}>
       <Typography.Title
         className="m-0"
         style={{

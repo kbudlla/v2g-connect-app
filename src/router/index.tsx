@@ -6,7 +6,9 @@ import { AccessScreen } from 'components/screens/Auth/Access/Access';
 import { ResetPassword } from 'components/screens/Auth/ResetPassword/ResetPassword';
 import ChargerMapScreen from 'components/screens/ChargerMapScreen/ChargerMapScreen';
 import Dashboard from 'components/screens/Dashboard/Dashboard';
+import ForumScreen from 'components/screens/ForumScreen/ForumScreen';
 import { Home } from 'components/screens/Home/Home';
+import RewardsScreen from 'components/screens/RewardsScreen.tsx/RewardsScreen';
 import SustainabilityTracker from 'components/screens/SustainabilityTracker/SustainabilityTracker';
 
 import { ForgotPassword } from '../components/screens/Auth/ForgotPassword/ForgotPassword';
@@ -31,6 +33,18 @@ export const router = createBrowserRouter([
           {
             path: 'charger-map',
             element: <ChargerMapScreen />,
+          },
+          {
+            path: 'sustainability',
+            element: <SustainabilityTracker />,
+          },
+          {
+            path: 'rewards',
+            element: <RewardsScreen />,
+          },
+          {
+            path: 'community',
+            element: <ForumScreen />,
           },
           {
             path: 'sustainability',

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from 'antd';
 
 import Card, { ForwardedCardProps } from 'components/common/Card/Card';
-import RoundedIconContainer from 'components/common/RoundedIconContainer/RoundedIconContainer';
+import CardHeader from 'components/common/Card/CardHeader';
 
 import { formatKWhValue } from 'utils/units';
 
@@ -18,26 +18,7 @@ function EnergyChargedCard(props: ForwardedCardProps<EnergyChargedCardProps>): J
   const { t } = useTranslation('common');
 
   return (
-    <Card
-      header={
-        <div className="energy-charged-card-header">
-          <RoundedIconContainer Icon={BatteryChargingIcon} size={24} color="#52c41a" backgroundColor="#EDFFEF" />
-          <Typography.Title
-            level={2}
-            type="success"
-            className="m-0"
-            style={{
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('energyChargedCardTitle')}
-          </Typography.Title>
-        </div>
-      }
-      {...props}
-    >
+    <Card header={<CardHeader title={t('energyChargedCardTitle')} icon={BatteryChargingIcon} />} {...props}>
       <Typography.Title
         className="m-0"
         style={{

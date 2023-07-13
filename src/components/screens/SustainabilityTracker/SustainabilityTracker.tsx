@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 
-import CarbonFootprint from 'components/common/CarbonFootprint/CarbonFootprint';
+import CarbonFootprintCard from 'components/common/CarbonFootprintCard/CarbonFootprintCard';
 import ChallengesCard from 'components/common/ChallengesCard/ChallengesCard';
 import LeaderboardCard from 'components/common/LeaderboardCard/LeaderboardCard';
 import PageWrapper from 'components/common/PageWrapper/PageWrapper';
@@ -10,7 +10,7 @@ function SustainabilityTracker(): JSX.Element {
     <PageWrapper showBreadcrumbs>
       <Row gutter={[32, 32]} className="flex-1">
         <Col span={24}>
-          <CarbonFootprint fullheight fullwidth />
+          <CarbonFootprintCard fullheight fullwidth />
         </Col>
       </Row>
       <Row gutter={[32, 32]} className="flex-1">

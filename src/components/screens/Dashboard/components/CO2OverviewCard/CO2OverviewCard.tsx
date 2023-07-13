@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from 'antd';
 
 import Card, { ForwardedCardProps } from 'components/common/Card/Card';
-import RoundedIconContainer from 'components/common/RoundedIconContainer/RoundedIconContainer';
+import CardHeader from 'components/common/Card/CardHeader';
 
 import { EnergyMix, getCO2Emissions } from 'utils/energyMix';
 import { formatKgValue } from 'utils/units';
@@ -28,26 +28,7 @@ function CO2OverviewCard(props: ForwardedCardProps<CO2OverviewCardProps>): JSX.E
   }, [userMix, gridMix, amountKWh]);
 
   return (
-    <Card
-      header={
-        <div className="co2-overview-card-header">
-          <RoundedIconContainer Icon={CO2Icon} size={24} color="#52c41a" backgroundColor="#EDFFEF" />
-          <Typography.Title
-            level={2}
-            type="success"
-            style={{
-              margin: 0,
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('co2SavedTitle')}
-          </Typography.Title>
-        </div>
-      }
-      {...props}
-    >
+    <Card header={<CardHeader title={t('co2SavedTitle')} icon={CO2Icon} />} {...props}>
       <Typography.Title
         style={{
           color: '#0D1C2E',

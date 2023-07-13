@@ -7,6 +7,8 @@ import { Button, Input, Modal, Spin, Table, TableProps, Typography } from 'antd'
 
 import Card, { CardProps } from 'components/common/Card/Card';
 
+import CardHeader from '../Card/CardHeader';
+
 /* Columns */
 
 const columns: TableProps<LeaderboardUser>['columns'] = [
@@ -109,24 +111,11 @@ function LeaderboardCard(props: LeaderboardCardProps): JSX.Element {
     <>
       <Card
         header={
-          <div className="leaderboard-card-header">
-            <Typography.Title
-              level={2}
-              type="success"
-              style={{
-                margin: 0,
-                fontSize: '26px',
-                lineHeight: '36px',
-                letterSpacing: '-0.2px',
-              }}
-            >
-              {t('leaderboard')}
-            </Typography.Title>
-
+          <CardHeader title={t('leaderboard')}>
             <Button type="primary" onClick={handleModalOpen}>
               {t('showAll')}
             </Button>
-          </div>
+          </CardHeader>
         }
         loading={loading}
         {...props}

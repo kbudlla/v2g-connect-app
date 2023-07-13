@@ -27,7 +27,7 @@ function Card(props: PropsWithChildren<CardProps>): JSX.Element {
       className={clsx('card', props.className, { fullwidth, fullheight, fixedheight, disablePadding })}
       style={style}
     >
-      {props.header && <div className="card-header">{props.header}</div>}
+      {props.header && props.header}
       <div className="card-content">
         {loading && (
           <div className="card-loading-overlay">

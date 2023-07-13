@@ -6,6 +6,7 @@ import { Button, Input, Modal, Spin, Typography } from 'antd';
 import { ChargingReceipt } from 'utils/simulation';
 
 import Card, { ForwardedCardProps } from '../Card/Card';
+import CardHeader from '../Card/CardHeader';
 import ChargingReceiptsTable from '../ChargingReceiptsTable/ChargingReceiptsTable';
 
 /* Modal */
@@ -83,24 +84,11 @@ function ChargingReceiptsCard(props: ForwardedCardProps<ChargingReceiptsCardProp
   return (
     <Card
       header={
-        <div className="challenges-card-header">
-          <Typography.Title
-            level={2}
-            type="success"
-            style={{
-              margin: 0,
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('receiptsTitle')}
-          </Typography.Title>
-
+        <CardHeader title={t('receiptsTitle')}>
           <Button type="primary" onClick={handleModalOpen}>
             {t('showAll')}
           </Button>
-        </div>
+        </CardHeader>
       }
       {...props}
     >

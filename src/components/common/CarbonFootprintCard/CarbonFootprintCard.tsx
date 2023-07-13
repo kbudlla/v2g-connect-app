@@ -11,6 +11,7 @@ import { useTranslatedCO2Statistics } from 'utils/carbon';
 import { TimeUnit, defaultRangeForTimeUnit } from 'utils/time';
 import { halfSpace } from 'utils/units';
 
+import CardHeader from '../Card/CardHeader';
 import RealtimeFootprintChart from './components/RealtimeFootprintChart';
 import SustainabilityInfo from './components/SustainabilityInfo';
 
@@ -37,7 +38,7 @@ function StatisticsBadge(props: StatisticsBadgeProps): JSX.Element {
 // eslint-disable-next-line @typescript-eslint/ban-types
 type CarbonFootprintProps = {};
 
-function CarbonFootprint(props: ForwardedCardProps<CarbonFootprintProps>): JSX.Element {
+function CarbonFootprintCard(props: ForwardedCardProps<CarbonFootprintProps>): JSX.Element {
   const { t } = useTranslation('common');
   const getTranslatedCO2Statistics = useTranslatedCO2Statistics();
 
@@ -53,22 +54,9 @@ function CarbonFootprint(props: ForwardedCardProps<CarbonFootprintProps>): JSX.E
   return (
     <Card
       header={
-        <div className="flex flex-row justify-between flex-wrap gap-4">
-          <Typography.Title
-            level={2}
-            type="success"
-            style={{
-              margin: 0,
-              fontSize: '26px',
-              lineHeight: '36px',
-              letterSpacing: '-0.2px',
-            }}
-          >
-            {t('realtimeCarbonFootprint')}
-          </Typography.Title>
-
+        <CardHeader title={t('realtimeCarbonFootprint')}>
           <SustainabilityInfo averageCO2={footprint?.average} loading={loading} timeUnit={timeRange.unit} />
-        </div>
+        </CardHeader>
       }
       loading={loading}
       {...props}
@@ -119,4 +107,4 @@ function CarbonFootprint(props: ForwardedCardProps<CarbonFootprintProps>): JSX.E
   );
 }
 
-export default CarbonFootprint;
+export default CarbonFootprintCard;

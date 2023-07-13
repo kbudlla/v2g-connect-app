@@ -7,6 +7,8 @@ import { Button, Input, Modal, Progress, Spin, Table, TableProps, Typography } f
 
 import Card, { CardProps } from 'components/common/Card/Card';
 
+import CardHeader from '../Card/CardHeader';
+
 import { green, grey } from '@ant-design/colors';
 import { CheckCircleFilled as DoneIcon } from '@ant-design/icons';
 
@@ -122,24 +124,11 @@ function ChallengesCard(props: ChallengesCardProps): JSX.Element {
     <>
       <Card
         header={
-          <div className="challenges-card-header">
-            <Typography.Title
-              level={2}
-              type="success"
-              style={{
-                margin: 0,
-                fontSize: '26px',
-                lineHeight: '36px',
-                letterSpacing: '-0.2px',
-              }}
-            >
-              {t('challenges')}
-            </Typography.Title>
-
+          <CardHeader title={t('challenges')}>
             <Button type="primary" onClick={handleModalOpen}>
               {t('showAll')}
             </Button>
-          </div>
+          </CardHeader>
         }
         loading={loading}
         {...props}

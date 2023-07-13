@@ -1,0 +1,13 @@
+.v2g-collapse {
+    max-height: 40vh;
+    overflow: hidden;
+
+    // Mui standards for leaving screen
+    transition: max-height 195ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+    &.collapsed {
+        max-height: 0;
+        // Mui-standards for entering screnn
+        transition: max-height 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    }
+}

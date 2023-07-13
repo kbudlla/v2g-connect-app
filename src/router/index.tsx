@@ -6,6 +6,8 @@ import { AccessScreen } from 'components/screens/Auth/Access/Access';
 import { ResetPassword } from 'components/screens/Auth/ResetPassword/ResetPassword';
 import ChargerMapScreen from 'components/screens/ChargerMapScreen/ChargerMapScreen';
 import Dashboard from 'components/screens/Dashboard/Dashboard';
+import ForumThread from 'components/screens/ForumScreen/components/ForumThread';
+import ThreadOverview from 'components/screens/ForumScreen/components/ThreadOverview';
 import ForumScreen from 'components/screens/ForumScreen/ForumScreen';
 import { Home } from 'components/screens/Home/Home';
 import RewardsScreen from 'components/screens/RewardsScreen.tsx/RewardsScreen';
@@ -45,6 +47,16 @@ export const router = createBrowserRouter([
           {
             path: 'community',
             element: <ForumScreen />,
+            children: [
+              {
+                path: '',
+                element: <ThreadOverview />,
+              },
+              {
+                path: ':threadId',
+                element: <ForumThread />,
+              },
+            ],
           },
           {
             path: 'sustainability',

@@ -1,7 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Input, Modal, Spin, Typography } from 'antd';
+import { Button, Input } from 'antd';
+
+import Modal from 'components/common/Modal/Modal';
 
 import { ChargingReceipt } from 'utils/simulation';
 
@@ -19,40 +21,23 @@ type ChargingReceiptsModalProps = {
 };
 
 function ChargingReceiptsModal(props: ChargingReceiptsModalProps): JSX.Element {
-  const { open, data, loading } = props;
+  const { open, onClose, data, loading } = props;
   const { t } = useTranslation('common');
 
   return (
     <Modal
+      loading={loading}
       open={open}
-      onCancel={props.onClose}
-      footer={null}
-      centered
-      className="challenges-modal-root"
-      style={{ width: '' }}
+      onClose={onClose}
+      header={
+        <CardHeader title={t('receiptsTitle')}>
+          <Input placeholder={t('search') ?? ''} />
+        </CardHeader>
+      }
+      width="40rem"
+      className="!max-h-screen"
     >
-      {/* Title */}
-      <div className="challenges-modal-title-wrapper">
-        <Typography.Title
-          level={2}
-          type="success"
-          style={{
-            margin: 0,
-            fontSize: '26px',
-            lineHeight: '36px',
-            letterSpacing: '-0.2px',
-          }}
-        >
-          {t('receiptsTitle')}
-        </Typography.Title>
-        <Input placeholder={t('search') ?? ''} />
-      </div>
-
-      {/* Content */}
-      <div className="challenges-modal-content-wrapper">
-        {loading && <Spin className="m-auto" />}
-        {!loading && data && <ChargingReceiptsTable pagination receipts={data} />}
-      </div>
+      <ChargingReceiptsTable pagination receipts={data ?? []} />
     </Modal>
   );
 }

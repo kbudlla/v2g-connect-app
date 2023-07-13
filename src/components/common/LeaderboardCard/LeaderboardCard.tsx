@@ -1,11 +1,14 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LeaderboardUser, useLeaderboard } from 'api/sustainability';
 
-import { Button, Input, Modal, Spin, Table, TableProps, Typography } from 'antd';
+import { Button, Input, Table, TableProps } from 'antd';
 
 import Card, { CardProps } from 'components/common/Card/Card';
+import Modal from 'components/common/Modal/Modal';
+
+import { useResponsiveDimensions } from 'utils/hooks';
 
 import CardHeader from '../Card/CardHeader';
 
@@ -28,7 +31,7 @@ const columns: TableProps<LeaderboardUser>['columns'] = [
     key: 'location',
   },
   {
-    title: 'Points',
+    title: () => <span className="whitespace-nowrap">Points</span>,
     dataIndex: 'points',
     key: 'points',
   },
@@ -45,46 +48,37 @@ function LeaderboardModal(props: LeaderboardModalProps): JSX.Element {
   const { t } = useTranslation('common');
   const { loading, leaderboard } = useLeaderboard();
 
+  const rootElementRef = useRef<HTMLDivElement | null>(null);
+  const { boundingBox } = useResponsiveDimensions(rootElementRef);
+
   return (
     <Modal
+      loading={loading}
       open={props.open}
-      onCancel={props.onClose}
-      footer={null}
-      centered
-      className="leaderboard-modal-root"
-      style={{ width: '' }}
+      onClose={props.onClose}
+      header={
+        <CardHeader title={t('leaderboard')}>
+          <Input placeholder={t('search') ?? ''} />
+        </CardHeader>
+      }
+      width="40rem"
+      className="!max-h-screen"
     >
-      {/* Title */}
-      <div className="leaderboard-modal-title-wrapper">
-        <Typography.Title
-          level={2}
-          type="success"
-          style={{
-            margin: 0,
-            fontSize: '26px',
-            lineHeight: '36px',
-            letterSpacing: '-0.2px',
+      <div className="w-full h-full overflow-hidden" ref={rootElementRef}>
+        <Table
+          dataSource={leaderboard}
+          columns={columns}
+          pagination={{
+            defaultPageSize: 10,
+            pageSizeOptions: [5, 10, 20],
+            responsive: true,
           }}
-        >
-          {t('leaderboard')}
-        </Typography.Title>
-        <Input placeholder={t('search') ?? ''} />
-      </div>
-
-      {/* Content */}
-      <div>
-        {loading && <Spin style={{ margin: 'auto' }} />}
-        {!loading && (
-          <Table
-            dataSource={leaderboard}
-            columns={columns}
-            pagination={{
-              defaultPageSize: 10,
-              pageSizeOptions: [5, 10, 20],
-            }}
-            rowKey={(row) => row.id}
-          />
-        )}
+          scroll={{
+            x: true,
+            y: (boundingBox?.height ?? 0) - 56 - 56,
+          }}
+          rowKey={(row) => row.id}
+        />
       </div>
     </Modal>
   );
@@ -120,7 +114,15 @@ function LeaderboardCard(props: LeaderboardCardProps): JSX.Element {
         loading={loading}
         {...props}
       >
-        <Table dataSource={leaderboard} columns={columns} pagination={false} />
+        <Table
+          dataSource={leaderboard}
+          columns={columns}
+          pagination={false}
+          scroll={{
+            x: true,
+          }}
+          rowKey={(row) => row.id}
+        />
       </Card>
       <LeaderboardModal open={modalOpen} onClose={handleModalClose} />
     </>

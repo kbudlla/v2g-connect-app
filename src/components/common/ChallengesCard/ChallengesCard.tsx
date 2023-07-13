@@ -1,16 +1,20 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Challenge, useChallenges } from 'api/sustainability';
 
-import { Button, Input, Modal, Progress, Spin, Table, TableProps, Typography } from 'antd';
+import { Button, Input, Progress, Table, TableProps } from 'antd';
 
 import Card, { CardProps } from 'components/common/Card/Card';
+import Modal from 'components/common/Modal/Modal';
+
+import { useResponsiveDimensions } from 'utils/hooks';
 
 import CardHeader from '../Card/CardHeader';
 
 import { green, grey } from '@ant-design/colors';
 import { CheckCircleFilled as DoneIcon } from '@ant-design/icons';
+import { ReactComponent as EcoCoinIcon } from 'assets/icons/material/leaf-circle-outline.svg';
 
 /* Columns */
 
@@ -21,9 +25,18 @@ const columns: TableProps<Challenge>['columns'] = [
     key: 'name',
   },
   {
-    title: 'Rewarded points',
+    title: () => (
+      // This is required for some reason, to make it not break the title
+      <span className="whitespace-nowrap">Reward</span>
+    ),
     dataIndex: 'points',
     key: 'points',
+    render: (value) => (
+      <span className="flex gap-1">
+        <span className="my-auto">{value}</span>
+        <EcoCoinIcon className="my-auto w-4 h-4" />
+      </span>
+    ),
   },
   {
     title: 'Progress',
@@ -32,14 +45,16 @@ const columns: TableProps<Challenge>['columns'] = [
     render: (_, { completion: { done, total, count, discrete } }) => {
       const progressPercent = (count / total) * 100;
       return (
-        <Progress
-          percent={progressPercent}
-          steps={discrete ? total : undefined}
-          size="small"
-          strokeColor={new Array(total).fill(0).map((_, i) => (i < count ? green[7] : grey[6]))}
-          // Yes we need to use style here, because the color prop is not forwarded correctly
-          format={() => (done ? <DoneIcon style={{ color: green[7] }} /> : `${count}/${total}`)}
-        />
+        <span className="flex justify-start">
+          <Progress
+            percent={progressPercent}
+            steps={discrete ? total : undefined}
+            size="small"
+            strokeColor={new Array(total).fill(0).map((_, i) => (i < count ? green[7] : grey[6]))}
+            // Yes we need to use style here, because the color prop is not forwarded correctly
+            format={() => (done ? <DoneIcon style={{ color: green[7] }} /> : `${count}/${total}`)}
+          />
+        </span>
       );
     },
   },
@@ -53,49 +68,40 @@ type ChallengesModalProps = {
 };
 
 function ChallengesModal(props: ChallengesModalProps): JSX.Element {
+  const { open, onClose } = props;
   const { t } = useTranslation('common');
   const { loading, challenges } = useChallenges();
 
+  const rootElementRef = useRef<HTMLDivElement | null>(null);
+  const { boundingBox } = useResponsiveDimensions(rootElementRef);
+
   return (
     <Modal
-      open={props.open}
-      onCancel={props.onClose}
-      footer={null}
-      centered
-      className="challenges-modal-root"
-      style={{ width: '' }}
+      loading={loading}
+      open={open}
+      onClose={onClose}
+      header={
+        <CardHeader title={t('challenges')}>
+          <Input placeholder={t('search') ?? ''} />
+        </CardHeader>
+      }
+      width="40rem"
+      className="!max-h-screen"
     >
-      {/* Title */}
-      <div className="challenges-modal-title-wrapper">
-        <Typography.Title
-          level={2}
-          type="success"
-          style={{
-            margin: 0,
-            fontSize: '26px',
-            lineHeight: '36px',
-            letterSpacing: '-0.2px',
+      <div className="w-full h-full overflow-hidden" ref={rootElementRef}>
+        <Table
+          dataSource={challenges}
+          columns={columns}
+          pagination={{
+            defaultPageSize: 10,
+            pageSizeOptions: [5, 10, 20],
           }}
-        >
-          {t('challenges')}
-        </Typography.Title>
-        <Input placeholder={t('search') ?? ''} />
-      </div>
-
-      {/* Content */}
-      <div className="challenges-modal-content-wrapper">
-        {loading && <Spin style={{ margin: 'auto' }} />}
-        {!loading && (
-          <Table
-            dataSource={challenges}
-            columns={columns}
-            pagination={{
-              defaultPageSize: 10,
-              pageSizeOptions: [5, 10, 20],
-            }}
-            rowKey={(row) => row.id}
-          />
-        )}
+          scroll={{
+            x: true,
+            y: (boundingBox?.height ?? 0) - 77 - 64,
+          }}
+          rowKey={(row) => row.id}
+        />
       </div>
     </Modal>
   );
@@ -136,7 +142,15 @@ function ChallengesCard(props: ChallengesCardProps): JSX.Element {
         loading={loading}
         {...props}
       >
-        <Table dataSource={challenges} columns={columns} pagination={false} showHeader={!simple} />
+        <Table
+          dataSource={challenges}
+          columns={columns}
+          pagination={false}
+          scroll={{
+            x: true,
+          }}
+          showHeader={!simple}
+        />
       </Card>
       <ChallengesModal open={modalOpen} onClose={handleModalClose} />
     </>

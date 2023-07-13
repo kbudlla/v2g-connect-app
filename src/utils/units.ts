@@ -49,7 +49,7 @@ export const formatKgValueWithUnit = (co2Kg: number): { value: string; unit: str
 };
 
 export const formatKWhValue = (kwh?: number | null): string => {
-  if (!kwh) return `--${halfSpace}kWh`;
+  if (kwh == null) return `--${halfSpace}kWh`;
 
   // kwh
   if (kwh > 1) {

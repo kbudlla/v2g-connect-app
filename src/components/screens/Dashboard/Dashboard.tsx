@@ -83,7 +83,13 @@ const Dashboard = () => {
           />
         </Col>
         <Col sm={24} lg={12}>
-          <ChargingReceiptsCard fullheight fullwidth loading={loading} limit={3} receipts={energyUsageInfo?.receipts} />
+          <ChargingReceiptsCard
+            fullwidth
+            loading={loading}
+            limit={6}
+            receipts={energyUsageInfo?.receipts}
+            className="sm:h-[48rem] md:h-full"
+          />
         </Col>
       </Row>
 

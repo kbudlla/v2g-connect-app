@@ -49,5 +49,8 @@
   "routeNameSustainability": "Sustainability tracker",
   "routeNameChargerMap": "Charger Map",
   "routeNameRewards": "Rewards",
-  "routeNameForum": "Community forum"
+  "routeNameForum": "Community forum",
+  "rewardsPointsCardTitle": "Your Points",
+  "rewardsOffersCardTitle": "Offers & benefits for redemption (red)",
+  "rewardsOpenChallengesCardsTitle": "More ways to earn points"
 }

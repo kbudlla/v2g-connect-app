@@ -103,14 +103,15 @@ function ChallengesModal(props: ChallengesModalProps): JSX.Element {
 
 /* Main Component */
 
-type ChallengesCardProps = Omit<CardProps, 'header' | 'loading'>;
+type ChallengesCardProps = Omit<CardProps, 'header' | 'loading'> & { title: string; simple?: boolean };
 
 function ChallengesCard(props: ChallengesCardProps): JSX.Element {
+  const { title, simple } = props;
   const { t } = useTranslation('common');
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { loading, challenges } = useChallenges(6);
+  const { loading, challenges } = useChallenges(simple ? 3 : 6);
 
   const handleModalOpen = useCallback(() => {
     setModalOpen(true);
@@ -124,16 +125,18 @@ function ChallengesCard(props: ChallengesCardProps): JSX.Element {
     <>
       <Card
         header={
-          <CardHeader title={t('challenges')}>
-            <Button type="primary" onClick={handleModalOpen}>
-              {t('showAll')}
-            </Button>
+          <CardHeader title={title}>
+            {!simple && (
+              <Button type="primary" onClick={handleModalOpen}>
+                {t('showAll')}
+              </Button>
+            )}
           </CardHeader>
         }
         loading={loading}
         {...props}
       >
-        <Table dataSource={challenges} columns={columns} pagination={false} />
+        <Table dataSource={challenges} columns={columns} pagination={false} showHeader={!simple} />
       </Card>
       <ChallengesModal open={modalOpen} onClose={handleModalClose} />
     </>

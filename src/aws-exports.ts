@@ -10,8 +10,10 @@ export default {
   oauth: {
     domain: 'v2gconnect-app.auth.eu-central-1.amazoncognito.com',
     scope: ['email', 'openid', 'profile'],
-    redirectSignIn: 'http://localhost:5173/dashboard',
-    redirectSignOut: 'http://localhost:5173/auth/login',
+    redirectSignIn:
+      process.env.NODE_ENV === 'production' ? 'https:/v2gconnect.de/dashboard' : 'http://localhost:5173/dashboard',
+    redirectSignOut:
+      process.env.NODE_ENV === 'production' ? 'https:/v2gconnect.de/auth/login' : 'http://localhost:5173/auth/login',
     responseType: 'code',
   },
   federationTarget: 'COGNITO_USER_AND_IDENTITY_POOLS',

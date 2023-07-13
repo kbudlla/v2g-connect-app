@@ -1,18 +1,23 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { UserInfo, useUserInfo } from 'api/user';
 
+import { usePartialAppContext } from 'core/AppContext';
+
 import { Typography } from 'antd';
+
+import { Auth } from 'aws-amplify';
 
 const useTranslatedRandomGreeting = (userInfo: UserInfo | null) => {
   const { t } = useTranslation('common');
+  const [userFullName] = usePartialAppContext('userFullName');
 
   const greeting = useMemo(() => {
     if (!userInfo) return 'Loading...';
     const greetings: string[] = t('greetings', { returnObjects: true }); // Get the list of greetings
     const randomIndex = Math.floor(Math.random() * greetings.length);
-    return t(`greetings.${randomIndex}`, { user: `${userInfo.name.first} ${userInfo.name.last}` });
+    return t(`greetings.${randomIndex}`, { user: userFullName });
   }, [userInfo, t]);
 
   return greeting;

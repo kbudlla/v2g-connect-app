@@ -5,8 +5,6 @@ import { useCognitoAccessTokenFromAppContext } from 'hooks/auth/useCognitoAccess
 export const UnauthenticatedOnlyRoute = ({ redirectPath = '/' }) => {
   const { tokenVerified, accessToken } = useCognitoAccessTokenFromAppContext();
 
-  console.log(accessToken);
-
   if (!tokenVerified) return null;
 
   return accessToken ? <Navigate to={redirectPath} replace /> : <Outlet />;

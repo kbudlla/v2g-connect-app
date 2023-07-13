@@ -6,23 +6,16 @@ import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 import { Auth } from 'aws-amplify';
 
 type Props = {
-  danger: boolean;
   label: string;
   icon: React.ReactNode;
 };
 
-const FederatedSignButton: React.FC<any> = ({ danger, label, icon }) => {
-  // const handleFederatedSignIn = async () => {
-  //   await Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
-  // };
+const FederatedSignButton: React.FC<Props> = ({ label, icon }) => {
+  const handleFederatedSignIn = async () => {
+    await Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
+  };
   return (
-    <Button
-      type="default"
-      danger={danger}
-      // onClick={() => handleFederatedSignIn()}
-      icon={icon}
-      style={{ marginTop: 10 }}
-    >
+    <Button type="default" onClick={() => handleFederatedSignIn()} icon={icon} style={{ marginTop: 10 }}>
       {label}
     </Button>
   );

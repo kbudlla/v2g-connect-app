@@ -7,6 +7,7 @@ import { Auth } from 'aws-amplify';
 
 export const useCognitoAccessTokenFromAppContext = () => {
   const [accessTokenFromState, setAccessTokenFromState] = usePartialAppContext('accessToken');
+  const [, setUserData] = usePartialAppContext('userFullName');
   const [state, setState] = useState<{ tokenVerified: boolean; accessToken: CognitoAccessToken | undefined }>({
     tokenVerified: !!accessTokenFromState,
     accessToken: accessTokenFromState,
@@ -21,6 +22,7 @@ export const useCognitoAccessTokenFromAppContext = () => {
           const accessToken = session.getAccessToken();
           // Save the access token in global state for faster refetch
           setAccessTokenFromState(accessToken);
+          setUserData(session.getIdToken().payload?.name);
           if (!unmounted) setState({ tokenVerified: true, accessToken });
         })
         .catch(() => {

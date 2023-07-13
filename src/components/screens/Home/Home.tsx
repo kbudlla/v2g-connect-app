@@ -12,7 +12,6 @@ const { Content } = Layout;
 
 export const Home = () => {
   const [accessToken, setAccessToken] = usePartialAppContext('accessToken');
-  console.log(accessToken);
   return (
     <Layout>
       <MainMenu />

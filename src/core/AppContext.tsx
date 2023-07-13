@@ -8,6 +8,7 @@ import type { CognitoAccessToken } from 'amazon-cognito-identity-js';
 type AppContextStore = {
   isMainMenuCollapsed: boolean;
   accessToken?: CognitoAccessToken;
+  userFullName?: string;
 };
 
 const InitialAppContextValues: AppContextStore = {

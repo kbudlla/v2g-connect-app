@@ -3,14 +3,21 @@
 
 export default {
   aws_project_region: 'eu-central-1',
-  aws_cognito_identity_pool_id: 'eu-central-1:06011d0d-9d82-4eec-8f1e-5fbc711f2a6b',
+  aws_cognito_identity_pool_id: '',
   aws_cognito_region: 'eu-central-1',
-  aws_user_pools_id: 'eu-central-1_vmUdgggcZ',
-  aws_user_pools_web_client_id: '2u2qfuvvqqki3npvrk24teidld',
-  oauth: {},
+  aws_user_pools_id: 'eu-central-1_WmIZPlE9G',
+  aws_user_pools_web_client_id: '7q5vqcdd54mijq3irkjvslitgc',
+  oauth: {
+    domain: 'v2gconnect-app.auth.eu-central-1.amazoncognito.com',
+    scope: ['email', 'openid', 'profile'],
+    redirectSignIn: 'http://localhost:5173/dashboard',
+    redirectSignOut: 'http://localhost:5173/auth/login',
+    responseType: 'code',
+  },
+  federationTarget: 'COGNITO_USER_AND_IDENTITY_POOLS',
   aws_cognito_username_attributes: [],
   aws_cognito_social_providers: [],
-  aws_cognito_signup_attributes: ['BIRTHDATE', 'EMAIL', 'NAME', 'PHONE_NUMBER'],
+  aws_cognito_signup_attributes: ['EMAIL'],
   aws_cognito_mfa_configuration: 'OFF',
   aws_cognito_mfa_types: ['SMS'],
   aws_cognito_password_protection_settings: {

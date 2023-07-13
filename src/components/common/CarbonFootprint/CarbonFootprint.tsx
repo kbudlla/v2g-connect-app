@@ -77,7 +77,7 @@ function CarbonFootprint(props: ForwardedCardProps<CarbonFootprintProps>): JSX.E
       <Space wrap className="justify-end">
         <Select
           defaultValue={timeRange.unit}
-          className="w-32"
+          className="mw-40"
           onChange={handleTimeUnitChange}
           options={[
             // { value: 'minutes', label: 'Current Day (Minutes)' },

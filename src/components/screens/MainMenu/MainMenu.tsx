@@ -50,7 +50,7 @@ const makeMenuItems = (t: TFunction<'general'>): MenuItem[] => [
   },
 
   {
-    key: 'community',
+    key: '/community',
     label: 'Community Forum',
     title: '',
     icon: <TeamOutlined />,

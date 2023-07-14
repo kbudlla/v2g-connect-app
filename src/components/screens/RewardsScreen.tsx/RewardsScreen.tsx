@@ -14,7 +14,7 @@ function RewardsScreen(): JSX.Element {
     <PageWrapper showBreadcrumbs>
       <Row gutter={[32, 32]}>
         <Col span={24} md={12}>
-          <PointBalanceCard fullheight balance={420} />
+          <PointBalanceCard fullheight balance={1337} />
         </Col>
         <Col span={24} md={12}>
           <ChallengesCard simple title={t('rewardsOpenChallengesCardsTitle')} />

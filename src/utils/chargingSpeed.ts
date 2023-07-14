@@ -4,6 +4,10 @@ import { cosineInterpolation, findClosestValueIndices } from './interpolation';
 import { RNG } from './rng';
 
 // And https://plotdigitizer.com/
+
+// Maybe update to this, convert to C values?
+// https://www.researchgate.net/figure/State-of-Charge-versus-a-charging-power-and-b-discharging-V2G-power-of-EV-of-three_fig4_344665888
+
 export const estimateChargingSpeedPercentage = (currentBatteryPercentage: number): number => {
   // The raw values (0 and 100 were clipped to the following interpolation works propely)
   // Sort because the graph-drawing might be bad and we just assume a convex graph

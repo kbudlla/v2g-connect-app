@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [userId] = useState('userId');
   const [timeRange, setTimeRange] = useState(defaultRangeForTimeUnit({ unit: 'months' }));
 
-  const { energyUsageInfo, loading } = useEnergyUsage(userId, 0.6, timeRange);
+  const { energyUsageInfo, loading } = useEnergyUsage(userId, 0.75, timeRange);
 
   const handleTimeUnitChange = useCallback((unit: TimeUnit) => {
     setTimeRange(defaultRangeForTimeUnit({ unit }));

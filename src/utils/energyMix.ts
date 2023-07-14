@@ -129,27 +129,9 @@ export const normalizeEnergyMix = (mix: EnergyMix | null): EnergyMix | null => {
 
 /* Constants */
 
-// See above, 2022 values
-export const AveragePowerMix: EnergyMix = {
-  [EnergyProducerType.Coal]: 0.311,
-  [EnergyProducerType.Nuclear]: 0.06,
-  [EnergyProducerType.Gas]: 0.138,
-  [EnergyProducerType.Oil]: 0.008,
-  [EnergyProducerType.Wind]: 0.217,
-  [EnergyProducerType.Water]: 0.03,
-  [EnergyProducerType.Biomass]: 0.077,
-  [EnergyProducerType.Photovoltaic]: 0.105,
-  [EnergyProducerType.Waste]: 0.01,
-  [EnergyProducerType.Geothermal]: 0.0,
-  // This value was 4.2%, but with that this didn't add up to 1
-  [EnergyProducerType.Other]: 0.044,
-};
-
-export const SimpleAveragePowerMix = energyMixToSimple(AveragePowerMix);
-
 /* Access to resamples values from the energy mix */
 
-export const EnergyMixTimeSeries = EnergyMixData.map((element) => {
+export const EnergyMixTimeSeries: (EnergyMix & { timestamp: number })[] = EnergyMixData.map((element) => {
   // First, rename/map the fields into something more readable
   const timestamp = moment(element['Datum (MEZ)']).valueOf();
 
@@ -169,16 +151,19 @@ export const EnergyMixTimeSeries = EnergyMixData.map((element) => {
   };
 
   return { timestamp, ...normalizeEnergyMix(mix) };
-}).sort((a, b) => a.timestamp - b.timestamp);
+}).sort((a, b) => a.timestamp - b.timestamp) as (EnergyMix & { timestamp: number })[];
 const EnergyMixTimeSeriesStart = Math.min(...EnergyMixTimeSeries.map((e) => e.timestamp));
 const EnergyMixTimeSeriesEnd = Math.max(...EnergyMixTimeSeries.map((e) => e.timestamp));
 const EnergyMixTimeSeriesTimeDelta = EnergyMixTimeSeriesEnd - EnergyMixTimeSeriesStart;
+
+// Because JS's module is broken
+const modulo = (n: number, m: number) => ((n % m) + m) % m;
 
 export const getCurrentEnergyMix = (timestamp: number): EnergyMix => {
   // First, we re-map the timestamp into the time-series we have
   // Not 100% sure if we have to subtract the EnergyMixTimeSeriesStart and add it back, but I think yes
   const localTimestamp =
-    ((timestamp - EnergyMixTimeSeriesStart) % EnergyMixTimeSeriesTimeDelta) + EnergyMixTimeSeriesStart;
+    modulo(Math.floor(timestamp - EnergyMixTimeSeriesStart), EnergyMixTimeSeriesTimeDelta) + EnergyMixTimeSeriesStart;
 
   // Find the two closest values
   const [i, ii] = findClosestValueIndices(
@@ -198,6 +183,27 @@ export const getCurrentEnergyMix = (timestamp: number): EnergyMix => {
   // This is fine, because it cannot be null
   return mix as EnergyMix;
 };
+
+// See above, 2022 values
+export const AveragePowerMix: EnergyMix = {
+  [EnergyProducerType.Coal]: 0.311,
+  [EnergyProducerType.Nuclear]: 0.06,
+  [EnergyProducerType.Gas]: 0.138,
+  [EnergyProducerType.Oil]: 0.008,
+  [EnergyProducerType.Wind]: 0.217,
+  [EnergyProducerType.Water]: 0.03,
+  [EnergyProducerType.Biomass]: 0.077,
+  [EnergyProducerType.Photovoltaic]: 0.105,
+  [EnergyProducerType.Waste]: 0.01,
+  [EnergyProducerType.Geothermal]: 0.0,
+  // This value was 4.2%, but with that this didn't add up to 1
+  [EnergyProducerType.Other]: 0.044,
+};
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+// export const AveragePowerMix = normalizeEnergyMix((EnergyMixTimeSeries as EnergyMix[]).reduce((total, e) => addEnergyMix(total, e)))!
+
+export const SimpleAveragePowerMix = energyMixToSimple(AveragePowerMix);
 
 /* PowerMix to CO2 emissions */
 // https://www.bundestag.de/resource/blob/406432/c4cbd6c8c74ec40df8d9cda8fe2f7dbb/WD-8-056-07-pdf-data.pdf

@@ -175,7 +175,7 @@ export const getCarbonFootprint = async (
   const timesteps = getTimeSteps(range);
 
   // Run the simulation instead
-  const { data: energyUsageInfo } = await getEnergyUsage(userId, 0.5, range);
+  const { data: energyUsageInfo } = await getEnergyUsage(userId, 0.75, range);
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const emissionsKg = energyUsageInfo!.timeseries.map((val) =>
@@ -184,7 +184,7 @@ export const getCarbonFootprint = async (
   const average = emissionsKg.reduce((acc, e) => acc + e) / emissionsKg.length;
 
   // Return after timeout
-  return resolveWithTimeout({
+  return {
     status: 200,
     data: {
       average,
@@ -193,7 +193,7 @@ export const getCarbonFootprint = async (
         y: emissionsKg,
       },
     },
-  });
+  };
 };
 
 /* Hooks */

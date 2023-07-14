@@ -1,8 +1,13 @@
 // Charging speed depends on the state of charge of the battery
 // https://www.allego.eu/blog/2022/june/what-variables-affect-your-charging-speed
 import { cosineInterpolation, findClosestValueIndices } from './interpolation';
+import { RNG } from './rng';
 
 // And https://plotdigitizer.com/
+
+// Maybe update to this, convert to C values?
+// https://www.researchgate.net/figure/State-of-Charge-versus-a-charging-power-and-b-discharging-V2G-power-of-EV-of-three_fig4_344665888
+
 export const estimateChargingSpeedPercentage = (currentBatteryPercentage: number): number => {
   // The raw values (0 and 100 were clipped to the following interpolation works propely)
   // Sort because the graph-drawing might be bad and we just assume a convex graph
@@ -50,5 +55,7 @@ export const estimateChargingSpeedPercentage = (currentBatteryPercentage: number
 // https://de.wikipedia.org/wiki/Ladestation_(Elektrofahrzeug)
 export const ChargingSpeeds = [3.6, 5.8, 7.2, 11] as const;
 
-export const getRandomChargingSpeed = () => ChargingSpeeds[Math.floor(Math.random() * ChargingSpeeds.length)];
+export const getRandomChargingSpeed = (rng?: RNG) => {
+  return rng ? rng.choice([...ChargingSpeeds]) : ChargingSpeeds[Math.floor(Math.random() * ChargingSpeeds.length)];
+};
 export const getMaximumChargingSpeed = () => Math.max(...ChargingSpeeds);

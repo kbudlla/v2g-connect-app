@@ -88,7 +88,7 @@ export const getEnergyUsage = (userId: string, minimumStateOfCharge: number, ran
     rng,
     timestampStart: range.from.getTime(),
   });
-  for (const _ of timesteps) {
+  for (let i = 0; i < timesteps.length; i++) {
     const timestep = runSimulationStep(state);
     timeseries.push(timestep.statistics);
     receipts = receipts.concat(timestep.receipts);

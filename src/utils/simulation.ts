@@ -5,16 +5,19 @@ import {
   AveragePowerMix,
   EnergyMix,
   SimpleAveragePowerMix,
-  SimpleEnergyMix,
   SimpleEnergyProducerType,
   addEnergyMix,
   energyMixToSimple,
+  getCO2Emissions,
   getCurrentEnergyMix,
   normalizeEnergyMix,
   scaleEnergyMix,
 } from './energyMix';
 import { sigmoid } from './math';
+import { RNG } from './rng';
 import { TimeUnit, unitToMs } from './time';
+
+import moment from 'moment';
 
 export type DriverState = 'driving' | 'charging';
 
@@ -22,6 +25,8 @@ export type SimulationState = {
   stepIndex: number;
   substeps: number;
   timestepMs: number;
+  rng: RNG;
+  timestampStart: number;
 
   driverState: DriverState;
 
@@ -91,14 +96,29 @@ export const kWhPerKm = (16.7 + 30.9) / 200;
 
 /* Utility functions */
 
-const calculateChargingWeight = (currentMix: SimpleEnergyMix): number => {
+const calculateChargingWeight = (currentMix: EnergyMix, useCO2Weight = false): number => {
+  const weight = useCO2Weight
+    ? getCO2Emissions(AveragePowerMix, 1) - getCO2Emissions(currentMix, 1)
+    : energyMixToSimple(currentMix)[SimpleEnergyProducerType.Renewable] -
+      SimpleAveragePowerMix[SimpleEnergyProducerType.Renewable];
+
   return Math.max(
     0,
     sigmoid(
-      currentMix[SimpleEnergyProducerType.Renewable] - SimpleAveragePowerMix[SimpleEnergyProducerType.Renewable],
-      10,
+      weight,
+      // use more agressive scaling for co2, since the difference is smaller
+      useCO2Weight ? 40 : 10,
     ),
   );
+};
+
+const calculateDischargingWeight = (currentMix: EnergyMix, useCO2Weight = false): number => {
+  const weight = useCO2Weight
+    ? getCO2Emissions(currentMix, 1) - getCO2Emissions(AveragePowerMix, 1)
+    : SimpleAveragePowerMix[SimpleEnergyProducerType.Renewable] -
+      energyMixToSimple(currentMix)[SimpleEnergyProducerType.Renewable];
+
+  return Math.max(0, sigmoid(weight, 10));
 };
 
 /* Simulation Logic */
@@ -116,15 +136,16 @@ const simulateDriving = (state: SimulationState) => {
   state.usedKWh += kWhUsedPerTimestep;
 };
 const simulateCharging = (state: SimulationState, timestamp: number) => {
+  const useCO2Weight = true;
+
   // Get the current energy mix
-  const currentTimestamp = timestamp + state.stepIndex * state.timestepMs;
-  const currentEnergyMix = getCurrentEnergyMix(currentTimestamp);
-  const simpleEnergyMix = energyMixToSimple(currentEnergyMix);
+  const currentEnergyMix = getCurrentEnergyMix(timestamp);
 
   // Based on the relation of the current mix to the average
   // mix, we can calculate a weight to prefer charging, to opportunistically take in energy
-  // We're using sigmoid to shape the decision curvbe
-  const chargingWeight = calculateChargingWeight(simpleEnergyMix);
+  // We're using sigmoid to shape the decision curve
+  const chargingWeight = calculateChargingWeight(currentEnergyMix, useCO2Weight);
+  const dischargingWeight = calculateDischargingWeight(currentEnergyMix, useCO2Weight);
 
   // Get speed for charging
   const chargingSpeedKW = Math.min(
@@ -156,8 +177,31 @@ const simulateCharging = (state: SimulationState, timestamp: number) => {
 
   // Otherwise it's up to our algorithm to do what we want
   // Decide based on the current energy mix, if we want to charge or discharge
-  // TODO! this is not a great way to decide this.
-  if (Math.random() < chargingWeight) {
+  // if (state.rng.float(0, 1) < chargingWeight) {
+
+  // Estimate remaining charging time for a better estimate here?
+  // Holdout if the conditions become better in the next n timesteps
+  const lookahead = 15;
+  const futureChargingWeight = Math.max(
+    ...new Array(lookahead)
+      .fill(0)
+      .map((_, i) =>
+        calculateChargingWeight(getCurrentEnergyMix(timestamp + (state.timestepMs + 1) * i), useCO2Weight),
+      ),
+  );
+  const futureDischargingWeight = Math.max(
+    ...new Array(lookahead)
+      .fill(0)
+      .map((_, i) =>
+        calculateDischargingWeight(getCurrentEnergyMix(timestamp + (state.timestepMs + 1) * i), useCO2Weight),
+      ),
+  );
+
+  const shouldChargeNow = chargingWeight > dischargingWeight && futureChargingWeight <= chargingWeight;
+
+  const shouldDischargeNow = dischargingWeight > chargingWeight && futureDischargingWeight <= dischargingWeight;
+
+  if (shouldChargeNow) {
     // If the battery goes over 100%, we need to limit it back and re-calculate the actual power
     if (state.batteryPercentage + chargeRateBatteryPercentage > 1.0) {
       state.chargedKWh += (1.0 - state.batteryPercentage) * state.vehicleBatteryCapacityKWh;
@@ -181,13 +225,18 @@ const simulateCharging = (state: SimulationState, timestamp: number) => {
     return;
   }
 
-  // If we get here, we're discharging
-  state.batteryPercentage -= dischargeRateBatteryPercentage;
-  state.dischargedKWh += chargeRateTimestepKWh;
+  if (shouldDischargeNow) {
+    state.batteryPercentage -= dischargeRateBatteryPercentage;
+    state.dischargedKWh += chargeRateTimestepKWh;
+    return;
+  }
+
+  // Otherwise we stay idle
 };
 
 /* Updates the state in place */
-export const simulateTimestep = (state: SimulationState, timestamp: number) => {
+export const simulateTimestep = (state: SimulationState) => {
+  const timestamp = state.timestampStart + state.stepIndex * state.timestepMs;
   // Increment step-index
   state.stepIndex += 1;
 
@@ -216,7 +265,7 @@ export const simulateTimestep = (state: SimulationState, timestamp: number) => {
       ) {
         state.driverState = 'charging';
         // Select a new charger
-        state.maxChargerChargingSpeedKW = getRandomChargingSpeed();
+        state.maxChargerChargingSpeedKW = getRandomChargingSpeed(state.rng);
       }
       break;
     case 'charging':
@@ -231,7 +280,7 @@ export const simulateTimestep = (state: SimulationState, timestamp: number) => {
         const receipt = generateReceipt({
           chargedKWh: state.chargedKWh - state.lastChargedKWh,
           dischargedKWh: state.dischargedKWh - state.lastDischargedKWh,
-          location: charginStationLocationToHumanHumanReadable(getRandomChargingStation()),
+          location: charginStationLocationToHumanHumanReadable(getRandomChargingStation(state.rng)),
           timestamp: new Date(timestamp).toISOString(),
         });
         state.receipts.push(receipt);
@@ -244,9 +293,11 @@ export const simulateTimestep = (state: SimulationState, timestamp: number) => {
 
 type SimulationParamters = {
   timeUnit: TimeUnit;
+  timestampStart: number;
   // Simulation quality
   // used to determine the timesteps, such that the maximum battery % change <= this value
   quality?: number;
+  rng: RNG;
 
   batteryCapacityKWh: number;
   batteryPercentage: number;
@@ -256,7 +307,14 @@ type SimulationParamters = {
 };
 
 export const initializeSimulation = (parameters: SimulationParamters): SimulationState => {
-  const { batteryCapacityKWh, batteryPercentage, preferredBatteryPercentage, maxVehicleChargingSpeedKW } = parameters;
+  const {
+    batteryCapacityKWh,
+    batteryPercentage,
+    preferredBatteryPercentage,
+    maxVehicleChargingSpeedKW,
+    rng,
+    timestampStart,
+  } = parameters;
   const unitInMs = unitToMs(parameters.timeUnit);
 
   // Set the required timesteps, so we have enough 'resolution' to model the charging behavior correctly
@@ -272,16 +330,18 @@ export const initializeSimulation = (parameters: SimulationParamters): Simulatio
 
   const preferredAverageKilometers = timestepMs * (parameters.preferredKmPerYear / (12 * unitToMs('months')));
 
-  return {
+  const state: SimulationState = {
     stepIndex: 0,
+    timestampStart,
     substeps,
     timestepMs,
+    rng,
 
     // Start off in charging mode, by default
     driverState: 'charging',
 
     batteryPercentage,
-    maxChargerChargingSpeedKW: getRandomChargingSpeed(),
+    maxChargerChargingSpeedKW: getRandomChargingSpeed(rng),
 
     kilometersDriven: 0,
     kilometersDrivenAverage: 0,
@@ -302,15 +362,37 @@ export const initializeSimulation = (parameters: SimulationParamters): Simulatio
     lastDischargedKWh: 0,
     receipts: [],
   };
+
+  return state;
 };
 
-export const runSimulationStep = (state: SimulationState, timestep: Date) => {
+export const initializeSimulationWithPrerun = (parameters: SimulationParamters, timesteps = 8): SimulationState => {
+  const timestampStart = moment(parameters.timestampStart)
+    .subtract(timesteps - 1, parameters.timeUnit)
+    .valueOf();
+  const preRunState = initializeSimulation({
+    ...parameters,
+    timestampStart,
+  });
+
+  for (let i = 0; i < timesteps; i++) {
+    runSimulationStep(preRunState);
+  }
+  console.log(timestampStart + (preRunState.stepIndex + 1) * preRunState.timestepMs, parameters.timestampStart);
+
+  // const state = initializeSimulation(parameters)
+  // console.log(preRunState, state)
+  return preRunState;
+};
+
+export const runSimulationStep = (state: SimulationState) => {
   const batteryIn = state.batteryPercentage;
 
+  const timestamp = new Date(state.timestampStart + state.stepIndex * state.timestepMs);
+
   // Run the simulation substeps
-  const initialTimestamp = timestep.getTime();
   for (let i = 0; i < state.substeps; i++) {
-    simulateTimestep(state, initialTimestamp + i * state.timestepMs);
+    simulateTimestep(state);
   }
 
   // Export statistics
@@ -323,18 +405,18 @@ export const runSimulationStep = (state: SimulationState, timestep: Date) => {
     dischargeRateKW: state.dischargedKWh / (msPerHour / state.timestepMs),
     batteryOut: state.batteryPercentage,
     chargingMix: normalizeEnergyMix(state.averageEnergyMix) ?? AveragePowerMix,
-    timestamp: timestep.toISOString(),
+    timestamp: timestamp.toISOString(),
   };
   const receipts = [...state.receipts];
 
   // Reset running statistics
-  state.stepIndex = 0;
+  // state.stepIndex = 0;
   state.averageEnergyMix = null;
   state.chargedKWh = 0;
   state.dischargedKWh = 0;
   state.usedKWh = 0;
-  state.kilometersDriven = 0;
-  state.kilometersDrivenAverage = 0;
+  // state.kilometersDriven = 0;
+  // state.kilometersDrivenAverage = 0;
   state.lastChargedKWh = 0;
   state.lastDischargedKWh = 0;
   state.receipts = [];

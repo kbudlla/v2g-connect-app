@@ -1,6 +1,7 @@
 // Charging speed depends on the state of charge of the battery
 // https://www.allego.eu/blog/2022/june/what-variables-affect-your-charging-speed
 import { cosineInterpolation, findClosestValueIndices } from './interpolation';
+import { RNG } from './rng';
 
 // And https://plotdigitizer.com/
 export const estimateChargingSpeedPercentage = (currentBatteryPercentage: number): number => {
@@ -50,5 +51,7 @@ export const estimateChargingSpeedPercentage = (currentBatteryPercentage: number
 // https://de.wikipedia.org/wiki/Ladestation_(Elektrofahrzeug)
 export const ChargingSpeeds = [3.6, 5.8, 7.2, 11] as const;
 
-export const getRandomChargingSpeed = () => ChargingSpeeds[Math.floor(Math.random() * ChargingSpeeds.length)];
+export const getRandomChargingSpeed = (rng?: RNG) => {
+  return rng ? rng.choice([...ChargingSpeeds]) : ChargingSpeeds[Math.floor(Math.random() * ChargingSpeeds.length)];
+};
 export const getMaximumChargingSpeed = () => Math.max(...ChargingSpeeds);

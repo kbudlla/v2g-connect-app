@@ -1,3 +1,5 @@
+import { RNG } from './rng';
+
 import chargingStations from 'assets/data/chargingStationsBNE.json';
 
 // Typing
@@ -42,7 +44,9 @@ export type ChargingStationConnectorType =
 
 export const ChargingStations = chargingStations as unknown as ChargingStation[];
 
-export const getRandomChargingStation = () => ChargingStations[Math.floor(Math.random() * ChargingStations.length)];
+export const getRandomChargingStation = (rng?: RNG) => {
+  return rng ? rng.choice(ChargingStations) : ChargingStations[Math.floor(Math.random() * ChargingStations.length)];
+};
 
 export const charginStationLocationToHumanHumanReadable = (station: ChargingStation) => {
   return `${station.location.street} ${station.location.number}, ${station.location.zipCode} ${station.location.city}`;

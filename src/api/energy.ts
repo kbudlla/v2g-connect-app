@@ -5,8 +5,11 @@ import { APIHookError, APIResponse } from './types';
 
 import { EnergyMix, addEnergyMix, normalizeEnergyMix } from 'utils/energyMix';
 import { resolveWithTimeout } from 'utils/mock';
+import { RNG } from 'utils/rng';
 import { ChargingReceipt, EnergyUsageTimestep, initializeSimulation, runSimulationStep } from 'utils/simulation';
 import { TimeRange, getTimeSteps } from 'utils/time';
+
+import * as Comlink from 'comlink';
 
 type EnergyUsageStats = Omit<EnergyUsageTimestep, 'batteryIn' | 'batteryOut' | 'timestamp'>;
 
@@ -75,46 +78,48 @@ export const getEnergyUsage = async (
   minimumStateOfCharge: number,
   range: TimeRange,
 ): Promise<APIResponse<EnergyUsageInfo>> => {
-  const timesteps = getTimeSteps(range);
+  // const rng = new RNG(42069)
 
-  // Decide on a Battery Capacity of the vehicle and initial state of charge
-  const batteryCapacityKWh = Math.random() * (EVBatteryCapacityMax - EVBatteryCapacityMin) + EVBatteryCapacityMin;
-  const initialBatteryPercentage = Math.random() * 0.8 + 0.2;
+  // const timesteps = getTimeSteps(range);
 
-  // Decide on a random amount of kilometers driven per year
-  const kmPerYear =
-    Math.random() * (maxKilometersDrivenPerYear - minKilometersDrivenPerYear) + minKilometersDrivenPerYear;
+  // // Decide on a Battery Capacity of the vehicle and initial state of charge
+  // const batteryCapacityKWh = rng.float(EVBatteryCapacityMin, EVBatteryCapacityMax)
+  // const initialBatteryPercentage = rng.float(0.2, 1.0);
 
-  // Run a quick simulation for each of the timesteps separately
-  // This is easier than averaging later
-  const timeseries: EnergyUsageTimestep[] = [];
-  let receipts: ChargingReceipt[] = [];
-  const state = initializeSimulation({
-    batteryCapacityKWh,
-    batteryPercentage: initialBatteryPercentage,
-    maxVehicleChargingSpeedKW: EVMaxChargingSpeedKw,
-    preferredBatteryPercentage: minimumStateOfCharge,
-    preferredKmPerYear: kmPerYear,
-    timeUnit: range.unit,
-    quality: 0.05,
-  });
-  for (const ts of timesteps) {
-    const timestep = runSimulationStep(state, ts);
-    timeseries.push(timestep.statistics);
-    receipts = receipts.concat(timestep.receipts);
-  }
+  // // Decide on a random amount of kilometers driven per year
+  // const kmPerYear = rng.float(minKilometersDrivenPerYear, maxKilometersDrivenPerYear);
+
+  // // Run a quick simulation for each of the timesteps separately
+  // // This is easier than averaging later
+  // const timeseries: EnergyUsageTimestep[] = [];
+  // let receipts: ChargingReceipt[] = [];
+  // const state = initializeSimulation({
+  //   batteryCapacityKWh,
+  //   batteryPercentage: initialBatteryPercentage,
+  //   maxVehicleChargingSpeedKW: EVMaxChargingSpeedKw,
+  //   preferredBatteryPercentage: minimumStateOfCharge,
+  //   preferredKmPerYear: kmPerYear,
+  //   timeUnit: range.unit,
+  //   quality: 0.05,
+  //   rng,
+  //   timestampStart: range.from.getTime()
+  // });
+  // for (const _ of timesteps) {
+  //   const timestep = runSimulationStep(state);
+  //   timeseries.push(timestep.statistics);
+  //   receipts = receipts.concat(timestep.receipts);
+  // }
+
+  const instance = new ComlinkWorker<typeof import('./workers/simulation')>(
+    new URL('./workers/simulation', import.meta.url),
+  );
+  const result = await instance.getEnergyUsage(userId, minimumStateOfCharge, range);
 
   // Return after timeout
-  return resolveWithTimeout({
+  return {
     status: 200,
-    data: {
-      total: totalEnergyUsage(timeseries),
-      average: averageEnergyUsage(timeseries),
-      timeseries,
-      receipts,
-      batteryCapacityKWh,
-    },
-  });
+    data: result,
+  };
 };
 
 /* Hooks */

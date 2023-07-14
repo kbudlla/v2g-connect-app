@@ -184,7 +184,7 @@ export const getCarbonFootprint = async (
   const average = emissionsKg.reduce((acc, e) => acc + e) / emissionsKg.length;
 
   // Return after timeout
-  return resolveWithTimeout({
+  return {
     status: 200,
     data: {
       average,
@@ -193,7 +193,7 @@ export const getCarbonFootprint = async (
         y: emissionsKg,
       },
     },
-  });
+  };
 };
 
 /* Hooks */

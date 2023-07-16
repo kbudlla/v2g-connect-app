@@ -6,7 +6,7 @@ import { usePartialAppContext } from 'core/AppContext';
 
 import { MenuProps, Layout, Menu, Button } from 'antd';
 
-import { V2GLogo } from 'components/common/V2GLogo/V2GLogo';
+import V2GLogo from 'components/common/V2GLogo/V2GLogo';
 
 import './MainMenu.scss';
 

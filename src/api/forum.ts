@@ -167,6 +167,19 @@ export const getPaginatedMessagesForThread = async (
   });
 };
 
+export const getThreadTitle = async (threadId: string): Promise<APIResponse<string>> => {
+  const thread = threads[threadId] ?? generateMockThreadFromSummary(threadSummaries[0]);
+
+  // Return after timeout
+  return resolveWithTimeout(
+    {
+      status: 200,
+      data: thread.title,
+    },
+    100,
+  );
+};
+
 /* Hooks */
 
 export const usePaginatedForumOverview = (initialPageSize = 10) => {
@@ -243,6 +256,8 @@ export const usePaginatedForumOverview = (initialPageSize = 10) => {
     error,
     summaries,
     total,
+    page,
+    pageSize,
     handlePaginationChange,
   };
 };
@@ -330,5 +345,51 @@ export const usePaginatedForumThread = (threadId: string, initialPageSize = 10) 
     page,
     pageSize,
     handlePaginationChange,
+  };
+};
+
+export const useThreadTitle = (threadId: string) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<APIHookError | null>(null);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+
+  const isMountedRef = useRef(false);
+
+  const update = useCallback(() => {
+    // TODO this is very generic, so we could make this a wrapper thingie
+    setLoading(true);
+    getThreadTitle(threadId).then((val) => {
+      if (!isMountedRef.current) return;
+      setLoading(false);
+      if (val.status !== 200) {
+        setError(APIHookError.InvalidRequestError);
+        setTitle(undefined);
+        return;
+      }
+      if (val.data == null) {
+        setError(APIHookError.ServerSideError);
+        setTitle(undefined);
+        return;
+      }
+      setError(null);
+      setTitle(val.data);
+    });
+  }, [threadId]);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    // Update on mount
+    update();
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [update]);
+
+  return {
+    loading,
+    error,
+    title,
   };
 };

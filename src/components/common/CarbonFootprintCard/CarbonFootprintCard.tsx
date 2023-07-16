@@ -40,7 +40,7 @@ type CarbonFootprintProps = {};
 
 function CarbonFootprintCard(props: ForwardedCardProps<CarbonFootprintProps>): JSX.Element {
   const { t } = useTranslation('common');
-  const getTranslatedCO2Statistics = useTranslatedCO2Statistics();
+  const getTranslatedCO2Statistics = useTranslatedCO2Statistics({ count: 3 });
 
   const [userId] = useState('userId');
   const [timeRange, setTimeRange] = useState(defaultRangeForTimeUnit({ unit: 'months' }));

@@ -49,16 +49,16 @@ const Dashboard = () => {
         </Col>
         <Col span={24} xl={8}>
           <Row gutter={[16, 16]} className="h-full">
-            <Col span={12} xl={24}>
+            <Col span={24} md={12} xl={24}>
               <EnergySoldCard fullheight loading={loading} amount={energyUsageInfo?.total.dischargedKWh} />
             </Col>
-            <Col span={12} xl={24}>
+            <Col span={24} md={12} xl={24}>
               <EarningsCard fullheight loading={loading} receipts={energyUsageInfo?.receipts} />
             </Col>
-            <Col span={12} xl={24}>
+            <Col span={24} md={12} xl={24}>
               <EnergyChargedCard fullheight loading={loading} amountKWh={amountChargedClean} />
             </Col>
-            <Col span={12} xl={24}>
+            <Col span={24} md={12} xl={24}>
               <CO2OverviewCard
                 fullheight
                 loading={loading}
@@ -72,7 +72,7 @@ const Dashboard = () => {
       </Row>
 
       <Row gutter={[32, 32]}>
-        <Col sm={24} lg={12} className="h-[26rem]">
+        <Col span={24} md={12} lg={12} className="h-[34rem] w-full">
           <EnergyMixCard
             simple
             fullheight
@@ -82,7 +82,7 @@ const Dashboard = () => {
             userMix={energyUsageInfo?.average.chargingMix}
           />
         </Col>
-        <Col sm={24} lg={12}>
+        <Col span={24} md={12} lg={12}>
           <ChargingReceiptsCard
             fullwidth
             loading={loading}

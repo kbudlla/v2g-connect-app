@@ -152,8 +152,6 @@ export const getPaginatedMessagesForThread = async (
   const totalCount = thread.messages.length;
   const safeCount = Math.min(count, totalCount - offset);
 
-  console.log(totalCount, offset, safeCount);
-
   // Return after timeout
   return resolveWithTimeout({
     status: 200,
@@ -311,7 +309,6 @@ export const usePaginatedForumThread = (threadId: string, initialPageSize = 10) 
   // Compatible with the call-sig of antd Pagination component
   const handlePaginationChange = useCallback((page: number, pageSize: number) => {
     const pageSizeChanged = lastPaginationConfigRef.current.pageSize !== pageSize;
-    console.log(page, pageSize);
     if (pageSizeChanged) {
       // TODO! We need to ensure that the currently visible items are still visible
       // for now we just reset the page.

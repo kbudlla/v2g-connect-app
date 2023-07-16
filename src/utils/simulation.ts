@@ -378,10 +378,7 @@ export const initializeSimulationWithPrerun = (parameters: SimulationParamters, 
   for (let i = 0; i < timesteps; i++) {
     runSimulationStep(preRunState);
   }
-  console.log(timestampStart + (preRunState.stepIndex + 1) * preRunState.timestepMs, parameters.timestampStart);
 
-  // const state = initializeSimulation(parameters)
-  // console.log(preRunState, state)
   return preRunState;
 };
 

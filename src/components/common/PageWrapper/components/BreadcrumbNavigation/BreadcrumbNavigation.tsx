@@ -43,8 +43,6 @@ const useBreadcrumbPath = () => {
           url: path ? `/${path}/${part}` : `/${part}`,
         };
       });
-      console.log(parts);
-
       // And we're done if we're not in the forum
       if (!isForum || parts.length !== 2) return pathElements;
 

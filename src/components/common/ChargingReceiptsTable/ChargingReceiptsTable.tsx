@@ -73,8 +73,6 @@ function ChargingReceiptsTable(props: ChargingReceiptsTableProps): JSX.Element {
   const rootElementRef = useRef<HTMLDivElement | null>(null);
   const { boundingBox } = useResponsiveDimensions(rootElementRef);
 
-  console.log(receipts);
-
   return (
     <div className="w-full h-full overflow-hidden" ref={rootElementRef}>
       <Table

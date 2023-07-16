@@ -35,7 +35,7 @@ export const ForgotPassword = () => {
           {t('reset_password')}
         </Button>
       </Form.Item>
-      <Link className="return" to="/auth/reset-password">
+      <Link className="return" to="/auth/login">
         {t('return')}
       </Link>
     </Form>

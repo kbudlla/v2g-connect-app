@@ -61,7 +61,7 @@ export const useEnergyUsage = (userId: string, minimumStateOfCharge: number, ran
       setError(null);
       setEnergyUsageInfo(val.data);
     });
-  }, [userId, range]);
+  }, [userId, range, minimumStateOfCharge]);
 
   useEffect(() => {
     isMountedRef.current = true;

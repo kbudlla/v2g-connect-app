@@ -10,7 +10,7 @@ import { V2GLogo } from 'components/common/V2GLogo/V2GLogo';
 
 import './MainMenu.scss';
 
-import i18next, { TFunction } from 'i18next';
+import { TFunction } from 'i18next';
 
 import {
   TeamOutlined,
@@ -22,6 +22,7 @@ import {
 } from '@ant-design/icons';
 
 type MenuItem = Required<MenuProps>['items'][number];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const makeMenuItems = (t: TFunction<'general'>): MenuItem[] => [
   {
     key: '/dashboard',
@@ -82,7 +83,7 @@ export const MainMenu = () => {
   const { t } = useTranslation('general');
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const items = useMemo(() => makeMenuItems(t), [i18next.language]);
+  const items = useMemo(() => makeMenuItems(t), [t]);
 
   const basePathName = useMemo(() => [pathname.replace(/^(\/[^/]+)(\/.+)$/, '$1')], [pathname]);
   return (

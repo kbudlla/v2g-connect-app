@@ -68,12 +68,12 @@ function ForumReplyForm(props: ForumReplyFormProps): JSX.Element {
 
   const handleCancel = useCallback(() => {
     onCancel?.();
-  }, []);
+  }, [onCancel]);
 
   const handleSubmit = useCallback(() => {
     onSubmit?.(content);
     setContent('');
-  }, [content]);
+  }, [content, onSubmit]);
 
   return (
     <Card

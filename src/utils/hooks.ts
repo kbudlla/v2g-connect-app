@@ -30,7 +30,7 @@ export const useResponsiveDimensions = (ref: React.RefObject<HTMLElement>, debou
       observer.unobserve(element);
       observer.disconnect();
     };
-  }, []);
+  }, [handleBoundingBoxSizeChange, ref]);
 
   return {
     boundingBox,

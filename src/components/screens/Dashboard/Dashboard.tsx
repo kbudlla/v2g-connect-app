@@ -19,7 +19,8 @@ import EnergyChargedCard from './components/EnergyChargedCard/EnergyChargedCard'
 import EnergySoldCard from './components/EnergySoldCard/EnergySoldCard';
 
 const Dashboard = () => {
-  const [userId] = useState('userId');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [userId, setUserId] = useState('userId');
   const [timeRange, setTimeRange] = useState(defaultRangeForTimeUnit({ unit: 'months' }));
 
   const { energyUsageInfo, loading } = useEnergyUsage(userId, 0.75, timeRange);

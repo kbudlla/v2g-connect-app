@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Form, Input, Select, Button, notification } from 'antd';
+import { Form, Input, Select, Button } from 'antd';
 
 import { LeftOutlined } from '@ant-design/icons';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Auth } from 'aws-amplify';
 
 const { Option } = Select;
@@ -27,7 +27,9 @@ const RegistrationForm = () => {
 
   const navigate = useNavigate();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
+  // eslint-disable-next-line react/hook-use-state, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
   const [registerdUser, setRegisteredUser] = useState<any>(null);
 
   // useEffect(() => {
@@ -36,6 +38,7 @@ const RegistrationForm = () => {
   //   }
   // }, [loading, registerdUser, props.history]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   const onFinish = async (values: any) => {
     // setLoading(true);
     // try {

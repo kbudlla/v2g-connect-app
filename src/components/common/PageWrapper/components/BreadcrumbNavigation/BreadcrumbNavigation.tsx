@@ -94,7 +94,7 @@ function BreadcrumbPathElement(props: BreadcrumbPathElementProps): JSX.Element {
     () => ({
       selected: location.pathname === url,
     }),
-    [location],
+    [location, url],
   );
 
   return (

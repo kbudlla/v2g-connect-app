@@ -33,7 +33,7 @@ function EnergyMixChart(props: EnergyMixChartProps): JSX.Element {
       val: energyMix[type],
       name: type,
     }));
-  }, [energyMix]);
+  }, [energyMix, simple]);
 
   return (
     <div className={clsx('h-full max-h-full overflow-hidden flex flex-col', props.className)}>

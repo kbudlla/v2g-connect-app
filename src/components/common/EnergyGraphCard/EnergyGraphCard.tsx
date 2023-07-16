@@ -23,9 +23,12 @@ function EnergyGraphCard(props: ForwardedCardProps<EnergyGraphCardProps>): JSX.E
   const { energyUsageInfo, onTimeRangeChange, timeRange } = props;
   const { t } = useTranslation('common');
 
-  const handleTimeUnitChange = useCallback((unit: TimeUnit) => {
-    onTimeRangeChange?.(unit);
-  }, []);
+  const handleTimeUnitChange = useCallback(
+    (unit: TimeUnit) => {
+      onTimeRangeChange?.(unit);
+    },
+    [onTimeRangeChange],
+  );
 
   return (
     <Card

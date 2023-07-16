@@ -17,5 +17,5 @@ export const useLogout = () => {
     } finally {
       setAccessTokenFromState(undefined);
     }
-  }, [accessTokenFromState]);
+  }, [accessTokenFromState, setAccessTokenFromState]);
 };

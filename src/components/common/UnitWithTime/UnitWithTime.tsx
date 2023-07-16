@@ -16,7 +16,7 @@ const useTranslatedTimeUnit = (unit: TimeUnit) => {
         weeks: t('weeks'),
         months: t('months'),
       }[unit]),
-    [t],
+    [t, unit],
   );
 
   return translatedUnit;

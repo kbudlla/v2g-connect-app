@@ -1,24 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { UserInfo, useUserInfo } from 'api/user';
 
 import { usePartialAppContext } from 'core/AppContext';
 
 import { Typography } from 'antd';
 
-import { Auth } from 'aws-amplify';
-
-const useTranslatedRandomGreeting = (userInfo: UserInfo | null) => {
+const useTranslatedRandomGreeting = () => {
   const { t } = useTranslation('common');
   const [userFullName] = usePartialAppContext('userFullName');
 
   const greeting = useMemo(() => {
-    if (!userInfo) return 'Loading...';
+    if (!userFullName) return 'Loading...';
     const greetings: string[] = t('greetings', { returnObjects: true }); // Get the list of greetings
     const randomIndex = Math.floor(Math.random() * greetings.length);
     return t(`greetings.${randomIndex}`, { user: userFullName });
-  }, [userInfo, t]);
+  }, [userFullName, t]);
 
   return greeting;
 };
@@ -36,10 +32,10 @@ function useTranslatedRandomGreetingSubtitle() {
 }
 
 function Greeting(): JSX.Element {
-  const [userId] = useState('very_much_valid_user_id');
-  const { userInfo } = useUserInfo(userId);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [userId, setUserId] = useState('very_much_valid_user_id');
 
-  const greeting = useTranslatedRandomGreeting(userInfo);
+  const greeting = useTranslatedRandomGreeting();
   const greetingSubtitle = useTranslatedRandomGreetingSubtitle();
 
   return (

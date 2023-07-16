@@ -39,7 +39,7 @@ export const useGeoLocation = (options: useGeoLocationOptions) => {
       maximumAge: 5000,
       timeout: 2000,
     });
-  }, []);
+  }, [enableHighAccuracy, handleLocationUpdate, handleLocationUpdateError]);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -61,7 +61,7 @@ export const useGeoLocation = (options: useGeoLocationOptions) => {
         navigator.geolocation.clearWatch(watchHandlerId);
       }
     };
-  }, []);
+  }, [watch, enableHighAccuracy, handleLocationUpdate, handleLocationUpdateError, updateLocation]);
 
   return {
     location,

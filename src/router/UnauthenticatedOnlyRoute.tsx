@@ -2,7 +2,11 @@ import { Navigate, Outlet } from 'react-router';
 
 import { useCognitoAccessTokenFromAppContext } from 'hooks/auth/useCognitoAccessToken';
 
-export const UnauthenticatedOnlyRoute = ({ redirectPath = '/' }) => {
+type UnauthenticatedOnlyRouteProps = {
+  redirectPath?: string;
+};
+
+export const UnauthenticatedOnlyRoute = ({ redirectPath = '/' }: UnauthenticatedOnlyRouteProps) => {
   const { tokenVerified, accessToken } = useCognitoAccessTokenFromAppContext();
 
   if (!tokenVerified) return null;

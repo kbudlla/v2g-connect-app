@@ -37,7 +37,7 @@ export type Challenge = {
 export type CarbonFootprintInfo = {
   average: number;
   timeseries: {
-    x: string[];
+    x: number[];
     y: number[];
   };
 };
@@ -179,7 +179,9 @@ export const getCarbonFootprint = async (
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const emissionsKg = energyUsageInfo!.timeseries.map((val) =>
-    getCO2Emissions(val.chargingMix, val.chargedKWh - val.dischargedKWh),
+    // Not 100% accurate to use min here, but otherwise we can get negative values
+    // Which technically makes sense, but explaining that to someone is annoying
+    getCO2Emissions(val.chargingMix, Math.max(0, val.chargedKWh - val.dischargedKWh)),
   );
   const average = emissionsKg.reduce((acc, e) => acc + e) / emissionsKg.length;
 
@@ -189,7 +191,7 @@ export const getCarbonFootprint = async (
     data: {
       average,
       timeseries: {
-        x: timesteps.map((e) => e.toISOString()),
+        x: timesteps.map((e) => e.getTime()),
         y: emissionsKg,
       },
     },

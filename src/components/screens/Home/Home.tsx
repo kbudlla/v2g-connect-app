@@ -11,6 +11,7 @@ import './Home.scss';
 const { Content } = Layout;
 
 export const Home = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [accessToken, setAccessToken] = usePartialAppContext('accessToken');
   return (
     <Layout>

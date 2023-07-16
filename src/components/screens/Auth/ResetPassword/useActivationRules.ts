@@ -13,6 +13,7 @@ const validatePasswordValue = (value: string) => {
   return value.match(/[a-z]/) && value.match(/[A-Z]/) && value.match(/[0-9]/) && value.match(/[^a-zA-Z0-9]/);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const useActivationInputRules = (t: TFunction<'activate'>, i18n: i18n) => {
   const passwordRule = useMemo(
     () =>
@@ -23,7 +24,7 @@ export const useActivationInputRules = (t: TFunction<'activate'>, i18n: i18n) =>
             : Promise.reject(new Error(t('password_rule_error') || undefined));
         },
       })),
-    [i18n.language],
+    [t],
   );
   const retypePasswordRule = useMemo(
     () =>
@@ -35,7 +36,7 @@ export const useActivationInputRules = (t: TFunction<'activate'>, i18n: i18n) =>
           return Promise.reject(new Error(t('password_do_not_match') || undefined));
         },
       })),
-    [i18n.language],
+    [t],
   );
 
   return { requiredRule: REQUIRED_RULE, passwordRule, retypePasswordRule };

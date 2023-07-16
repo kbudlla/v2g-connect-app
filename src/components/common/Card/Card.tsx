@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 
 import { Card as AntdCard, Spin } from 'antd';
 
@@ -17,15 +17,22 @@ export type ForwardedCardProps<T> = T & ForwardableCardProps;
 
 export type CardProps = {
   header?: JSX.Element;
+  footer?: JSX.Element;
   fixedheight?: boolean;
+  onClick?: () => void;
 } & ForwardableCardProps;
 
 function Card(props: PropsWithChildren<CardProps>): JSX.Element {
-  const { fullwidth, fullheight, fixedheight, disablePadding, loading, style } = props;
+  const { fullwidth, fullheight, fixedheight, disablePadding, loading, style, onClick } = props;
+
+  const hoverable = useMemo(() => Boolean(onClick), [onClick]);
+
   return (
     <AntdCard
       className={clsx('card', props.className, { fullwidth, fullheight, fixedheight, disablePadding })}
       style={style}
+      hoverable={hoverable}
+      onClick={onClick}
     >
       {props.header && props.header}
       <div className="card-content">
@@ -37,6 +44,7 @@ function Card(props: PropsWithChildren<CardProps>): JSX.Element {
 
         {props.children}
       </div>
+      {props.footer && props.footer}
     </AntdCard>
   );
 }

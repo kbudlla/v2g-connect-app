@@ -35,7 +35,7 @@ export const useCognitoAccessTokenFromAppContext = () => {
     return () => {
       unmounted = true;
     };
-  }, []);
+  }, [accessTokenFromState, setAccessTokenFromState, setUserData]);
 
   return state;
 };

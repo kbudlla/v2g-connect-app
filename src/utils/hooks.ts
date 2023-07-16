@@ -2,7 +2,7 @@ import { useLayoutEffect, useMemo, useState } from 'react';
 
 import { debounce } from 'lodash-es';
 
-export const useResponsiveDimensions = (ref: React.RefObject<HTMLElement>, debounceInterval = 100) => {
+export const useResponsiveDimensions = (ref: React.RefObject<Element>, debounceInterval = 100) => {
   const [boundingBox, setBoundingBox] = useState<DOMRect | undefined>();
   const handleBoundingBoxSizeChange = useMemo(() => debounce(setBoundingBox, debounceInterval), [debounceInterval]);
 
@@ -30,7 +30,7 @@ export const useResponsiveDimensions = (ref: React.RefObject<HTMLElement>, debou
       observer.unobserve(element);
       observer.disconnect();
     };
-  }, []);
+  }, [handleBoundingBoxSizeChange, ref]);
 
   return {
     boundingBox,

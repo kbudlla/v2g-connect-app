@@ -3,7 +3,7 @@ import ReactCodeInput from 'react-code-input';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
-import { Alert, Button, Form, Input, Row, Space, Typography } from 'antd';
+import { Button, Form, Input, Row, Space, Typography } from 'antd';
 
 import './ResetPassword.scss';
 
@@ -26,6 +26,7 @@ export const ResetPassword = () => {
   const email = search.get('username') || '';
 
   const onSubmit = async (fields: { password: string }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password } = fields;
 
     if (confirmationCode.length !== 6) {

@@ -14,7 +14,7 @@ type CardHeaderProps = {
 function CardHeader(props: PropsWithChildren<CardHeaderProps>): JSX.Element {
   const { title, icon: Icon, children } = props;
   return (
-    <div className="card-header flex flex-row justify-between mb-4 gap-4 flex-wrap">
+    <div className="card-header flex flex-row justify-between mb-4 gap-2 flex-wrap">
       <div className="flex flex-row">
         {/* Icon */}
         {Icon && (
@@ -31,10 +31,8 @@ function CardHeader(props: PropsWithChildren<CardHeaderProps>): JSX.Element {
           <Typography.Title
             level={2}
             type="success"
+            className="my-auto"
             style={{
-              margin: 'auto 0 auto 0',
-              fontSize: '26px',
-              lineHeight: '42px',
               letterSpacing: '-0.2px',
             }}
           >

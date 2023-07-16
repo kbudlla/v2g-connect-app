@@ -35,6 +35,7 @@ export default function ChargerMap() {
       >
         {markers.map((markerGeoJSON, index) => (
           <Marker key={markerGeoJSON.id ?? index} anchor={markerGeoJSON.geometry.coordinates as [number, number]}>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <ChargerMapMarker {...(markerGeoJSON.properties as any)} />
           </Marker>
         ))}

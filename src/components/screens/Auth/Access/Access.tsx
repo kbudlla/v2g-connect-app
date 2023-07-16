@@ -1,10 +1,9 @@
-import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { Divider, Image, Layout, Space, Typography } from 'antd';
+import { Image, Layout } from 'antd';
 
 import { LanguageSelector } from 'components/common/LanguageSelector/LanguageSelector';
-import { V2GLogo } from 'components/common/V2GLogo/V2GLogo';
+import V2GLogo from 'components/common/V2GLogo/V2GLogo';
 
 import './Access.scss';
 

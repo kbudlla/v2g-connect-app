@@ -46,7 +46,8 @@ function ChallengesModal(props: ChallengesModalProps): JSX.Element {
   const { t } = useTranslation('common');
   const { loading } = useChallenges();
 
-  const [offers] = useState(generateMockOffers(200));
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [offers, setOffers] = useState(generateMockOffers(200));
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(6);
 
@@ -133,7 +134,7 @@ function OfferCard(props: OfferCardProps): JSX.Element {
   const handleRedeem = useCallback(() => {
     if (disabled) return;
     onRedeem?.(id);
-  }, [onRedeem, disabled]);
+  }, [onRedeem, disabled, id]);
 
   return (
     <Card className="border border-dashed border-gray-400">
@@ -186,7 +187,8 @@ function OffersCard(props: OffersCardProps): JSX.Element {
     setModalOpen(false);
   }, []);
 
-  const [offers] = useState(generateMockOffers(6));
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [offers, setOffers] = useState(generateMockOffers(6));
 
   return (
     <>

@@ -33,11 +33,15 @@ export const defaultRangeForTimeUnit = (options: DefaultRangeForTimeUnitOptions)
   }
 };
 
-export const getTimeSteps = (range: TimeRange) => {
-  const { from, to, unit } = range;
-  const difference = moment(to).diff(from, unit);
-  const start = moment(from);
-  return new Array(difference).fill(0).map((_, i) => start.add(i, unit).toDate());
+export const getTimeSteps = (range: TimeRange): Date[] => {
+  const { unit } = range;
+  // Start off with a clean from and to
+  const from = moment(range.from).startOf(unit);
+  const to = moment(range.to).startOf(unit);
+
+  const difference = to.diff(from, unit);
+  // Note: .add modifies the momentjs object, so this messes everything up
+  return [from.toDate(), ...new Array(difference).fill(0).map(() => from.add(1, unit).toDate())];
 };
 
 export const unitToMs = (unit: TimeUnit): number => {

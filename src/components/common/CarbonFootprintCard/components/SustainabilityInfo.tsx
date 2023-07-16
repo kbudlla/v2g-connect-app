@@ -40,36 +40,43 @@ function SustainabilityInfo(props: SustainabilityInfoProps): JSX.Element {
   const sustainabilityScore = useMemo(() => {
     if (loading || averageCO2 == null) return null;
     const score = getSustainabilityScore(averageCO2, timeUnit);
+    const formattedAverageCO2 = formatKgValueWithUnit(averageCO2);
     return {
       ...score,
-      humanReadableCO2: formatKgValueWithUnit(averageCO2),
+      humanReadableCO2: {
+        value: `Average: ${formattedAverageCO2.value}`,
+        unit: formattedAverageCO2.unit,
+      },
     };
   }, [averageCO2, loading, timeUnit]);
 
   return (
     <Typography.Title
-      level={2}
+      level={3}
       style={{
-        margin: 0,
-        fontSize: '26px',
-        lineHeight: '36px',
-        letterSpacing: '-0.2px',
-        fontWeight: 400,
         // TODO! We could also do some cool red to green interpolation here
         color: sustainabilityScore?.ideal ? '#237804' : '#000',
       }}
+      className="h-min flex flex-wrap gap-4"
     >
-      <span style={{ fontWeight: 800, marginRight: '0.5em' }}>
-        {loading && 'Loading...'}
+      {/* Average + Unit */}
+      <span className="flex">
+        <span style={{ fontWeight: 800 }} className="my-auto mr-1 whitespace-nowrap">
+          {loading && 'Loading...'}
+          {!loading && sustainabilityScore?.humanReadableCO2.value}
+        </span>
         {!loading && (
-          <span>
-            Average: {sustainabilityScore?.humanReadableCO2.value}
-            <UnitWithTime unit={sustainabilityScore?.humanReadableCO2.unit ?? ''} timeUnit={timeUnit} />
-          </span>
+          <UnitWithTime
+            unit={sustainabilityScore?.humanReadableCO2.unit ?? ''}
+            timeUnit={timeUnit}
+            className="my-auto whitespace-nowrap"
+          />
         )}
       </span>
+
+      {/* Score */}
       {!loading && (
-        <span style={{ fontSize: '20px', marginRight: '0.5em' }}>
+        <span style={{ fontSize: '20px' }} className="my-auto">
           {/* Typescript is stupid, the nc should not be needed here */}
           {percentileMessageMap[sustainabilityScore?.percentile ?? 10]}
         </span>

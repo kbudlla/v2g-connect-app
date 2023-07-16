@@ -6,6 +6,11 @@
         width: 100%;
         overflow: hidden;
         flex-direction: column;
+
+        // = antd-sm
+        @media screen and (max-width: 576px) {
+            padding: 16px;
+        }
     }
 
     &.fixedheight {
@@ -15,7 +20,7 @@
     }
 
     &.disablePadding {
-        .ant-card-body {
+        & > .ant-card-body {
             padding: 0;
         }
     }

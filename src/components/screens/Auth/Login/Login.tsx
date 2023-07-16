@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { usePartialAppContext } from 'core/AppContext';
-
-import { Alert, Button, Form, Input, Typography, notification } from 'antd';
+import { Alert, Button, Form, Input, Typography } from 'antd';
 import type { Rule } from 'antd/es/form';
 
 import './Login.scss';

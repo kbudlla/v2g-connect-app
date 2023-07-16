@@ -33,8 +33,18 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             colorPrimary: '#00b96b',
             colorLink: '#00b96b',
             colorLinkHover: '#00b96b',
+            colorSuccess: '#00b96b',
             colorError: '#ff4d4f',
             colorText: '#1d1e20',
+          },
+          components: {
+            Typography: {
+              // Globally adjust the Typography.Title component
+              // So we need less overrides
+              titleMarginBottom: 0,
+              titleMarginTop: 0,
+              fontFamily: 'Roboto',
+            },
           },
         }}
       >

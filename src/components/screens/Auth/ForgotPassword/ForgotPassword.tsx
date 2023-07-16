@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { Alert, Button, Form, Input, Typography } from 'antd';
+import { Button, Form, Input, Typography } from 'antd';
 import type { Rule } from 'antd/es/form';
 
 // import { useForgotPassword } from '../../../../hooks/app/cognito/useForgotPassword';
@@ -13,6 +13,7 @@ export const ForgotPassword = () => {
   // const { state, forgotPassword } = useForgotPassword();
 
   const onSubmit = async (fields: { email: string }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { email } = fields;
     // forgotPassword(email);
   };

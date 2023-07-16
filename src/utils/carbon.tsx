@@ -2,8 +2,10 @@
 This module contains utility functions to translate average CO2 usage into something more appropriate for users
 It takes care of providing the required Icons as well.
 */
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { shuffleArray } from './array';
 import { toYearPercentage, type TimeUnit } from './time';
 
 import { ReactComponent as AirplaneIcon } from 'assets/icons/material/airplane-takeoff.svg';
@@ -36,51 +38,70 @@ type EquivalentCO2StatisticInfo = {
   type: CO2SourceType;
 };
 
-export const useTranslatedCO2Statistics = () => {
-  const { t } = useTranslation('common');
-  const CO2SourceTypeUtilsMap: Record<CO2SourceType, (kg: number) => EquivalentCO2StatisticInfo> = {
-    Tree: (value) => ({
-      icon: TreeIcon,
-      value: value / 22,
-      text: t('co2StatisticsTree'),
-      type: 'Tree',
-    }),
-    Airplane: (value) => ({
-      icon: AirplaneIcon,
-      value: value / 0.225,
-      text: t('co2StatisticsAirplane'),
-      type: 'Airplane',
-    }),
-    Car: (value) => ({
-      icon: CarIcon,
-      value: value / 0.192,
-      text: t('co2StatisticsCar'),
-      type: 'Car',
-    }),
-    Bus: (value) => ({
-      icon: BusIcon,
-      value: value / 0.105,
-      text: t('co2StatisticsBus'),
-      type: 'Bus',
-    }),
-    Train: (value) => ({
-      icon: TrainIcon,
-      value: value / 0.041,
-      text: t('co2StatisticsTrain'),
-      type: 'Train',
-    }),
-  };
+type useTranslatedCO2StatisticsOptions = {
+  count?: number;
+};
 
-  return (co2Kg: number): EquivalentCO2StatisticInfo[] => {
-    // Calculate equivalents for each source:
-    return (
-      CO2SourceNames.map((name) => {
+export const useTranslatedCO2Statistics = (options: useTranslatedCO2StatisticsOptions) => {
+  const { count } = options;
+  const { t } = useTranslation('common');
+  const CO2SourceTypeUtilsMap: Record<CO2SourceType, (kg: number) => EquivalentCO2StatisticInfo> = useMemo(() => {
+    return {
+      Tree: (value) => ({
+        icon: TreeIcon,
+        value: value / 22,
+        text: t('co2StatisticsTree'),
+        type: 'Tree',
+      }),
+      Airplane: (value) => ({
+        icon: AirplaneIcon,
+        value: value / 0.225,
+        text: t('co2StatisticsAirplane'),
+        type: 'Airplane',
+      }),
+      Car: (value) => ({
+        icon: CarIcon,
+        value: value / 0.192,
+        text: t('co2StatisticsCar'),
+        type: 'Car',
+      }),
+      Bus: (value) => ({
+        icon: BusIcon,
+        value: value / 0.105,
+        text: t('co2StatisticsBus'),
+        type: 'Bus',
+      }),
+      Train: (value) => ({
+        icon: TrainIcon,
+        value: value / 0.041,
+        text: t('co2StatisticsTrain'),
+        type: 'Train',
+      }),
+    };
+  }, [t]);
+
+  const getTranslatedCO2Statistics = useCallback(
+    (co2Kg: number): EquivalentCO2StatisticInfo[] => {
+      // Calculate equivalents for each source:
+      const equivalents = CO2SourceNames.map((name) => {
         return CO2SourceTypeUtilsMap[name](co2Kg);
       })
         // Filter out elements close to 0
-        .filter((e) => e.value > 1)
-    );
-  };
+        .filter((e) => e.value > 1);
+
+      // Apply the count, if provided
+      if (count != null) {
+        // Shuffle the array
+        return shuffleArray(equivalents)
+          .slice(0, count)
+          .sort((a, b) => a.value - b.value);
+      }
+      return equivalents;
+    },
+    [CO2SourceTypeUtilsMap, count],
+  );
+
+  return getTranslatedCO2Statistics;
 };
 
 // Sustainability-metric

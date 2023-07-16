@@ -200,7 +200,6 @@ export const AveragePowerMix: EnergyMix = {
   [EnergyProducerType.Other]: 0.044,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 // export const AveragePowerMix = normalizeEnergyMix((EnergyMixTimeSeries as EnergyMix[]).reduce((total, e) => addEnergyMix(total, e)))!
 
 export const SimpleAveragePowerMix = energyMixToSimple(AveragePowerMix);

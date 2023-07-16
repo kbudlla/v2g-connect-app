@@ -3,7 +3,12 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:react/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended'
+  ],
   overrides: [
     {
       env: {
@@ -21,8 +26,14 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'react'],
+  settings: {
+    react: {
+      pragma: 'React',
+      version: 'detect'
+    }
+  },
   rules: {
     'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off',
-  },
+    'react/hook-use-state': 'warn'
+  }
 };

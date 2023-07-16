@@ -1,14 +1,22 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
+
+import { getThreadTitle } from 'api/forum';
 
 import { Typography } from 'antd';
 
 import { clsx } from 'clsx';
 
+type PathElement = {
+  title: string;
+  url: string;
+};
+
 const useBreadcrumbPath = () => {
   const { pathname } = useLocation();
   const { t } = useTranslation('common');
+  const [pathElements, setPathElements] = useState<PathElement[]>([]);
 
   const translatedPathNameMap: Record<string, string> = useMemo(
     () => ({
@@ -20,31 +28,47 @@ const useBreadcrumbPath = () => {
     }),
     [t],
   );
-  const pathElements = useMemo(() => {
-    const parts = pathname.split('/').filter((e) => e);
-    const basePathName = pathname.replace(/^(\/[^/]+)(\/.+)$/, '$1');
-    const isForum = basePathName === '/community';
 
-    // For each of the parts, we can get both the human-readable title
-    // and the corresponding URL
-    return [
-      ...parts.slice(0, isForum ? 1 : 2).map((part, index, parts) => {
+  useEffect(() => {
+    const updatePathElements = async (): Promise<PathElement[]> => {
+      const parts = pathname.split('/').filter((e) => e);
+      const basePathName = pathname.replace(/^(\/[^/]+)(\/.+)$/, '$1');
+      const isForum = basePathName === '/community';
+
+      // We can already transform the elements
+      const pathElements = parts.slice(0, isForum ? 1 : 2).map((part, index, parts) => {
         const path = parts.filter((_, ii) => ii < index).join('/');
         return {
           title: translatedPathNameMap[part] ?? part,
           url: path ? `/${path}/${part}` : `/${part}`,
         };
-      }),
-      // Extra Path element for Forum
-      ...(isForum && parts.length === 2
-        ? [
-            {
-              title: atob(parts[parts.length - 1]).split('|')[0],
-              url: pathname,
-            },
-          ]
-        : []),
-    ];
+      });
+      console.log(parts);
+
+      // And we're done if we're not in the forum
+      if (!isForum || parts.length !== 2) return pathElements;
+
+      // Check if we're looking at a thread
+      // And if yes, resolve it's name
+      const threadName = await getThreadTitle(parts[1]);
+
+      // For each of the parts, we can get both the human-readable title
+      // and the corresponding URL
+      return [
+        ...pathElements,
+        // Extra Path element for Forum thread
+        ...(isForum && parts.length === 2
+          ? [
+              {
+                title: threadName.data ?? 'Error',
+                url: pathname,
+              },
+            ]
+          : []),
+      ];
+    };
+
+    updatePathElements().then((pathElements) => setPathElements(pathElements));
   }, [pathname, translatedPathNameMap]);
 
   return pathElements;
@@ -70,20 +94,20 @@ function BreadcrumbPathElement(props: BreadcrumbPathElementProps): JSX.Element {
     () => ({
       selected: location.pathname === url,
     }),
-    [location],
+    [location, url],
   );
 
   return (
-    <Typography className={clsx('breadcrumb-navigation-text', { selected: selected })} onClick={handleClick}>
+    <Typography.Text className={clsx('breadcrumb-navigation-text', { selected: selected })} onClick={handleClick}>
       {title}
-    </Typography>
+    </Typography.Text>
   );
 }
 
 function BreadcrumbNavigation(): JSX.Element {
   const pathElements = useBreadcrumbPath();
   return (
-    <div className="breadcrumb-wrapper my-auto flex gap-2">
+    <div className="breadcrumb-wrapper flex gap-2 flex-wrap">
       {pathElements.map((part, index) => (
         <BreadcrumbPathElement {...part} key={`path_element_${index}`} />
       ))}

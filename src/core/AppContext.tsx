@@ -18,7 +18,7 @@ const InitialAppContextValues: AppContextStore = {
 /**
  * Function that generate the pub sub pattern for `useSyncExternalStore`
  */
-const getAppContextPubSub = (initialValues: AppContextStore) => {
+const useAppContextPubSub = (initialValues: AppContextStore) => {
   // Use a ref for the store
   const store = useRef(initialValues);
   const subscribers = useRef(new Set<() => void>());
@@ -43,10 +43,10 @@ const getAppContextPubSub = (initialValues: AppContextStore) => {
   };
 };
 
-const AppContext = createContext<ReturnType<typeof getAppContextPubSub> | null>(null);
+const AppContext = createContext<ReturnType<typeof useAppContextPubSub> | null>(null);
 
 export const AppContextProvider = ({ children }: { children: React.ReactNode }) => (
-  <AppContext.Provider value={getAppContextPubSub(InitialAppContextValues)}>{children}</AppContext.Provider>
+  <AppContext.Provider value={useAppContextPubSub(InitialAppContextValues)}>{children}</AppContext.Provider>
 );
 
 export const usePartialAppContext = <Selector extends keyof AppContextStore>(selector: Selector) => {
@@ -54,7 +54,7 @@ export const usePartialAppContext = <Selector extends keyof AppContextStore>(sel
   if (!store) throw new Error('<AppContextProvider> is not used as any parent of the component using that function');
 
   const state = useSyncExternalStore(store.subscribe, () => store.get()[selector]);
-  const setState = useCallback((value: typeof state) => store.set({ [selector]: value }), []);
+  const setState = useCallback((value: typeof state) => store.set({ [selector]: value }), [selector, store]);
 
   return [state, setState] as const;
 };

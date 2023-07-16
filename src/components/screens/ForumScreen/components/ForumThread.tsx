@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 
 import { ForumMessage, usePaginatedForumThread } from 'api/forum';
 
-import { Avatar, Button, Divider, Pagination, Typography } from 'antd';
+import { Avatar, Button, Col, Divider, FloatButton, Pagination, Row, Typography } from 'antd';
 
 import Card from 'components/common/Card/Card';
 import CardHeader from 'components/common/Card/CardHeader';
@@ -68,58 +68,67 @@ function ForumReplyForm(props: ForumReplyFormProps): JSX.Element {
 
   const handleCancel = useCallback(() => {
     onCancel?.();
-  }, []);
+  }, [onCancel]);
 
   const handleSubmit = useCallback(() => {
     onSubmit?.(content);
     setContent('');
-  }, [content]);
+  }, [content, onSubmit]);
 
   return (
     <Card
       fullwidth
+      disablePadding
       header={
         <Button shape="circle" type="text" className="ml-auto" onClick={handleCancel}>
           <CloseIcon />
         </Button>
       }
     >
-      <Typography.Paragraph
-        editable={{
-          onChange: setContent,
-          text: content,
-          editing: true,
-          autoSize: { minRows: 3, maxRows: 8 },
-        }}
-        className="!mt-2"
-      >
-        {content}
-      </Typography.Paragraph>
-      <Divider />
-      <div className="flex gap-4">
-        <Avatar size="large" className="my-auto" />
+      <div className="px-4 pb-4">
+        {/* TextField */}
+        <Typography.Paragraph
+          editable={{
+            onChange: setContent,
+            text: content,
+            editing: true,
+            autoSize: { minRows: 3, maxRows: 8 },
+          }}
+          className="!mt-2"
+          style={{
+            insetInline: '0',
+          }}
+        >
+          {content}
+        </Typography.Paragraph>
 
-        {/* Name and Date */}
-        <span className="flex flex-col gap-2 my-auto">
-          <span className="flex flex-col gap-2">
-            <span className="font-medium text-sm" style={{ color: '#383838' }}>
-              Your Name here.
+        <Divider className="!my-2" />
+        <Row gutter={[32, 16]}>
+          <Col span={24} md={12} className="flex gap-4">
+            <Avatar size="large" className="my-auto" />
+
+            {/* Name and Date */}
+            <span className="flex flex-col gap-2 my-auto">
+              <span className="flex flex-col gap-2">
+                <span className="font-medium text-sm" style={{ color: '#383838' }}>
+                  Your Name here.
+                </span>
+                <span className="font-medium text-xs" style={{ color: '#868D97' }}>
+                  {time}
+                </span>
+              </span>
             </span>
-            <span className="font-medium text-xs" style={{ color: '#868D97' }}>
-              {time}
-            </span>
-          </span>
-        </span>
+          </Col>
 
-        <span className="flex-1" />
-
-        {/* Extra, interactive elements? */}
-        <Button type="primary" onClick={handleSubmit} className="flex h-9">
-          <span className="my-auto w-6 h-6">
-            <ReplyIcon width={24} height={24} />
-          </span>
-          <span className="my-auto pl-2">Reply</span>
-        </Button>
+          <Col span={24} md={12} className="flex gap-4 justify-end">
+            <Button type="primary" onClick={handleSubmit} className="flex h-9">
+              <span className="my-auto w-6 h-6">
+                <ReplyIcon width={24} height={24} />
+              </span>
+              <span className="my-auto pl-2">Reply</span>
+            </Button>
+          </Col>
+        </Row>
       </div>
     </Card>
   );
@@ -147,7 +156,25 @@ function ForumThread(): JSX.Element {
   }, []);
 
   return (
-    <Card className="flex-1 basis-1" fixedheight header={<CardHeader title={title} />} loading={loading}>
+    <Card
+      className="flex-1 basis-1"
+      fixedheight
+      header={<CardHeader title={title} />}
+      loading={loading}
+      footer={
+        <div className="flex justify-end p-4">
+          <Pagination
+            current={page}
+            pageSize={pageSize}
+            onChange={handlePaginationChange}
+            total={total}
+            defaultPageSize={initialPageSize}
+            showSizeChanger
+            pageSizeOptions={[3, 5, 10, 20]}
+          />
+        </div>
+      }
+    >
       <div className="h-full w-full flex flex-col">
         {/* Messages */}
         <div className="flex-1 min-h-0 overflow-hidden mb-4">
@@ -165,27 +192,15 @@ function ForumThread(): JSX.Element {
           </Collapse>
         </div>
 
-        <Collapse collapse={reply} className="mb-6 mt-4 flex justify-end">
-          <Button type="primary" onClick={handleEnableReply} className="flex h-9">
-            <span className="my-auto w-6 h-6">
-              <ReplyIcon width={24} height={24} />
-            </span>
-            <span className="my-auto pl-2">Reply</span>
-          </Button>
-        </Collapse>
-
-        {/* Pagination */}
-        <div className="flex justify-end">
-          <Pagination
-            current={page}
-            pageSize={pageSize}
-            onChange={handlePaginationChange}
-            total={total}
-            defaultPageSize={initialPageSize}
-            showSizeChanger
-            pageSizeOptions={[3, 5, 10, 20]}
+        <Collapse collapse={reply} forward>
+          <FloatButton
+            type="primary"
+            shape="circle"
+            onClick={handleEnableReply}
+            icon={<ReplyIcon />}
+            style={{ right: 48, bottom: 96 }}
           />
-        </div>
+        </Collapse>
       </div>
     </Card>
   );

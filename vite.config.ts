@@ -24,6 +24,31 @@ export default defineConfig({
   worker: {
     plugins: [comlink()],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          // Vendor modules
+          if (id.includes('node_modules')) {
+            if (id.includes('@aws-amplify')) {
+              return 'vendor_aws';
+            } else if (id.includes('antd')) {
+              return 'vendor_antd';
+            } else if (id.includes('@faker-js')) {
+              return 'vendor_faker';
+            }
+
+            return 'vendor'; // all other package goes here
+          } else {
+            // split chargingStations module into it's own chunk, because it's huge!
+            if (id.includes('chargingStations')) {
+              return 'utils_charging_stations';
+            }
+          }
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
